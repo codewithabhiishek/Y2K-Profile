@@ -1,0 +1,1625 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta name="description" content="PROFILE.EXE — Y2K GitHub profile toolkit. AI README compiler, themed SVG stat cards, pixel avatars, 3D wordmarks, year-wrapped summaries. Free, open source, no watermarks." />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23030a05'/%3E%3Crect x='2' y='2' width='28' height='28' rx='4' fill='none' stroke='%2300ff66' stroke-width='2'/%3E%3Crect x='6' y='6' width='20' height='13' rx='2' fill='%23071a0c' stroke='%2300ff66' stroke-width='1.5'/%3E%3Cpath d='M9 10l3 2.5-3 2.5' stroke='%2300ff66' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='14' y1='15' x2='19' y2='15' stroke='%2300ff66' stroke-width='1.8' stroke-linecap='round'/%3E%3Cpath d='M13 19v4h6v-4' stroke='%2300ff66' stroke-width='2' fill='none'/%3E%3Cline x1='8' y1='25' x2='24' y2='25' stroke='%2300ff66' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<title>PROFILE.EXE</title>
+<style>
+/* ================================================================
+   PROFILE.EXE — self-contained Y2K GitHub profile toolkit.
+   The entire app lives in this file: no build step, no modules,
+   no external JS. Themes are data; every surface reads CSS vars.
+
+   HARD RULE: no "<" may ever appear inside the script regions of
+   this document (some delivery proxies strip tag-shaped sequences
+   from inline scripts). Real tags in HTML strings are written as
+   \x3c… inside executable scripts, and the main app block below is
+   stored inert (type="text/plain") with every "<" written as «,
+   then decoded and executed by the tiny loader at the bottom.
+   ================================================================ */
+:root{
+  --t-bg:#030a05; --t-deep:#010502; --t-panel:#07130a; --t-panel2:#0b1e10;
+  --t-ink:#d8ffe4; --t-muted:#5f8f6f; --t-line:#1c4a2e; --t-hi:#2f7a4c; --t-lo:#04110a;
+  --t-pri:#00ff66; --t-sec:#7dffa8; --t-acc:#d4ff3f; --t-scan:.13; --t-rad:2px;
+  --f-px:'Press Start 2P',monospace; --f-crt:'VT323',monospace;
+  --f-ui:'Chakra Petch',sans-serif; --f-mono:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box}
+html{scrollbar-color:var(--t-line) var(--t-deep)}
+body{
+  margin:0; min-height:100vh; color:var(--t-ink); font-family:var(--f-ui);
+  background-color:var(--t-deep);
+  background-image:
+    linear-gradient(color-mix(in srgb,var(--t-line) 26%,transparent) 1px,transparent 1px),
+    linear-gradient(90deg,color-mix(in srgb,var(--t-line) 26%,transparent) 1px,transparent 1px);
+  background-size:42px 42px;
+  transition:background-color .35s ease,color .35s ease;
+}
+::selection{background:var(--t-pri);color:var(--t-deep)}
+button{font-family:inherit}
+
+/* ---------- CRT atmosphere ---------- */
+.crt-scan,.crt-vig,.crt-flick{position:fixed;inset:0;pointer-events:none}
+.crt-scan{z-index:70;opacity:var(--t-scan);mix-blend-mode:multiply;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.5) 0 1px,transparent 1px 3px)}
+.crt-vig{z-index:71;background:radial-gradient(ellipse at center,transparent 58%,rgba(0,0,0,.5) 100%)}
+.crt-flick{z-index:69;background:color-mix(in srgb,var(--t-pri) 4%,transparent);animation:flick 4s steps(8) infinite}
+@keyframes flick{0%,100%{opacity:.5}9%{opacity:.32}42%{opacity:.6}70%{opacity:.4}}
+
+/* ---------- surfaces ---------- */
+.sf-bevel{border:2px solid;border-color:var(--t-hi) var(--t-lo) var(--t-lo) var(--t-hi);background:var(--t-panel);border-radius:var(--t-rad)}
+.sf-inset{border:2px solid;border-color:var(--t-lo) var(--t-hi) var(--t-hi) var(--t-lo);background:color-mix(in srgb,var(--t-deep) 72%,var(--t-panel));border-radius:var(--t-rad)}
+.sf-pixel{border:2px solid var(--t-line);background:var(--t-panel);box-shadow:0 0 0 2px var(--t-deep),0 0 0 4px var(--t-line),inset 0 0 0 2px var(--t-deep)}
+.sf-glow{border:1px solid color-mix(in srgb,var(--t-pri) 60%,transparent);background:var(--t-panel);box-shadow:0 0 14px color-mix(in srgb,var(--t-pri) 22%,transparent),inset 0 0 14px color-mix(in srgb,var(--t-pri) 8%,transparent)}
+.sf-grid{border:1px solid var(--t-line);background-color:var(--t-panel);
+  background-image:linear-gradient(color-mix(in srgb,var(--t-line) 35%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--t-line) 35%,transparent) 1px,transparent 1px);background-size:22px 22px}
+.sf-scan{border:1px solid var(--t-line);background:var(--t-panel);position:relative}
+.sf-scan::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:.3;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.35) 0 1px,transparent 1px 4px)}
+
+.win{position:relative}
+.win-h{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.5rem .75rem;border-bottom:1px solid var(--t-line);background:var(--t-panel2)}
+.win-t{display:flex;align-items:center;gap:.5rem;min-width:0}
+.win-t h2{margin:0;font-family:var(--f-px);font-size:10px;letter-spacing:.12em;color:var(--t-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dots{display:flex;gap:4px}
+.dots i{width:9px;height:9px;display:inline-block}
+.win-b{position:relative}
+
+/* ---------- controls ---------- */
+.btn{font-family:var(--f-ui);font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;user-select:none;
+  border:2px solid;border-color:var(--t-hi) var(--t-lo) var(--t-lo) var(--t-hi);
+  background:linear-gradient(180deg,var(--t-panel2),var(--t-panel));color:var(--t-ink);
+  padding:.45rem .85rem;font-size:.75rem;border-radius:var(--t-rad);
+  transition:transform .06s ease,filter .15s ease,box-shadow .15s ease;display:inline-flex;align-items:center;gap:.4rem;justify-content:center;white-space:nowrap}
+.btn:hover{filter:brightness(1.25);box-shadow:0 0 12px color-mix(in srgb,var(--t-pri) 30%,transparent)}
+.btn:active{transform:translate(1px,1px);border-color:var(--t-lo) var(--t-hi) var(--t-hi) var(--t-lo)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none;box-shadow:none}
+.btn-pri{background:linear-gradient(180deg,color-mix(in srgb,var(--t-pri) 92%,white),var(--t-pri));color:var(--t-deep);
+  border-color:color-mix(in srgb,var(--t-pri) 65%,white) color-mix(in srgb,var(--t-pri) 55%,black) color-mix(in srgb,var(--t-pri) 55%,black) color-mix(in srgb,var(--t-pri) 65%,white)}
+.btn-pri:hover{box-shadow:0 0 18px color-mix(in srgb,var(--t-pri) 55%,transparent)}
+.btn-sm{padding:.28rem .55rem;font-size:.65rem;letter-spacing:.05em}
+.inp{font-family:var(--f-mono);background:color-mix(in srgb,var(--t-deep) 80%,var(--t-panel));
+  border:2px solid;border-color:var(--t-lo) var(--t-hi) var(--t-hi) var(--t-lo);color:var(--t-pri);
+  padding:.55rem .8rem;font-size:.9rem;outline:none;width:100%;border-radius:var(--t-rad);transition:box-shadow .2s}
+.inp:focus{box-shadow:0 0 0 1px var(--t-pri),0 0 16px color-mix(in srgb,var(--t-pri) 35%,transparent)}
+.inp::placeholder{color:color-mix(in srgb,var(--t-muted) 75%,transparent)}
+select.inp{color:var(--t-ink)}
+.led{width:8px;height:8px;border-radius:999px;display:inline-block;box-shadow:0 0 8px currentColor;animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.blink{animation:blk 1.1s steps(1) infinite}
+@keyframes blk{0%,49%{opacity:1}50%,100%{opacity:0}}
+.glow-txt{text-shadow:0 0 8px color-mix(in srgb,var(--t-pri) 80%,transparent),0 0 26px color-mix(in srgb,var(--t-pri) 40%,transparent)}
+
+/* ---------- header / ticker / tabs ---------- */
+.hdr{position:sticky;top:0;z-index:60;border-bottom:2px solid var(--t-line);
+  background:color-mix(in srgb,var(--t-deep) 94%,transparent);backdrop-filter:blur(10px)}
+.hdr-in{max-width:1440px;margin:0 auto;padding:.65rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.logo-t{font-family:var(--f-px);font-size:1.05rem;letter-spacing:.08em;color:var(--t-pri);line-height:1;margin:0}
+.logo-s{font-family:var(--f-mono);font-size:10px;color:var(--t-muted);margin:4px 0 0}
+.chip-group{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding:3px 6px;border:1px solid var(--t-line);background:color-mix(in srgb,var(--t-deep) 70%,var(--t-panel));border-radius:var(--t-rad)}
+.chip{display:inline-flex;gap:2.5px;padding:4px 5px;border:1px solid var(--t-line);background:var(--t-panel);cursor:pointer;border-radius:2px;transition:transform .12s ease,box-shadow .15s ease,border-color .15s}
+.chip i{width:9px;height:9px;display:inline-block;border-radius:1px}
+.chip:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.5);border-color:var(--t-pri)}
+.chip.on{border-color:var(--t-pri);box-shadow:0 0 12px color-mix(in srgb,var(--t-pri) 45%,transparent)}
+.ticker{overflow:hidden;border-top:1px solid var(--t-line);border-bottom:1px solid var(--t-line);background:color-mix(in srgb,var(--t-deep) 90%,black)}
+.ticker-in{display:inline-flex;white-space:nowrap;font-family:var(--f-crt);font-size:15px;color:var(--t-sec);padding:3px 0;animation:marq 35s linear infinite;will-change:transform}
+.ticker:hover .ticker-in{animation-play-state:paused}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.tabs{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:0 1.25rem}
+.tab{text-align:center;background:transparent;border:none;border-top:3px solid transparent;cursor:pointer;
+  padding:.65rem .75rem .55rem;opacity:.75;transition:opacity .15s,background .2s,transform .12s;width:100%;border-radius:var(--t-rad) var(--t-rad) 0 0}
+.tab:hover{opacity:1;transform:translateY(-1px);background:color-mix(in srgb,var(--t-panel) 50%,transparent)}
+.tab.on{opacity:1;background:var(--t-panel);border-top-color:var(--t-pri);border-left:1px solid var(--t-line);border-right:1px solid var(--t-line);box-shadow:0 -4px 16px color-mix(in srgb,var(--t-pri) 15%,transparent)}
+.tab b{display:flex;align-items:center;justify-content:center;gap:.45rem;font-family:var(--f-ui);font-weight:700;font-size:11.5px;letter-spacing:.12em;color:var(--t-ink)}
+.tab.on b{color:var(--t-pri)}
+.tab span{display:block;font-family:var(--f-mono);font-size:9.5px;color:var(--t-muted);margin-top:3px}
+.tab.on span{color:var(--t-sec)}
+
+main{max-width:1440px;width:100%;margin:0 auto;padding:1.25rem 1.25rem 4.5rem;box-sizing:border-box}
+.pane{animation:pin .25s cubic-bezier(.2,.8,.3,1) both}
+@keyframes pin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sbar{position:fixed;bottom:0;left:0;right:0;z-index:60;border-top:2px solid var(--t-line);
+  background:color-mix(in srgb,var(--t-deep) 96%,black);backdrop-filter:blur(8px)}
+.sbar-in{max-width:1440px;margin:0 auto;padding:.4rem 1.25rem;display:flex;gap:1.5rem;align-items:center;
+  font-family:var(--f-mono);font-size:10.5px;color:var(--t-muted);white-space:nowrap;overflow-x:auto}
+
+/* ---------- layouts & cards ---------- */
+.grid2{display:grid;gap:1.25rem;grid-template-columns:420px 1fr;align-items:stretch}
+.grid2b{grid-template-columns:330px 1fr}
+.stack{display:flex;flex-direction:column;gap:.85rem}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.lbl{font-family:var(--f-ui);font-weight:700;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--t-muted)}
+.note{font-family:var(--f-mono);font-size:10.5px;line-height:1.6;color:var(--t-muted)}
+.logbox{height:6.5rem;overflow-y:auto;padding:.5rem .7rem;font-family:var(--f-mono);font-size:11px;line-height:1.55;color:var(--t-sec)}
+.errbox{padding:.55rem .75rem;font-family:var(--f-mono);font-size:11px;line-height:1.55;color:var(--t-acc);border:1px dashed var(--t-acc);background:color-mix(in srgb,var(--t-acc) 8%,transparent)}
+
+.tone{flex:1;text-align:left;padding:.5rem .65rem;border:1px solid var(--t-line);background:transparent;cursor:pointer;transition:all .15s;border-radius:var(--t-rad)}
+.tone:hover{border-color:var(--t-sec);transform:translateX(2px);background:color-mix(in srgb,var(--t-panel) 60%,transparent)}
+.tone.on{border-color:var(--t-pri);background:var(--t-panel2);box-shadow:0 0 12px color-mix(in srgb,var(--t-pri) 25%,transparent)}
+.tone b{display:block;font-family:var(--f-ui);font-size:11px;letter-spacing:.12em;color:var(--t-ink)}
+.tone.on b{color:var(--t-pri)}
+.tone span{display:block;font-family:var(--f-mono);font-size:9px;color:var(--t-muted);margin-top:2px;line-height:1.35}
+
+.tplrow{display:flex;flex-direction:column;gap:5px}
+.tplbtn{display:block;width:100%;text-align:left;padding:.6rem .75rem;border:1px solid var(--t-line);background:transparent;cursor:pointer;transition:all .15s;border-radius:var(--t-rad)}
+.tplbtn:hover{border-color:var(--t-sec);transform:translateX(3px);background:color-mix(in srgb,var(--t-panel) 60%,transparent)}
+.tplbtn.on{border-color:var(--t-pri);background:var(--t-panel2);box-shadow:0 0 12px color-mix(in srgb,var(--t-pri) 20%,transparent)}
+.tplbtn b{display:flex;align-items:center;gap:.5rem;font-family:var(--f-ui);font-size:11.5px;letter-spacing:.08em;color:var(--t-ink)}
+.tplbtn.on b{color:var(--t-pri)}
+.tplbtn span{display:block;font-family:var(--f-mono);font-size:9.5px;color:var(--t-muted);margin-top:2px;line-height:1.45}
+
+.seg{display:inline-flex;border:1px solid var(--t-line);border-radius:var(--t-rad);overflow:hidden}
+.seg button{border:none;background:transparent;color:var(--t-muted);font-family:var(--f-px);font-size:8px;padding:6px 9px;cursor:pointer;transition:all .12s}
+.seg button:hover{color:var(--t-ink);background:color-mix(in srgb,var(--t-panel) 80%,transparent)}
+.seg button.on{background:var(--t-pri);color:var(--t-deep);font-weight:bold}
+
+.svgwrap{padding:1rem;display:flex;justify-content:center;align-items:center;overflow:hidden;width:100%;min-height:160px;background:color-mix(in srgb,var(--t-deep) 90%,black);border-radius:var(--t-rad)}
+.svgwrap svg{max-width:100%;width:100%;height:auto;display:block;box-shadow:0 8px 30px rgba(0,0,0,.65);border-radius:2px}
+.embed{font-family:var(--f-mono);font-size:10px;color:var(--t-muted);padding:.45rem .6rem;white-space:nowrap;overflow-x:auto;background:color-mix(in srgb,var(--t-deep) 80%,var(--t-panel));border-top:1px solid var(--t-line)}
+
+.output{flex:1;min-height:640px;display:flex;flex-direction:column}
+.split{flex:1;display:grid;min-height:0;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr)}
+.split.one{grid-template-columns:1fr}
+.split>div{min-height:0;height:100%}
+.md-editor{width:100%;height:100%;resize:none;border:none;outline:none;padding:1rem;white-space:pre;overflow:auto;
+  font-family:var(--f-mono);font-size:12px;line-height:1.6;color:var(--t-sec);caret-color:var(--t-pri);
+  background:color-mix(in srgb,var(--t-deep) 88%,black)}
+.preview{overflow-y:auto;padding:1.2rem;min-height:0;background:color-mix(in srgb,var(--t-deep) 55%,var(--t-panel))}
+.emptybox{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2.5rem;text-align:center}
+.emptybox pre{font-family:var(--f-crt);font-size:18px;line-height:1.3;color:var(--t-line);margin:0;max-width:100%;overflow-x:auto}
+.busybox{flex:1;display:flex;align-items:center;justify-content:center;font-family:var(--f-crt);font-size:28px;color:var(--t-pri);text-align:center;padding:1.5rem}
+
+/* ---------- visuals symmetrical grid ---------- */
+.viz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.15rem;align-items:stretch}
+
+/* ---------- responsive breakpoints ---------- */
+@media(max-width:1199px){
+  .grid2{grid-template-columns:360px 1fr}
+  .grid2b{grid-template-columns:300px 1fr}
+  .viz-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:960px){
+  .grid2,.grid2b{grid-template-columns:1fr}
+  .tabs{grid-template-columns:repeat(2,1fr)}
+  .output{min-height:550px}
+}
+@media(max-width:768px){
+  main{padding:.8rem .6rem 4.5rem}
+  .hdr-in{padding:.5rem .75rem;gap:.6rem}
+  .logo-t{font-size:.85rem}
+  .logo-s{font-size:9px}
+  .tabs{padding:0 .5rem;grid-template-columns:repeat(2,1fr);gap:4px}
+  .tab{padding:.5rem .6rem .4rem}
+  .tab b{font-size:10.5px}
+  .viz-grid{grid-template-columns:1fr}
+  .split{grid-template-columns:1fr !important;grid-template-rows:280px 360px}
+  .split>div:first-child{border-right:none !important;border-bottom:1px solid var(--t-line)}
+  .md-editor{padding:.75rem;font-size:11.5px}
+  .preview{padding:.85rem}
+  .logbox{height:6rem}
+  .svgwrap{padding:.6rem}
+  .win-h{padding:.4rem .6rem}
+  .win-t h2{font-size:10px}
+  .btn{padding:.4rem .7rem;font-size:.7rem}
+}
+@media(max-width:480px){
+  .tabs{grid-template-columns:1fr 1fr}
+  .tab b{font-size:9.5px}
+  .tab span{display:none}
+  .row{gap:.4rem}
+  .ticker-in{font-size:13.5px}
+  .emptybox pre{font-size:14px}
+  .busybox{font-size:20px}
+}
+
+/* ---------- rendered markdown ---------- */
+.md{font-family:var(--f-mono);font-size:13px;line-height:1.65;color:var(--t-ink);word-break:break-word}
+.md>*:first-child{margin-top:0}
+.md h1,.md h2,.md h3{font-family:var(--f-crt);color:var(--t-pri);line-height:1.15;margin:1.3em 0 .5em;text-shadow:0 0 10px color-mix(in srgb,var(--t-pri) 35%,transparent)}
+.md h1{font-size:2rem;border-bottom:2px dashed var(--t-line);padding-bottom:.35em}
+.md h2{font-size:1.5rem}.md h2::before{content:"## ";color:var(--t-muted)}
+.md h3{font-size:1.2rem;color:var(--t-sec)}
+.md p{margin:.7em 0}
+.md a{color:var(--t-acc);text-decoration:none;border-bottom:1px dotted var(--t-acc)}
+.md a:hover{background:color-mix(in srgb,var(--t-acc) 20%,transparent)}
+.md strong{color:var(--t-pri)}.md em{color:var(--t-sec)}
+.md code{font-family:var(--f-mono);background:color-mix(in srgb,var(--t-deep) 80%,var(--t-panel));border:1px solid var(--t-line);padding:.08em .35em;color:var(--t-acc);font-size:.9em}
+.md pre{background:color-mix(in srgb,var(--t-deep) 92%,black);border:1px solid var(--t-line);border-left:3px solid var(--t-pri);padding:.8em 1em;overflow-x:auto;font-size:11.5px;line-height:1.45}
+.md pre code{background:none;border:none;padding:0;color:var(--t-sec)}
+.md ul,.md ol{padding-left:1.4em;margin:.6em 0}.md li{margin:.25em 0}.md li::marker{color:var(--t-pri)}
+.md blockquote{border-left:3px solid var(--t-acc);background:color-mix(in srgb,var(--t-panel2) 60%,transparent);margin:.8em 0;padding:.4em 1em;color:var(--t-sec)}
+.md table{border-collapse:collapse;width:100%;margin:.9em 0;font-size:12px}
+.md th{font-family:var(--f-ui);text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;color:var(--t-deep);background:var(--t-pri);padding:.4em .7em;text-align:left}
+.md td{border:1px solid var(--t-line);padding:.4em .7em}
+.md tr:nth-child(even) td{background:color-mix(in srgb,var(--t-panel2) 45%,transparent)}
+.md hr{border:none;border-top:2px dashed var(--t-line);margin:1.3em 0}
+.md img{max-width:100%;vertical-align:middle;margin:.15em .1em;border-radius:2px}
+.md img.img-broken{display:none !important}
+.md details{border:1px dashed var(--t-line);padding:.5em .8em;margin:.7em 0}
+.md summary{cursor:pointer;color:var(--t-pri);font-family:var(--f-ui);font-weight:600;letter-spacing:.05em}
+
+/* ---------- toasts ---------- */
+#toasts{position:fixed;bottom:3.2rem;right:1rem;z-index:90;display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}
+.toast{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;font-family:var(--f-mono);font-size:12px;color:var(--t-ink);
+  animation:tin .25s cubic-bezier(.2,.8,.3,1) both;max-width:320px}
+.toast.err{color:var(--t-acc)}
+@keyframes tin{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+.thin::-webkit-scrollbar{width:10px;height:10px}
+.thin::-webkit-scrollbar-track{background:var(--t-deep)}
+.thin::-webkit-scrollbar-thumb{background:var(--t-line);border:2px solid var(--t-deep)}
+.thin::-webkit-scrollbar-thumb:hover{background:var(--t-pri)}
+.pfcard{display:flex;align-items:center;gap:.75rem;padding:.75rem}
+.pfcard .ava{width:44px;height:44px;flex-shrink:0;display:grid;place-items:center;border:2px solid var(--t-pri);font-family:var(--f-px);font-size:11px;color:var(--t-pri);overflow:hidden}
+.pfcard .ava img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- living atmosphere ---------- */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.45;
+  background-image:
+    radial-gradient(1px 1px at 22px 34px,var(--t-sec) 50%,transparent 51%),
+    radial-gradient(1px 1px at 120px 90px,var(--t-muted) 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 180px 160px,var(--t-acc) 50%,transparent 51%),
+    radial-gradient(1px 1px at 60px 190px,var(--t-sec) 50%,transparent 51%);
+  background-size:230px 230px;animation:drift 110s linear infinite}
+.stars.s2{opacity:.25;background-size:360px 360px;animation-duration:170s;animation-direction:reverse}
+@keyframes drift{from{background-position:0 0}to{background-position:230px 460px}}
+.logo-t:hover{animation:glitch .28s steps(2) infinite;cursor:crosshair}
+@keyframes glitch{
+  0%{text-shadow:2px 0 var(--t-acc),-2px 0 var(--t-sec),0 0 8px color-mix(in srgb,var(--t-pri) 80%,transparent)}
+  50%{text-shadow:-2px 0 var(--t-acc),2px 0 var(--t-sec),0 0 8px color-mix(in srgb,var(--t-pri) 80%,transparent)}
+  100%{text-shadow:1px 1px var(--t-acc),-1px -1px var(--t-sec),0 0 8px color-mix(in srgb,var(--t-pri) 80%,transparent)}}
+.win{transition:box-shadow .2s ease,transform .15s ease}
+.win:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(0,0,0,.5),0 0 0 1px color-mix(in srgb,var(--t-pri) 28%,transparent)}
+.pane .win{animation:pin .35s cubic-bezier(.2,.8,.3,1) both}
+.pane .win:nth-of-type(2){animation-delay:.06s}
+.pane .win:nth-of-type(3){animation-delay:.12s}
+.pane .win:nth-of-type(4){animation-delay:.18s}
+.stack > .win{animation:pin .35s cubic-bezier(.2,.8,.3,1) both}
+.stack > .win:nth-of-type(2){animation-delay:.07s}
+.stack > .win:nth-of-type(3){animation-delay:.14s}
+#powerflash{position:fixed;inset:0;z-index:85;pointer-events:none;background:var(--t-pri);opacity:0}
+#powerflash.go{animation:pflash .5s ease-out}
+@keyframes pflash{0%{opacity:.5}100%{opacity:0}}
+.chip:active{transform:translateY(1px)}
+.tplbtn:active,.tone:active{transform:translateX(3px) scale(.99)}
+@media(prefers-reduced-motion:reduce){.ticker-in,.crt-flick,.blink,.led,.stars{animation:none!important}.pane,.pane .win,.stack > .win{animation-duration:.01s!important}.logo-t:hover{animation:none!important}.win{transition:none}}
+</style>
+
+<script>
+/* WATCHDOG — depends on nothing. Every tag-shaped token here is written
+   as \x3c so no delivery proxy can strip it into broken JS. */
+window.__PX_BUILD__ = "20260213-A";
+window.__PX_WATCH__ = setTimeout(function () {
+  if (window.__PX_APP__) return;
+  var missing = [];
+  if (!window.__PX_BOOTED__) missing.push("BLOCK 1 \u2014 core toolkit (utils/themes)");
+  if (!window.__PX_TPL__) missing.push("BLOCK 2 \u2014 template data");
+  if (!window.__PX_APP__) missing.push("APP \u2014 renderer");
+  var msg = "BOOT FAULT \u2014 FAILED TO EXECUTE:\x3cbr>" + missing.join("\x3cbr>") +
+    "\x3cbr>\x3cbr>\x3cspan style='font-size:.72rem;color:#ffb000'>build=" + window.__PX_BUILD__ +
+    " \u00b7 flags=" + (window.__PX_BOOTED__ ? "B1" : "-") + (window.__PX_TPL__ ? "+B2" : "") +
+    " \u00b7 If this persists, open DevTools \u2192 Console for the exact error.\x3c/span>";
+  var d = document.getElementById("bootdiag");
+  if (d) { d.style.color = "#ff3b2f"; d.style.fontSize = "1rem"; d.style.letterSpacing = ".08em"; d.innerHTML = msg; return; }
+  document.body.insertAdjacentHTML("afterbegin",
+    "\x3cdiv style='position:fixed;inset:0;z-index:99999;background:rgba(1,5,2,.97);display:flex;align-items:center;justify-content:center;padding:2rem'>" +
+    "\x3cdiv style='max-width:700px;font-family:monospace;color:#ff3b2f;font-size:1rem;line-height:1.9;text-align:left;border:2px solid #ff3b2f;padding:1.5rem;background:#0b0202'>" + msg + "\x3c/div>\x3c/div>");
+}, 6000);
+window.addEventListener("error", function (e) {
+  if (window.__PX_APP__) return;
+  var d = document.getElementById("bootdiag");
+  if (d) {
+    if (!window.__PX_ERRMETA__) {
+      window.__PX_ERRMETA__ = 1;
+      d.innerHTML += "\x3cbr>\x3cspan style='font-size:.62rem;color:#2f7a4c'>forensics: build=" + window.__PX_BUILD__ +
+        " doc=" + (document.documentElement.outerHTML.length / 1024).toFixed(1) + "KB" +
+        " flags=" + (window.__PX_BOOTED__ ? "B1" : "-") + (window.__PX_TPL__ ? "+B2" : "") + (window.__PX_APP__ ? "+APP" : "") + "\x3c/span>";
+    }
+    d.style.color = "#ff3b2f";
+    d.innerHTML += "\x3cbr>\x3cspan style='font-size:.72rem'>JS ERROR: " + String((e && e.message) || e).replace(/\x3c/g, "&lt;") + " (line " + ((e && e.lineno) || "?") + ")\x3c/span>";
+  }
+});
+/* boot theater: type status lines while the real app links (tag-free by design) */
+(function () {
+  var lines = ["LINKING CORE MODULES\u2026", "ALLOCATING PHOSPHOR\u2026", "WARMING CATHODE RAY\u2026", "HANDSHAKE WITH 1999\u2026"];
+  var li = 0, ch = 0;
+  (function tick() {
+    if (window.__PX_APP__) return;
+    var el = document.getElementById("bootdiag");
+    if (!el) return;
+    var line = lines[li % lines.length];
+    ch++;
+    if (ch > line.length + 10) { li++; ch = 0; }
+    el.textContent = line.slice(0, Math.min(ch, line.length)) + (ch <= line.length ? "\u258C" : "");
+    setTimeout(tick, 30);
+  })();
+})();
+</script>
+</head>
+<body>
+
+<div id="app">
+  <!-- Static boot screen: visible with zero JavaScript -->
+  <div id="boot" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;padding:2rem;text-align:center;font-family:'VT323',monospace">
+    <div style="font-size:clamp(2rem,6vw,3.4rem);color:var(--t-pri);letter-spacing:.12em;text-shadow:0 0 14px var(--t-pri)">PROFILE.EXE</div>
+    <div style="font-size:clamp(1.1rem,3vw,1.6rem);color:#ffb000;letter-spacing:.35em">Y2K GITHUB TOOLKIT</div>
+    <div style="font-size:1.25rem;color:#7dffa8;letter-spacing:.15em">BOOTING<span style="animation:pxblink 1.1s steps(1) infinite">&#9608;</span></div>
+    <div id="bootdiag" style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:#5f8f6f;letter-spacing:.18em;max-width:640px">LINKING CORE MODULES&hellip;</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:#2f7a4c;letter-spacing:.22em;margin-top:1.2rem">BUILD 20260213-A &middot; 18 TEMPLATES &middot; SELF-CONTAINED</div>
+  </div>
+  <style>@keyframes pxblink{0%,49%{opacity:1}50%,100%{opacity:0}}</style>
+</div>
+<div id="toasts"></div>
+<div class="stars s1"></div><div class="stars s2"></div>
+<div class="crt-scan"></div><div class="crt-vig"></div><div class="crt-flick"></div>
+<div id="powerflash"></div>
+
+<script>
+/* ═══ BLOCK 1 — core toolkit. Rule: tags written \x3c, comparisons flipped. ═══ */
+(function(){
+"use strict";
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/\x3c/g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function fnv1a(str){var h=0x811c9dc5;for(var i=0;str.length>i;i++){h^=str.charCodeAt(i);h=Math.imul(h,0x01000193);}return h>>>0;}
+function rng(seed){var a=seed>>>0;return function(){a|=0;a=(a+0x6d2b79f5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
+function mix(h1,h2,t){function p(h){h=h.replace("#","");return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+  var a=p(h1),b=p(h2),o=a.map(function(v,i){return Math.round(v+(b[i]-v)*t).toString(16).padStart(2,"0");});return"#"+o.join("");}
+function fmt(n){if(n>=1e6)return(n/1e6).toFixed(1)+"M";if(n>=1000)return(n/1000).toFixed(1)+"k";return String(n);}
+var mem={};var realOk=(function(){try{var k="__px__";window.localStorage.setItem(k,"1");window.localStorage.removeItem(k);return true;}catch(e){return false;}})();
+var store={get:function(k){try{if(realOk){var v=window.localStorage.getItem(k);if(v!==null)return v;}}catch(e){}return mem[k]||null;},
+  set:function(k,v){mem[k]=v;try{if(realOk)window.localStorage.setItem(k,v);}catch(e){}},
+  del:function(k){delete mem[k];try{if(realOk)window.localStorage.removeItem(k);}catch(e){}}};
+function legacyCopy(t){try{var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();var ok=document.execCommand("copy");document.body.removeChild(ta);return ok;}catch(e){return false;}}
+function copyText(t){if(navigator.clipboard&&navigator.clipboard.writeText){return navigator.clipboard.writeText(t).then(function(){return true;},function(){return legacyCopy(t);});}
+  return Promise.resolve(legacyCopy(t));}
+function download(name,content,mime){var b=new Blob([content],{type:mime||"image/svg+xml"});var u=URL.createObjectURL(b);var a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(u);},2000);}
+function toast(msg,kind){var el=document.createElement("div");el.className="toast sf-bevel"+(kind==="err"?" err":"");
+  el.innerHTML='\x3ci class="led" style="background:'+(kind==="err"?"var(--t-acc)":"var(--t-pri)")+';color:'+(kind==="err"?"var(--t-acc)":"var(--t-pri)")+'">\x3c/i>\x3cspan>'+esc(msg)+"\x3c/span>";
+  document.getElementById("toasts").appendChild(el);setTimeout(function(){el.style.opacity="0";el.style.transition="opacity .3s";setTimeout(function(){el.remove();},320);},3400);}
+
+/* themes — add a skin by appending one object */
+var THEMES=[
+ {id:"phosphor",name:"PHOSPHOR-01",era:"1999 · CRT",sf:"sf-scan",scan:.13,rad:"2px",fd:"var(--f-crt)",fb:"var(--f-mono)",
+  c:{bg:"#030a05",deep:"#010502",panel:"#07130a",panel2:"#0b1e10",ink:"#d8ffe4",muted:"#5f8f6f",line:"#1c4a2e",hi:"#2f7a4c",lo:"#04110a",pri:"#00ff66",sec:"#7dffa8",acc:"#d4ff3f"},sw:["#00ff66","#07130a","#d4ff3f"]},
+ {id:"amber",name:"AMBER-88",era:"1984 · UNIX",sf:"sf-glow",scan:.11,rad:"2px",fd:"var(--f-crt)",fb:"var(--f-mono)",
+  c:{bg:"#120a02",deep:"#0a0501",panel:"#1d1206",panel2:"#291b09",ink:"#ffe9c4",muted:"#9c7b4a",line:"#4d3517",hi:"#7a5a26",lo:"#0d0702",pri:"#ffb000",sec:"#ffd27f",acc:"#ff6b1a"},sw:["#ffb000","#1d1206","#ff6b1a"]},
+ {id:"cybergrid",name:"CYBERGRID",era:"2001 · NET",sf:"sf-grid",scan:.09,rad:"0",fd:"var(--f-crt)",fb:"var(--f-ui)",
+  c:{bg:"#021014",deep:"#010a0d",panel:"#06222a",panel2:"#0a3039",ink:"#d9fbff",muted:"#5e93a0",line:"#155063",hi:"#1f7a94",lo:"#031318",pri:"#00e5ff",sec:"#64f0d8",acc:"#f5d300"},sw:["#00e5ff","#06222a","#f5d300"]},
+ {id:"ice",name:"ICE.CHROME",era:"1999 · IM",sf:"sf-bevel",scan:.05,rad:"3px",fd:"var(--f-crt)",fb:"var(--f-ui)",
+  c:{bg:"#dfe9f2",deep:"#c3d3e0",panel:"#eef4f9",panel2:"#f7fbfe",ink:"#17324a",muted:"#5c7690",line:"#a9bfd2",hi:"#ffffff",lo:"#8ba3b8",pri:"#0a84d0",sec:"#12b0c9",acc:"#f5a300"},sw:["#0a84d0","#eef4f9","#f5a300"]},
+ {id:"chrome",name:"LIQUID CHROME",era:"2000 · SKIN",sf:"sf-bevel",scan:.07,rad:"2px",fd:"var(--f-crt)",fb:"var(--f-ui)",
+  c:{bg:"#10151c",deep:"#0a0e13",panel:"#1a222c",panel2:"#242f3c",ink:"#e8eef5",muted:"#7f93a8",line:"#3a4b5e",hi:"#9fb4c8",lo:"#05080c",pri:"#c9d6e4",sec:"#7fd4ff",acc:"#00b3ff"},sw:["#c9d6e4","#1a222c","#00b3ff"]},
+ {id:"acid",name:"ACID RAVE",era:"1998 · FLYER",sf:"sf-pixel",scan:.1,rad:"0",fd:"var(--f-crt)",fb:"var(--f-ui)",
+  c:{bg:"#0c0f0a",deep:"#060804",panel:"#141a10",panel2:"#1d2617",ink:"#eaffdc",muted:"#7f9a6b",line:"#3a4d2c",hi:"#6a8f4a",lo:"#0a0d07",pri:"#b4ff00",sec:"#e0ff7a",acc:"#00ffd0"},sw:["#b4ff00","#141a10","#00ffd0"]},
+ {id:"redalert",name:"RED ALERT",era:"1997 · OPS",sf:"sf-glow",scan:.1,rad:"2px",fd:"var(--f-crt)",fb:"var(--f-mono)",
+  c:{bg:"#140404",deep:"#0b0202",panel:"#1e0808",panel2:"#2b0d0d",ink:"#ffe3dd",muted:"#a06a5f",line:"#5c231c",hi:"#8f3a2e",lo:"#0c0303",pri:"#ff3b2f",sec:"#ff8a70",acc:"#ffd23f"},sw:["#ff3b2f","#1e0808","#ffd23f"]},
+ {id:"holo",name:"HOLO-FOIL",era:"2001 · CARD",sf:"sf-glow",scan:.08,rad:"3px",fd:"var(--f-crt)",fb:"var(--f-ui)",
+  c:{bg:"#04140f",deep:"#020c09",panel:"#0a241c",panel2:"#123327",ink:"#e2fff2",muted:"#6ba38c",line:"#1f5c45",hi:"#3f8f6e",lo:"#03100b",pri:"#3dffb0",sec:"#b0ffe0",acc:"#ffd75e"},sw:["#3dffb0","#0a241c","#ffd75e"]},
+ {id:"gameboy",name:"DMG-8BIT",era:"1989 · POCKET",sf:"sf-pixel",scan:.09,rad:"0",fd:"var(--f-crt)",fb:"var(--f-mono)",
+  c:{bg:"#161c10",deep:"#0f130a",panel:"#1f2716",panel2:"#2a351d",ink:"#dce8b8",muted:"#8a9768",line:"#46522f",hi:"#6b7a48",lo:"#10150a",pri:"#9bbc0f",sec:"#c4d64f",acc:"#e8f0a0"},sw:["#9bbc0f","#1f2716","#e8f0a0"]},
+ {id:"flame",name:"AFTERBURNER",era:"2000 · RIG",sf:"sf-glow",scan:.1,rad:"2px",fd:"var(--f-crt)",fb:"var(--f-ui)",
+  c:{bg:"#140802",deep:"#0c0401",panel:"#221007",panel2:"#301809",ink:"#ffe8d2",muted:"#b07b4f",line:"#5e3216",hi:"#96551f",lo:"#0e0601",pri:"#ff7a1a",sec:"#ffb347",acc:"#ffe14d"},sw:["#ff7a1a","#221007","#ffe14d"]}
+];
+function theme(id){for(var i=0;THEMES.length>i;i++)if(THEMES[i].id===id)return THEMES[i];return THEMES[0];}
+function applyTheme(t){var r=document.documentElement.style,m={ "--t-bg":t.c.bg,"--t-deep":t.c.deep,"--t-panel":t.c.panel,"--t-panel2":t.c.panel2,
+  "--t-ink":t.c.ink,"--t-muted":t.c.muted,"--t-line":t.c.line,"--t-hi":t.c.hi,"--t-lo":t.c.lo,"--t-pri":t.c.pri,"--t-sec":t.c.sec,"--t-acc":t.c.acc,
+  "--t-scan":String(t.scan),"--t-rad":t.rad};for(var k in m)r.setProperty(k,m[k]);store.set("px_theme",t.id);}
+
+/* ASCII library (extensible) — pure ASCII + box glyphs, no tag-shaped tokens */
+var ASCII=[
+ {id:"banner",label:"BANNER",text:[
+"██████╗ ██████╗  ██████╗ ███████╗██╗██╗     ███████╗",
+"██╔══██╗██╔══██╗██╔═══██╗██╔════╝██║██║     ██╔════╝",
+"██████╔╝██████╔╝██║   ██║█████╗  ██║██║     █████╗  ",
+"██╔═══╝ ██╔══██╗██║   ██║██╔══╝  ██║██║     ██╔══╝  ",
+"██║     ██║  ██║╚██████╔╝██║     ██║███████╗███████╗",
+"╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚══════╝",
+"          ██╗  ██╗██╗  ██╗███████╗  · est. 1999 ·"].join("\n")},
+ {id:"matrix",label:"MATRIX",text:[
+"┌─────────────────────────────────────────────────────────────┐",
+"│ 01000011 01011001 01000010 01000101 01010010 01010011 01010000 │",
+"│ >> NEURAL LINK: ACTIVE  |  SECURITY CLEARANCE: ROOT (0x00)  │",
+"│ >> PACKET FLOW: 10 Gbps |  SYSTEM INTEGRITY: 100% NOMINAL   │",
+"└─────────────────────────────────────────────────────────────┘"].join("\n")},
+ {id:"sword",label:"QUEST / RPG",text:[
+"      /| ____________________________________________________",
+"O|===|* >____________________________________________________>",
+"      \\|  [ LEVEL 99 FULL-STACK DEVELOPER // QUEST LOG ]"].join("\n")},
+ {id:"arcade",label:"ARCADE",text:[
+"  ╔═══════════════════════════════════════════════════════╗",
+"  ║  ★ INSERT COIN TO PLAY · HIGH SCORE: 999,999,999 ★  ║",
+"  ║   [1P START]  PLAYER: DEVELOPER  ·  DIFFICULTY: HARD  ║",
+"  ╚═══════════════════════════════════════════════════════╝"].join("\n")},
+ {id:"wave",label:"WAVE",text:[
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+"   /\\   /\\   /\\        .--.      .-.      .-.",
+"  /  \\ /  \\ /  \\      (    )    (   )    (   )",
+" /    V    V    \\      `--'      `-'      `-'",
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+"      >> SIGNAL ACQUIRED · CARRIER LOCKED <<"].join("\n")},
+ {id:"grid",label:"GRID",text:[
+"+------+------+------+------+------+------+",
+"| SYS  | BOOT | OK   | LOAD | USER | OK   |",
+"+------+------+------+------+------+------+",
+"| GRID | LINK | SYNC | 100% | PASS | >>>> |",
+"+------+------+------+------+------+------+",
+"      WELCOME TO THE GRID, OPERATOR"].join("\n")},
+ {id:"terminal",label:"TERMINAL",text:[
+"C:\\> PROFILE.EXE /INIT",
+"LOADING MODULES: [##########] 100%",
+"HANDLE ....... OK",
+"REPOS ........ OK",
+"COFFEE ....... REQUIRED",
+"----------------------------------------------",
+"  READY. Type HELP for commands. (est. 1999)"].join("\n")}
+];
+function asciiText(id){for(var i=0;ASCII.length>i;i++)if(ASCII[i].id===id)return ASCII[i].text;return ASCII[0].text;}
+
+window.__PX__={esc:esc,fnv1a:fnv1a,rng:rng,mix:mix,fmt:fmt,theme:theme,applyTheme:applyTheme,
+  store:store,copyText:copyText,download:download,toast:toast,ASCII:ASCII,asciiText:asciiText,THEMES:THEMES};
+window.__PX_BOOTED__=1;
+})();
+</script>
+
+<script>
+/* ═══ BLOCK 2 — template data (Mode B). Tags in template markdown are \x3c-escaped. ═══ */
+window.__TEMPLATES__ = [
+{id:"phosphor",vibe:"CRT Matrix hacker station. Phosphor glow, telemetry, terminal loadout.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=waving&color=07130a&text=%E2%96%A0%20[YOUR%20NAME]%20%E2%96%A0&height=190&fontSize=38&fontColor=00ff66&stroke=00ff66&strokeWidth=2&desc=SYSTEM%20ONLINE%20%C2%B7%20FULL-STACK%20OPERATOR&descAlignY=66&descColor=7dffa8\" width=\"100%\" alt=\"Phosphor Banner\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=00FF66&center=true&vCenter=true&width=460&lines=Full+Stack+Engineer+%C2%B7+Open+Source+Builder;Building+Fast%2C+Reliable+Web+Platforms;Compiling+Clean+Code+Past+Midnight;Jacked+into+the+Phosphor+Matrix\" alt=\"Typing SVG\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/STATUS-COMPILING-00ff66?style=for-the-badge&logo=gnubash&logoColor=010502\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/LOCATION-[YOUR%20LOCATION]-07130a?style=for-the-badge&logo=googlemaps&logoColor=00ff66\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=00ff66&style=for-the-badge&label=PROFILE+VIEWS\"/>",
+"\x3c/div>",
+"",
+"```",
+"┌─[ OPERATOR TERMINAL ]────────────────────────────────────────┐",
+"│ USER     : @[YOUR-USERNAME]                                  │",
+"│ ROLE     : [Your Role / Specialization]                     │",
+"│ STATUS   : ONLINE · 0x0100 READY                             │",
+"│ MISSION  : Engineering high-throughput web applications      │",
+"└──────────────────────────────────────────────────────────────┘",
+"```",
+"",
+"### ▚ 01 // SYSTEM DIAGNOSTIC (ABOUT)",
+"- ⚡ **Primary Directive**: [Two sentences explaining what you engineer, what sets your code apart, and your favorite domain].",
+"- 🔭 **Currently Building**: **[Main Project Name]** — [quick one-liner].",
+"- 🌱 **Exploring Next**: `[Skill 7]`, `[Skill 8]`, and distributed systems.",
+"- 💬 **Ask Me About**: `[Skill 1]`, `[Skill 2]`, system performance & UI craft.",
+"",
+"### ▚ 02 // WEAPONS LOADOUT (TECH STACK)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,tailwind,python,fastapi,postgres,docker,git,linux&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### ▚ 03 // TELEMETRY & INTEL",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=07130a&title_color=00ff66&text_color=d8ffe4&icon_color=d4ff3f&border_radius=4\" alt=\"GitHub Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=07130a&ring=00ff66&fire=d4ff3f&currStreakLabel=7dffa8&currStreakNum=00ff66&sideNums=d8ffe4&sideLabels=5f8f6f&border_radius=4\" alt=\"Streak Stats\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api/top-langs/?username=[YOUR-USERNAME]&layout=compact&hide_border=true&bg_color=07130a&title_color=00ff66&text_color=d8ffe4&border_radius=4\" alt=\"Top Languages\" height=\"145\"/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=07130a&color=00ff66&line=00ff66&point=7dffa8&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### ▚ 04 // NOTABLE COMMITS (FEATURED WORKS)",
+"| Repository | Description | Tech Stack | Live Signal |",
+"| :--- | :--- | :--- | :--- |",
+"| **[Project 1 Name](https://github.com/[YOUR-USERNAME])** | [Core value proposition in one sharp sentence] | `[Skill 1]` `[Skill 2]` | [⚡ Live Demo →](link) |",
+"| **[Project 2 Name](https://github.com/[YOUR-USERNAME])** | [Architecture & performance highlight] | `[Skill 3]` `[Skill 4]` | [⚡ Live Demo →](link) |",
+"| **[Project 3 Name](https://github.com/[YOUR-USERNAME])** | [Open source utility or full-stack engine] | `[Skill 5]` `[Skill 6]` | [★ View Repo →](link) |",
+"",
+"### ▚ 05 // OPEN SECURE CHANNEL",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/EMAIL-00ff66?style=for-the-badge&logo=gmail&logoColor=010502\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-07130a?style=for-the-badge&logo=github&logoColor=00ff66\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/LINKEDIN-00ff66?style=for-the-badge&logo=linkedin&logoColor=010502\"/>\x3c/a>",
+"  \x3ca href=\"https://twitter.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/TWITTER-07130a?style=for-the-badge&logo=x&logoColor=00ff66\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"\x3cdiv align=\"center\">\x3cem style=\"color:#5f8f6f\">— [YOUR-USERNAME] // terminal log est. 1999 —\x3c/em>\x3c/div>"].join("\n")},
+
+{id:"amber",vibe:"1984 UNIX Station log. Warm monochrome amber phosphor glow.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=rect&color=1d1206&text=%3E_%20[YOUR%20NAME]%20%C2%B7%20UNIX-88&height=180&fontSize=36&fontColor=ffb000&stroke=ffb000&strokeWidth=2&desc=LATE-NIGHT%20TRANSMISSION%20%C2%B7%20300%20BAUD&descAlignY=66&descColor=ffd27f\" width=\"100%\" alt=\"Amber Banner\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Courier+Prime&pause=1000&color=FFB000&center=true&vCenter=true&width=450&lines=UNIX+Station+Online+%C2%B7+300+Baud;Crafting+Enduring+Software+Systems;Keeping+Old+Systems+Alive+and+New+Ones+Honest;Broadcasting+from+[YOUR+LOCATION]\" alt=\"Amber Typing\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/BAUD_RATE-300_BPS-ffb000?style=flat-square&logo=gnubash&logoColor=0a0501\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/CAFFEINE-CRITICAL-ff6b1a?style=flat-square\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=ffb000&style=flat-square&label=STATION_VIEWS\"/>",
+"\x3c/div>",
+"",
+"```",
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+"   /\\   /\\   /\\        .--.      .-.      .-.      .--.   ",
+"  /  \\ /  \\ /  \\      (    )    (   )    (   )    (    )  ",
+" /    V    V    \\      `--'      `-'      `-'      `--'   ",
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+"             >> AMBER STATION LOG · OPERATOR @[YOUR-USERNAME] <<",
+"```",
+"",
+"### ◈ STATION BRIEFING",
+"I engineer resilient backend architectures and handcrafted frontend surfaces. Specializing in **[Specialty 1]** and **[Specialty 2]**, I turn complex specifications into robust, maintainable code.",
+"",
+"### ◈ INSTRUMENT PANEL (SKILLS)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=ts,js,react,nodejs,express,postgres,redis,docker,git,linux,bash&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### ◈ STATION TELEMETRY",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1d1206&title_color=ffb000&text_color=ffe9c4&icon_color=ff6b1a&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=1d1206&ring=ffb000&fire=ff6b1a&currStreakLabel=ffd27f&currStreakNum=ffb000&sideNums=ffe9c4&sideLabels=9c7b4a&border_radius=4\" alt=\"Streak\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=1d1206&color=ffb000&line=ffb000&point=ffd27f&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### ◈ ACTIVE TRANSMISSIONS",
+"| Frequency | Payload | Signal |",
+"| :--- | :--- | :--- |",
+"| **[Project 1](https://github.com/[YOUR-USERNAME])** | [Full-stack application with real-time updates] | [Signal Locked →](link) |",
+"| **[Project 2](https://github.com/[YOUR-USERNAME])** | [High-efficiency developer tooling] | [Signal Locked →](link) |",
+"",
+"### ◈ CONTACT FREQUENCY",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/TELEGRAPH-ffb000?style=flat-square&logo=gmail&logoColor=0a0501\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-1d1206?style=flat-square&logo=github&logoColor=ffb000\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/NETWORK-ffb000?style=flat-square&logo=linkedin&logoColor=0a0501\"/>\x3c/a>",
+"\x3c/div>"].join("\n")},
+
+{id:"cybergrid",vibe:"Netrunner brutalist profile. Jacked directly into the cyberspace grid.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=slice&color=06222a&text=%E2%97%88%20[YOUR%20NAME]%20%E2%97%88&height=190&fontSize=38&fontColor=00e5ff&stroke=00e5ff&strokeWidth=2&desc=CYBERSPACE%20NETRUNNER%20%C2%B7%20GRID%20SYNC%20100%25&descAlignY=66&descColor=64f0d8\" width=\"100%\" alt=\"Cybergrid\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&pause=1000&color=00E5FF&center=true&vCenter=true&width=450&lines=Jacked+into+the+Cyberspace+Grid;Zero+ICE+Detected+%C2%B7+Data+Streams+Active;Architecting+Next-Gen+Web+Engines;Scanning+from+[YOUR+LOCATION]\" alt=\"Cyber Typing\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/ICE_STATUS-CLEARED-00e5ff?style=for-the-badge&logo=wireguard&logoColor=010a0d\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/SYNC-100%25-64f0d8?style=for-the-badge\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=00e5ff&style=for-the-badge&label=GRID_TRACES\"/>",
+"\x3c/div>",
+"",
+"```yaml",
+"handle: @[YOUR-USERNAME]",
+"class: Netrunner / Senior Full-Stack Engineer",
+"faction: Open-Source Vanguard",
+"location: [YOUR LOCATION]",
+"specialty: Distributed Architecture & High-Performance UI",
+"```",
+"",
+"### ◢ CYBERWARE DECK (TECH STACK)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=ts,react,nextjs,tailwind,nodejs,graphql,postgres,redis,docker,kubernetes,aws,git&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### ◢ GRID TELEMETRY & ACTIVITY",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=06222a&title_color=00e5ff&text_color=d9fbff&icon_color=f5d300&border_radius=0\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=06222a&ring=00e5ff&fire=f5d300&currStreakLabel=64f0d8&currStreakNum=00e5ff&sideNums=d9fbff&sideLabels=5e93a0&border_radius=0\" alt=\"Streak\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api/top-langs/?username=[YOUR-USERNAME]&layout=compact&hide_border=true&bg_color=06222a&title_color=00e5ff&text_color=d9fbff&border_radius=0\" alt=\"Languages\" height=\"145\"/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=06222a&color=00e5ff&line=00e5ff&point=64f0d8&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### ◢ ACTIVE NET RUNS (PROJECTS)",
+"| Node | Payload Briefing | Security Clearance | Link |",
+"| :--- | :--- | :--- | :--- |",
+"| **[Project Alpha](https://github.com/[YOUR-USERNAME])** | High-speed data processing pipeline | LEVEL 5 | [Execute →](link) |",
+"| **[Project Beta](https://github.com/[YOUR-USERNAME])** | Distributed real-time synchronization protocol | LEVEL 4 | [Execute →](link) |",
+"",
+"### ◢ UPLINK TERMINAL",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/SIGNAL-00e5ff?style=for-the-badge&logo=matrix&logoColor=010a0d\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-06222a?style=for-the-badge&logo=github&logoColor=00e5ff\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/LINK-00e5ff?style=for-the-badge&logo=linkedin&logoColor=010a0d\"/>\x3c/a>",
+"\x3c/div>"].join("\n")},
+
+{id:"ice",vibe:"Y2K Frost Messenger & glassmorphism aesthetic.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=soft&color=eef4f9&text=%E2%9C%A7%20[YOUR%20NAME]%20%E2%9C%A7&height=180&fontSize=38&fontColor=0a84d0&stroke=0a84d0&strokeWidth=1.5&desc=STATUS%3A%20ONLINE%20%C2%B7%20SHIPPING%20CLEAN%20CODE&descAlignY=66&descColor=12b0c9\" width=\"100%\" alt=\"Ice Banner\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Comfortaa&pause=1000&color=0A84D0&center=true&vCenter=true&width=450&lines=Full+Stack+Developer+%E2%9C%A7+Design+Enthusiast;Crafting+Smooth%2C+Modern+Experiences;Always+Online+on+the+Buddy+List;Building+Delightful+Web+Products\" alt=\"Ice Typing\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/MSN_STATUS-ONLINE-0a84d0?style=for-the-badge&logo=messenger&logoColor=ffffff\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/MOOD-SHIPPING_FEATURES-12b0c9?style=for-the-badge\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=0a84d0&style=for-the-badge&label=VISITORS\"/>",
+"\x3c/div>",
+"",
+"### ✧ ABOUT ME",
+"Hey! I'm **[Your Name]**, a developer obsessed with responsive interfaces and scalable architectures. I like turning ambiguous ideas into refined, responsive applications with personality.",
+"",
+"### ✧ MY BUDDY LIST (STACK)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=html,css,js,ts,react,nextjs,tailwind,nodejs,postgres,figma,git&theme=light\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### ✧ LIVE STATS & TELEMETRY",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=eef4f9&title_color=0a84d0&text_color=17324a&icon_color=f5a300&border_radius=8\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=eef4f9&ring=0a84d0&fire=f5a300&currStreakLabel=12b0c9&currStreakNum=0a84d0&sideNums=17324a&sideLabels=5c7690&border_radius=8\" alt=\"Streak\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=eef4f9&color=0a84d0&line=0a84d0&point=12b0c9&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### ✧ FAVORITE BUILDS",
+"- 🌟 **[Featured Project 1](https://github.com/[YOUR-USERNAME])** — [Clean UI web platform with modern state handling] · [Live Demo →](link)",
+"- 🚀 **[Featured Project 2](https://github.com/[YOUR-USERNAME])** — [Full-stack application with cloud sync] · [Live Demo →](link)",
+"",
+"### ✧ NUDGE ME / SAY HELLO",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/NUDGE_EMAIL-0a84d0?style=for-the-badge&logo=gmail&logoColor=ffffff\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-eef4f9?style=for-the-badge&logo=github&logoColor=0a84d0\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/LINKEDIN-0a84d0?style=for-the-badge&logo=linkedin&logoColor=ffffff\"/>\x3c/a>",
+"\x3c/div>"].join("\n")},
+
+{id:"chrome",vibe:"Liquid Chrome Winamp skin & digital audio workstation vibe.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=cylinder&color=1a222c&text=%E2%96%B6%20[YOUR%20NAME]%20%C2%B7%20GREATEST.HITS&height=180&fontSize=34&fontColor=c9d6e4&stroke=c9d6e4&strokeWidth=2&desc=WINAMP%20DIGITAL%20AUDIO%20STATION%20%C2%B7%20320%20KBPS&descAlignY=66&descColor=7fd4ff\" width=\"100%\" alt=\"Chrome Banner\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Orbitron&pause=1000&color=C9D6E4&center=true&vCenter=true&width=450&lines=Now+Playing%3A+High-Performance+Code;320+KBPS+Bitrate+%C2%B7+Stereo+Sound;Shipping+Full-Stack+Architectures;Track+01+of+Infinity\" alt=\"Chrome Typing\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/BITRATE-320KBPS-c9d6e4?style=flat-square&logo=winamp&logoColor=10151c\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/EQ-CRYSTAL_CLEAR-7fd4ff?style=flat-square\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=7fd4ff&style=flat-square&label=PLAYS\"/>",
+"\x3c/div>",
+"",
+"### ▷ PLAYLIST (PROJECTS)",
+"| Track # | Title | Runtime | Genre | Link |",
+"| :--- | :--- | :--- | :--- | :--- |",
+"| **01** | **[Track 01](https://github.com/[YOUR-USERNAME])** | 2026.03 | Full-Stack Web | [▶ Play →](link) |",
+"| **02** | **[Track 02](https://github.com/[YOUR-USERNAME])** | 2026.01 | Cloud & Systems | [▶ Play →](link) |",
+"",
+"### ▷ EQUALIZER (STACK)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=js,ts,react,nextjs,tailwind,nodejs,postgres,redis,docker,aws,git,linux&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### ▷ VISUALIZER & SPECTRUM",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1a222c&title_color=c9d6e4&text_color=e8eef5&icon_color=00b3ff&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=1a222c&ring=c9d6e4&fire=00b3ff&currStreakLabel=7fd4ff&currStreakNum=c9d6e4&sideNums=e8eef5&sideLabels=7f93a8&border_radius=4\" alt=\"Streak\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=1a222c&color=c9d6e4&line=c9d6e4&point=7fd4ff&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### ▷ REQUEST LINE",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/TAPE_INBOX-c9d6e4?style=flat-square&logo=gmail&logoColor=10151c\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-1a222c?style=flat-square&logo=github&logoColor=c9d6e4\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/LINKEDIN-c9d6e4?style=flat-square&logo=linkedin&logoColor=10151c\"/>\x3c/a>",
+"\x3c/div>"].join("\n")},
+
+{id:"acid",vibe:"90s Underground Rave Flyer. Toxic lime, high energy, brutalist.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=waving&color=141a10&text=%E2%98%85%20[YOUR%20NAME]%20LIVE%20%E2%98%85&height=190&fontSize=38&fontColor=b4ff00&stroke=b4ff00&strokeWidth=2&desc=ONE%20NIGHT%20ONLY%20%C2%B7%20NO%20DOWNTIME%20%C2%B7%20100%25%20UPTIME&descAlignY=66&descColor=00ffd0\" width=\"100%\" alt=\"Acid Banner\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=VT323&size=24&pause=1000&color=B4FF00&center=true&vCenter=true&width=450&lines=RAVE+PROTOCOL+ONLINE+%E2%98%85+HIGH+VOLTAGE;SPITTING+CLEAN+TYPESCRIPT+%26+REACT;NO+DRESS+CODE+%C2%B7+BRING+LAPTOP;TURNING+CAFFEINE+INTO+PRODUCTION+CODE\" alt=\"Acid Typing\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/STAGE-MAIN_ARENA-b4ff00?style=for-the-badge&logo=lightning&logoColor=0c0f0a\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/VOLTAGE-HIGH-00ffd0?style=for-the-badge\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=b4ff00&style=for-the-badge&label=RAVE_ATTENDEES\"/>",
+"\x3c/div>",
+"",
+"### ★ HEADLINERS (TECH STACK)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=js,ts,react,nextjs,tailwind,nodejs,express,postgres,mongodb,docker,git&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### ★ LIVE SET TELEMETRY",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=141a10&title_color=b4ff00&text_color=eaffdc&icon_color=00ffd0&border_radius=0\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=141a10&ring=b4ff00&fire=00ffd0&currStreakLabel=e0ff7a&currStreakNum=b4ff00&sideNums=eaffdc&sideLabels=7f9a6b&border_radius=0\" alt=\"Streak\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=141a10&color=b4ff00&line=b4ff00&point=00ffd0&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### ★ MAIN STAGE (PROJECTS)",
+"- ⚡ **[Project 1](https://github.com/[YOUR-USERNAME])** — [High-frequency real-time web application] · [Live Demo →](link)",
+"- ⚡ **[Project 2](https://github.com/[YOUR-USERNAME])** — [Full-stack reactive platform with sub-second latency] · [Live Demo →](link)",
+"",
+"### ★ AFTERPARTY (COMMS)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/GUESTLIST-b4ff00?style=for-the-badge&logo=gmail&logoColor=0c0f0a\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-141a10?style=for-the-badge&logo=github&logoColor=b4ff00\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/VIP-00ffd0?style=for-the-badge&logo=linkedin&logoColor=0c0f0a\"/>\x3c/a>",
+"\x3c/div>"].join("\n")},
+
+{id:"redalert",vibe:"Command & Conquer tactical military intel briefing.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=rect&color=1e0808&text=%E2%96%A0%20TACTICAL%20INTEL%20%C2%B7%20[YOUR%20NAME]%20%E2%96%A0&height=180&fontSize=34&fontColor=ff3b2f&stroke=ff3b2f&strokeWidth=2&desc=SECURITY%20CLEARANCE%3A%20PUBLIC%20%C2%B7%20COMBAT%20READY&descAlignY=66&descColor=ffd23f\" width=\"100%\" alt=\"Red Alert Banner\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Black+Ops+One&pause=1000&color=FF3B2F&center=true&vCenter=true&width=450&lines=Tactical+HQ+Online+%C2%B7+Red+Alert;Classified+Operation+History;Engineering+Mission-Critical+Systems;Combat+Readiness%3A+100%25\" alt=\"Red Alert Typing\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/THREAT_LEVEL-MAXIMUM-ff3b2f?style=for-the-badge&logo=target&logoColor=ffffff\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/DEPLOYMENT-ACTIVE-ffd23f?style=for-the-badge&logoColor=140404\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=ff3b2f&style=for-the-badge&label=INTEL_ACCESS\"/>",
+"\x3c/div>",
+"",
+"```yaml",
+"OPERATIVE   : @[YOUR-USERNAME]",
+"RANK        : Senior Full-Stack Specialist",
+"THEATER     : [YOUR LOCATION]",
+"CAPABILITY  : Rapid Full-Stack Deployment, Cloud Resiliency",
+"```",
+"",
+"### ◈ FIELD ARSENAL (WEAPONS)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=ts,react,nextjs,nodejs,postgres,redis,docker,kubernetes,aws,linux,git&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### ◈ FIELD TELEMETRY & METRICS",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1e0808&title_color=ff3b2f&text_color=ffe3dd&icon_color=ffd23f&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=1e0808&ring=ff3b2f&fire=ffd23f&currStreakLabel=ff8a70&currStreakNum=ff3b2f&sideNums=ffe3dd&sideLabels=a06a5f&border_radius=4\" alt=\"Streak\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=1e0808&color=ff3b2f&line=ff3b2f&point=ffd23f&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### ◈ OPERATION LOG (DEPLOYED WORKS)",
+"| Mission | Objective & Architecture | Status |",
+"| :--- | :--- | :--- |",
+"| **[Mission 01](https://github.com/[YOUR-USERNAME])** | [Distributed cloud infrastructure with auto-failover] | [DEPLOYED ★](link) |",
+"| **[Mission 02](https://github.com/[YOUR-USERNAME])** | [High-throughput data ingestion service] | [DEPLOYED ★](link) |",
+"",
+"### ◈ SECURE FREQUENCIES",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/SECURE_COMMS-ff3b2f?style=for-the-badge&logo=gmail&logoColor=ffffff\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/HQ_GITHUB-1e0808?style=for-the-badge&logo=github&logoColor=ff3b2f\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/COUNCIL-ffd23f?style=for-the-badge&logo=linkedin&logoColor=140404\"/>\x3c/a>",
+"\x3c/div>"].join("\n")},
+
+{id:"holo",vibe:"Gem-Mint 1st Edition Holographic collector card.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=waving&color=0a241c&text=%E2%9C%A6%20[YOUR%20NAME]%20%C2%B7%201ST%20EDITION%20%E2%9C%A6&height=190&fontSize=36&fontColor=3dffb0&stroke=3dffb0&strokeWidth=2&desc=LEGENDARY%20HOLO-FOIL%20%C2%B7%20PSA%20GEM%20MINT%2010&descAlignY=66&descColor=ffd75e\" width=\"100%\" alt=\"Holo Banner\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Cinzel&pause=1000&color=3DFFB0&center=true&vCenter=true&width=450&lines=Legendary+1st+Edition+Engineer;PSA+Gem+Mint+10+Graded;Full+Stack+Mastery+%C2%B7+Zero+Defects;Minting+High-Value+Open+Source\" alt=\"Holo Typing\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/RARITY-LEGENDARY-3dffb0?style=for-the-badge&logo=sparkles&logoColor=04140f\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/GRADE-PSA_10-ffd75e?style=for-the-badge&logoColor=04140f\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=3dffb0&style=for-the-badge&label=CARD_VIEWS\"/>",
+"\x3c/div>",
+"",
+"```yaml",
+"CARD NAME : [YOUR NAME]",
+"TYPE      : Legendary Full-Stack Architect",
+"HP        : 9999 / 9999",
+"RESISTANCE: Scope Creep, Race Conditions, Downtime",
+"WEAKNESS  : Good Coffee, Mechanical Keyboards",
+"```",
+"",
+"### ✦ ATTACK MOVES & SPECIAL SKILLS",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,postgres,graphql,docker,tailwind,git,figma&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### ✦ CARD POWER TELEMETRY",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=0a241c&title_color=3dffb0&text_color=e2fff2&icon_color=ffd75e&border_radius=8\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=0a241c&ring=3dffb0&fire=ffd75e&currStreakLabel=b0ffe0&currStreakNum=3dffb0&sideNums=e2fff2&sideLabels=6ba38c&border_radius=8\" alt=\"Streak\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=0a241c&color=3dffb0&line=3dffb0&point=ffd75e&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### ✦ GEM COLLECTION (SELECTED WORKS)",
+"| Move | Power Rating | Description | Link |",
+"| :--- | :--- | :--- | :--- |",
+"| **[Masterpiece 01](https://github.com/[YOUR-USERNAME])** | ★★★★★ | [Modern responsive platform with sub-second performance] | [Inspect →](link) |",
+"| **[Masterpiece 02](https://github.com/[YOUR-USERNAME])** | ★★★★★ | [Distributed full-stack architecture] | [Inspect →](link) |",
+"",
+"### ✦ COLLECTOR DIRECTORY",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/TRADE_INBOX-3dffb0?style=for-the-badge&logo=gmail&logoColor=04140f\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/VAULT_GITHUB-0a241c?style=for-the-badge&logo=github&logoColor=3dffb0\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/COLLECTOR_NETWORK-ffd75e?style=for-the-badge&logo=linkedin&logoColor=04140f\"/>\x3c/a>",
+"\x3c/div>"].join("\n")},
+
+{id:"gameboy",vibe:"8-bit Nintendo Game Boy quest cartridge & inventory.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=rect&color=1f2716&text=%E2%96%B8%20[YOUR%20NAME].GB%20%C2%B7%20PRESS%20START&height=180&fontSize=34&fontColor=9bbc0f&stroke=9bbc0f&strokeWidth=2&desc=8-BIT%20CARTRIDGE%20%C2%B7%20WORLD%201-1%20LOADED&descAlignY=66&descColor=c4d64f\" width=\"100%\" alt=\"GameBoy Banner\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Press+Start+2P&size=16&pause=1000&color=9BBC0F&center=true&vCenter=true&width=450&lines=PRESS+START+%E2%96%B8+LEVEL+99+PLAYER;INVENTORY%3A+FULL-STACK+CODE;BOSS+FIGHTS+WON%3A+100%25;SAVING+GAME+TO+MEMORY...\" alt=\"GameBoy Typing\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/PLAYER_1-READY-9bbc0f?style=flat-square&logo=nintendo&logoColor=0f130a\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/LIVES-INF-c4d64f?style=flat-square\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=9bbc0f&style=flat-square&label=COINS\"/>",
+"\x3c/div>",
+"",
+"```",
+"┌──────────────────────────────────────────────────────────────┐",
+"│ PLAYER    : @[YOUR-USERNAME]                                 │",
+"│ CLASS     : Full-Stack Developer [LVL 99]                    │",
+"│ WORLD     : [YOUR LOCATION]                                  │",
+"│ QUEST     : Building top-tier applications with zero bugs    │",
+"└──────────────────────────────────────────────────────────────┘",
+"```",
+"",
+"### ▸ ITEM INVENTORY (STACK)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=js,ts,react,nextjs,tailwind,nodejs,postgres,redis,docker,git,linux&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### ▸ HIGH SCORES & TELEMETRY",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1f2716&title_color=9bbc0f&text_color=dce8b8&icon_color=e8f0a0&border_radius=0\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=1f2716&ring=9bbc0f&fire=e8f0a0&currStreakLabel=c4d64f&currStreakNum=9bbc0f&sideNums=dce8b8&sideLabels=8a9768&border_radius=0\" alt=\"Streak\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=1f2716&color=9bbc0f&line=9bbc0f&point=c4d64f&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### ▸ WORLD MAP (DUNGEONS & PROJECTS)",
+"- 🍄 **[Zone 1](https://github.com/[YOUR-USERNAME])** — [Primary flagship application] · [Warp Pipe →](link)",
+"- ⭐ **[Zone 2](https://github.com/[YOUR-USERNAME])** — [Full-stack engine with cloud saves] · [Warp Pipe →](link)",
+"",
+"### ▸ 2-PLAYER LINK CABLE",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/LINK_CABLE-9bbc0f?style=flat-square&logo=gmail&logoColor=0f130a\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/CARTRIDGE_GITHUB-1f2716?style=flat-square&logo=github&logoColor=9bbc0f\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/COOP_NET-c4d64f?style=flat-square&logo=linkedin&logoColor=0f130a\"/>\x3c/a>",
+"\x3c/div>"].join("\n")},
+
+{id:"flame",vibe:"Overclocked test bench. Molten thermal output, turbo clock speed.",md:[
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://capsule-render.vercel.app/api?type=waving&color=240905&text=%F0%9F%94%A5%20[YOUR%20NAME]%20%C2%B7%20AFTERBURNER%20%F0%9F%94%A5&height=190&fontSize=36&fontColor=ff5500&stroke=ff5500&strokeWidth=2&desc=OVERCLOCKED%20FSB%20%C2%B7%20CORE%20TEMP%3A%20MOLTEN&descAlignY=66&descColor=ffd000\" width=\"100%\" alt=\"Flame Banner\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Russo+One&pause=1000&color=FF5500&center=true&vCenter=true&width=450&lines=System+Overclocked+%E2%9A%A1+Core+Temp%3A+Molten;Writing+Blazing-Fast+Web+Platforms;Zero-Throttle+Engineering;Building+High-Speed+Production+Apps\" alt=\"Flame Typing\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://img.shields.io/badge/CLOCK_SPEED-OVERCLOCKED-ff5500?style=for-the-badge&logo=speedtest&logoColor=ffffff\"/>",
+"  \x3cimg src=\"https://img.shields.io/badge/COOLING-COFFEE_LOOP-ffd000?style=for-the-badge&logoColor=120302\"/>",
+"  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=ff5500&style=for-the-badge&label=WATTS\"/>",
+"\x3c/div>",
+"",
+"```yaml",
+"CORE STATUS : RUNNING AT 133% CLOCK SPEED",
+"OPERATOR    : [YOUR NAME] (@[YOUR-USERNAME])",
+"SPECIALTY   : Ultra-Low Latency, High-Concurrency Web Engineering",
+"TEST BENCH  : [YOUR LOCATION]",
+"```",
+"",
+"### 🔥 SUPERCHARGED ARSENAL (STACK)",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,postgres,redis,docker,aws,fastapi,python,git&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+"\x3c/div>",
+"",
+"### 🔥 THERMAL TELEMETRY & BENCHMARKS",
+"\x3cdiv align=\"center\">",
+"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=240905&title_color=ff5500&text_color=ffe8d6&icon_color=ffd000&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-streak-stats.herokuapp.com/?user=[YOUR-USERNAME]&hide_border=true&background=240905&ring=ff5500&fire=ffd000&currStreakLabel=ff884d&currStreakNum=ff5500&sideNums=ffe8d6&sideLabels=a86b5b&border_radius=4\" alt=\"Streak\" height=\"165\"/>",
+"  \x3cbr/>",
+"  \x3cimg src=\"https://github-readme-activity-graph.vercel.app/graph?username=[YOUR-USERNAME]&bg_color=240905&color=ff5500&line=ff5500&point=ffd000&area=true&hide_border=true\" alt=\"Activity Graph\" width=\"100%\"/>",
+"\x3c/div>",
+"",
+"### 🔥 STRESS-TESTED BUILDS",
+"- ⚡ **[High-Performance Build 1](https://github.com/[YOUR-USERNAME])** — [Sub-millisecond processing engine] · [Live Rig →](link)",
+"- ⚡ **[High-Performance Build 2](https://github.com/[YOUR-USERNAME])** — [Distributed full-stack system] · [Live Rig →](link)",
+"",
+"### 🔥 EMERGENCY HOTLINE",
+"\x3cdiv align=\"center\">",
+"  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/HOTLINE-ff5500?style=for-the-badge&logo=gmail&logoColor=ffffff\"/>\x3c/a>",
+"  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-240905?style=for-the-badge&logo=github&logoColor=ff5500\"/>\x3c/a>",
+"  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/SUPERGRID-ffd000?style=for-the-badge&logo=linkedin&logoColor=120302\"/>\x3c/a>",
+"\x3c/div>"].join("\n")}
+];
+(function(){
+  var T=window.__TEMPLATES__;
+  function template(id){for(var i=0;T.length>i;i++)if(T[i].id===id)return T[i];return T[0];}
+  if(window.__PX__){window.__PX__.TEMPLATES=T;window.__PX__.template=template;}
+  window.__PX_TPL__=1;
+})();
+</script>
+
+<script type="text/plain" id="px-app">
+/* ═══ APP BLOCK (inert until the loader decodes it).
+   Every "«" below becomes "<" at runtime. Nothing tag-shaped is visible
+   to delivery proxies, so nothing can be stripped or corrupted. ═══ */
+(function(){
+"use strict";
+var esc=window.__PX__.esc, fnv1a=window.__PX__.fnv1a, rng=window.__PX__.rng, mix=window.__PX__.mix,
+    fmt=window.__PX__.fmt, theme=window.__PX__.theme, applyTheme=window.__PX__.applyTheme,
+    store=window.__PX__.store, copyText=window.__PX__.copyText, download=window.__PX__.download,
+    toast=window.__PX__.toast, ASCII=window.__PX__.ASCII, asciiText=window.__PX__.asciiText,
+    THEMES=window.__PX__.THEMES||[], TEMPLATES=window.__PX__.TEMPLATES||window.__TEMPLATES__||[],
+    template=window.__PX__.template||function(){return TEMPLATES[0]||null;};
+
+/* demo profile — instant data, zero config */
+var DEMO={isDemo:true,username:"nexusrider",name:"Kai Nakamura",location:"Osaka, JP",bio:"Full-stack engineer building small, fast, slightly haunted web tools.",
+ followers:482,following:91,publicRepos:47,stars:1036,joined:"2016",
+ langs:[["TypeScript",42],["Rust",19],["JavaScript",16],["CSS",11],["Go",8],["Shell",4]],
+ streak:14,currentStreak:6,activeMonth:"OCT 2025",
+ repos:[
+  {name:"dialup-dashboard",desc:"Realtime server dashboard styled like a 1999 ISP control panel.",stars:312,lang:"TypeScript",topics:["dashboard","websockets","retro"],url:"https://github.com/nexusrider/dialup-dashboard"},
+  {name:"crt.css",desc:"Drop-in CSS classes for scanlines, phosphor glow, and bezel borders.",stars:268,lang:"CSS",topics:["css","retro","effects"],url:"https://github.com/nexusrider/crt.css"},
+  {name:"tamago-cli",desc:"A CLI pet that lives in your terminal and dies if your tests fail.",stars:194,lang:"Rust",topics:["cli","rust","fun"],url:"https://github.com/nexusrider/tamago-cli"},
+  {name:"midi-garden",desc:"Generative plant visualizer driven by MIDI input. Grows while you play.",stars:121,lang:"JavaScript",topics:["webaudio","generative"],url:"https://github.com/nexusrider/midi-garden"},
+  {name:"bevel-ui",desc:"React component library with honest-to-god 1998 bevel borders.",stars:87,lang:"TypeScript",topics:["react","ui"],url:"https://github.com/nexusrider/bevel-ui"},
+  {name:"geocount",desc:"Visitor counter for the modern web — because the 90s had it right.",stars:54,lang:"Go",topics:["api","fun"],url:"https://github.com/nexusrider/geocount"}],
+ grid:(function(){var p=[0,1,2,0,3,1,0,0,2,4,1,0,1,0],g=[];for(var i=0;i«84;i++){g.push(i>=78?Math.max(2,p[i%14]):p[i%14]);}return g;})()};
+
+var TONES=[
+ {id:"professional",name:"PROFESSIONAL",blurb:"Clean, credible, hire-me energy.",sys:"Write in a confident professional tone: concrete achievements, crisp sentences, no slang, no gimmicky formatting beyond light markdown structure."},
+ {id:"y2k",name:"FUNKY / Y2K",blurb:"Chrome, CRT glow, dial-up swagger.",sys:"Write with Y2K retro-futurist flavor: terminal metaphors, playful ASCII energy, references to CRTs/dial-up/early-web culture. Keep it readable and clever, never cringe-word-salad."},
+ {id:"minimal",name:"MINIMAL",blurb:"Quiet. Precise. Scandinavian.",sys:"Write in a radically minimal tone: short sentences, generous whitespace, no emojis, no exclamation marks, only the strongest facts. Understatement is the aesthetic."},
+ {id:"recruiter",name:"RECRUITER MODE",blurb:"Keywords, metrics, open-to-work.",sys:"Optimize for recruiters and hiring managers: lead with measurable impact, name technologies explicitly for searchability, include an explicit open-to-work line and contact section."}
+];
+
+/* markdown renderer (GFM-ish subset) */
+function mdInline(s){
+  s=esc(s);var codes=[];
+  s=s.replace(/`([^`]+)`/g,function(m,c){codes.push(c);return"\x01"+(codes.length-1)+"\x01";});
+  s=s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,'«img alt="$1" src="$2" loading="lazy" onerror="this.classList.add(\'img-broken\')">');
+  s=s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'«a href="$2" target="_blank" rel="noopener">$1«/a>');
+  s=s.replace(/\*\*([^*]+)\*\*/g,"«strong>$1«/strong>");
+  s=s.replace(/\*([^*]+)\*/g,"«em>$1«/em>");
+  s=s.replace(/\x01(\d+)\x01/g,function(m,n){return"«code>"+codes[+n]+"«/code>";});
+  return s;}
+function mdRender(src){
+  var lines=src.split(/\r?\n/),out=[],i=0,inCode=false,code=[],list=null,quote=null,table=null;
+  function fl(){if(list){out.push(list.t==="ul"?"«ul>":"«ol>");for(var j=0;j«list.items.length;j++)out.push("«li>"+mdInline(list.items[j])+"«/li>");out.push(list.t==="ul"?"«/ul>":"«/ol>");list=null;}}
+  function fq(){if(quote){out.push("«blockquote>"+quote.map(mdInline).join("«br>")+"«/blockquote>");quote=null;}}
+  function ft(){if(table){var h="«table>";for(var r=0;r«table.length;r++){h+="«tr>";for(var c=0;c«table[r].length;c++)h+=(r===0?"«th>":"«td>")+mdInline(table[r][c])+(r===0?"«/th>":"«/td>");h+="«/tr>";}out.push(h+"«/table>");table=null;}}
+  while(i«lines.length){
+    var L=lines[i];
+    if(/^```/.test(L)){if(inCode){out.push("«pre>«code>"+esc(code.join("\n"))+"«/code>«/pre>");code=[];inCode=false;}else{fl();fq();ft();inCode=true;}i++;continue;}
+    if(inCode){code.push(L);i++;continue;}
+    if(/^\s*«\/?[a-zA-Z]/.test(L)){fl();fq();ft();out.push(L);i++;continue;}
+    var tm=L.match(/^\s*\|(.+)\|\s*$/);
+    if(tm){fl();fq();var cells=tm[1].split("|").map(function(c){return c.trim();});
+      if(!cells.every(function(c){return/^:?-{2,}:?$/.test(c);})) {if(!table)table=[];table.push(cells);} i++;continue;}
+    ft();
+    var h=L.match(/^(#{1,3})\s+(.*)$/);
+    if(h){fl();fq();var n=h[1].length;out.push("«h"+n+">"+mdInline(h[2])+"«/h"+n+">");i++;continue;}
+    if(/^\s*(-{3,}|\*{3,})\s*$/.test(L)){fl();fq();out.push("«hr>");i++;continue;}
+    var q=L.match(/^>\s?(.*)$/);
+    if(q){fl();if(!quote)quote=[];quote.push(q[1]);i++;continue;}
+    fq();
+    var li=L.match(/^\s*[-*]\s+(.*)$/),ol=L.match(/^\s*\d+\.\s+(.*)$/);
+    if(li||ol){if(!list)list={t:li?"ul":"ol",items:[]};list.items.push((li||ol)[1]);i++;continue;}
+    fl();
+    if(/^\s*$/.test(L)){i++;continue;}
+    out.push("«p>"+mdInline(L)+"«/p>");i++;
+  }
+  if(inCode&&code.length)out.push("«pre>«code>"+esc(code.join("\n"))+"«/code>«/pre>");
+  fl();fq();ft();
+  return out.join("\n");}
+
+/* SVG generators (themed, embeddable) */
+function fontOf(f){return f.replace("var(--f-crt)","'VT323', monospace").replace("var(--f-ui)","'Chakra Petch', sans-serif").replace("var(--f-mono)","'IBM Plex Mono', monospace").replace("var(--f-px)","'Press Start 2P', monospace");}
+function svgFrame(w,h,t,inner){var c=t.c;return '«svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'+
+ '«defs>«linearGradient id="g-'+t.id+'" x1="0" y1="0" x2="1" y2="1">«stop offset="0" stop-color="'+c.pri+'"/>«stop offset="1" stop-color="'+c.acc+'"/>«/linearGradient>«/defs>'+
+ '«rect width="'+w+'" height="'+h+'" fill="'+c.bg+'"/>'+
+ '«rect x="1.5" y="1.5" width="'+(w-3)+'" height="'+(h-3)+'" fill="none" stroke="'+c.line+'" stroke-width="3"/>'+
+ '«rect x="1.5" y="1.5" width="'+(w-3)+'" height="26" fill="'+c.panel2+'"/>'+
+ '«rect x="8" y="22" width="'+(w-16)+'" height="1" fill="'+c.line+'"/>'+
+ '«circle cx="14" cy="13" r="3.5" fill="'+c.acc+'"/>«circle cx="26" cy="13" r="3.5" fill="'+c.sec+'"/>«circle cx="38" cy="13" r="3.5" fill="'+c.pri+'"/>'+
+ inner+"«/svg>";}
+
+function avatarSvg(name,t,salt){
+  var seed=fnv1a(name.toLowerCase()+"|"+t.id+"|"+salt),r=rng(seed),c=t.c,N=8,P=16,pal=[c.pri,c.sec,c.acc],cells="";
+  for(var y=0;y«N;y++)for(var x=0;x«4;x++){if(r()«0.52){var col=pal[Math.floor(r()*pal.length)];
+    cells+='«rect x="'+(x*P)+'" y="'+(y*P)+'" width="'+P+'" height="'+P+'" fill="'+col+'"/>';
+    cells+='«rect x="'+((N-1-x)*P)+'" y="'+(y*P)+'" width="'+P+'" height="'+P+'" fill="'+col+'"/>';}}
+  return '«svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 132 132">'+
+   '«rect width="132" height="132" fill="'+c.deep+'"/>«rect x="2" y="2" width="128" height="128" fill="'+c.panel+'" stroke="'+c.line+'" stroke-width="2"/>'+
+   '«g transform="translate(2,2)">'+cells+"«/g>"+
+   '«rect x="2" y="2" width="128" height="128" fill="none" stroke="'+c.line+'" stroke-width="2"/>'+
+   '«rect x="2" y="2" width="128" height="4" fill="'+c.pri+'" opacity="0.7"/>«/svg>';}
+
+function statsCardSvg(p,t){
+  var c=t.c,inner="";
+  inner+='«text x="20" y="52" font-family="'+fontOf(t.fd)+'" font-size="24" fill="'+c.pri+'">@'+esc(p.username)+"«/text>";
+  inner+='«text x="448" y="52" text-anchor="end" font-family="'+fontOf(t.fb)+'" font-size="10" fill="'+c.muted+'" letter-spacing="2">PUBLIC INTEL CARD«/text>';
+  inner+='«rect x="20" y="64" width="428" height="1" fill="'+c.line+'"/>';
+  var stats=[["REPOS",p.publicRepos],["STARS",p.stars],["FOLLOWERS",p.followers]];
+  for(var i=0;i«3;i++){var x=20+i*146;
+    inner+='«text x="'+x+'" y="100" font-family="'+fontOf(t.fd)+'" font-size="30" fill="'+(i===1?c.acc:c.pri)+'">'+fmt(stats[i][1])+"«/text>";
+    inner+='«text x="'+x+'" y="116" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">'+stats[i][0]+"«/text>";}
+  inner+='«text x="20" y="142" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">TOP LANGUAGES«/text>';
+  var langs=p.langs.slice(0,5),bw=428,bx=20,by=152,bh=14;
+  for(var j=0;j«langs.length;j++){var w=Math.max(6,bw*langs[j][1]/100);
+    inner+='«rect x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+bh+'" fill="'+c.panel2+'"/>';
+    inner+='«rect x="'+bx+'" y="'+by+'" width="'+w+'" height="'+bh+'" fill="'+(j===0?c.pri:mix(c.pri,c.acc,j/(langs.length)))+'"/>';
+    inner+='«text x="'+(bx+6)+'" y="'+(by+11)+'" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+(j===0?c.deep:c.ink)+'" font-weight="bold">'+esc(langs[j][0]).toUpperCase()+" · "+langs[j][1]+"%«/text>";
+    by+=20;}
+  inner+='«text x="20" y="286" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">STREAK '+p.currentStreak+'D · BEST '+p.streak+'D · SINCE '+p.joined+"«/text>";
+  inner+='«text x="448" y="286" text-anchor="end" font-family="'+fontOf(t.fd)+'" font-size="12" fill="'+c.sec+'">'+esc(t.name)+"«/text>";
+  return svgFrame(468,300,t,inner);}
+
+function techMatrixSvg(p,t){
+  var c=t.c,inner="";
+  inner+='«text x="20" y="50" font-family="'+fontOf(t.fd)+'" font-size="20" fill="'+c.pri+'">TECH MATRIX // '+esc(p.username.toUpperCase())+"«/text>";
+  inner+='«text x="500" y="50" text-anchor="end" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="3">SILICON CO-PROCESSOR«/text>';
+  inner+='«rect x="20" y="60" width="480" height="1" fill="'+c.line+'"/>';
+  var langs=p.langs.slice(0,4);
+  for(var i=0;i«langs.length;i++){
+    var y=74+i*42,col=langs[i],w=Math.max(12,Math.min(240,Math.floor(240*col[1]/100)));
+    inner+='«rect x="20" y="'+y+'" width="480" height="34" fill="'+c.panel2+'" stroke="'+c.line+'"/>';
+    inner+='«text x="32" y="'+(y+16)+'" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.acc+'" letter-spacing="1">ADDR 0x0'+(i*4+10)+'0«/text>';
+    inner+='«text x="32" y="'+(y+28)+'" font-family="'+fontOf(t.fd)+'" font-size="13" fill="'+c.ink+'">'+esc(col[0]).toUpperCase()+"«/text>";
+    inner+='«rect x="180" y="'+(y+10)+'" width="240" height="14" fill="'+c.deep+'" stroke="'+c.line+'"/>';
+    inner+='«rect x="182" y="'+(y+12)+'" width="'+w+'" height="'+10+'" fill="'+(i===0?c.pri:mix(c.pri,c.sec,i/3))+'"/>';
+    inner+='«text x="432" y="'+(y+22)+'" font-family="'+fontOf(t.fb)+'" font-size="11" font-weight="bold" fill="'+c.pri+'">'+col[1]+"%«/text>";
+  }
+  inner+='«text x="20" y="244" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">REGISTER BUS: 64-BIT · STATUS: OPTIMAL«/text>';
+  inner+='«text x="500" y="244" text-anchor="end" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.sec+'">PROFILE.EXE v1.0«/text>';
+  return svgFrame(520,260,t,inner);}
+
+function biosCardSvg(p,t){
+  var c=t.c,inner="";
+  inner+='«text x="20" y="48" font-family="'+fontOf(t.fd)+'" font-size="16" fill="'+c.pri+'">★ Y2K MODULAR BIOS v4.51PG ★«/text>';
+  inner+='«text x="500" y="48" text-anchor="end" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">SYSTEM DIAGNOSTIC«/text>';
+  inner+='«rect x="20" y="58" width="480" height="1" fill="'+c.line+'"/>';
+  var lines=[
+    ["CPU TYPE", "64-BIT NEURAL SILICON @ 4.20 GHz"],
+    ["OPERATOR ID", "@"+esc(p.username.toUpperCase())+" (VERIFIED DEV)"],
+    ["BASE MEMORY", "640 KB OK · 1024 MB EXTENDED"],
+    ["PUBLIC REPOS", p.publicRepos+" PACKAGES DETECTED"],
+    ["STARS ACCRUED", fmt(p.stars)+" STARFIRE CREDITS"],
+    ["ACTIVE STREAK", p.currentStreak+" CONSECUTIVE SOLAR DAYS"],
+    ["PRIMARY ENGINE", (p.langs[0]?p.langs[0][0]:"POLYGLOT")+" COMPILER"]
+  ];
+  for(var i=0;i«lines.length;i++){
+    var ly=82+i*22;
+    inner+='«text x="30" y="'+ly+'" font-family="'+fontOf(t.fb)+'" font-size="11" fill="'+c.muted+'" letter-spacing="1">'+lines[i][0]+":«/text>";
+    inner+='«text x="180" y="'+ly+'" font-family="'+fontOf(t.fb)+'" font-size="11" font-weight="bold" fill="'+(i===1||i===4?c.acc:c.pri)+'">'+lines[i][1]+"«/text>";
+  }
+  inner+='«rect x="20" y="246" width="480" height="28" fill="'+c.panel2+'" stroke="'+c.line+'"/>';
+  inner+='«text x="30" y="264" font-family="'+fontOf(t.fb)+'" font-size="10" font-weight="bold" fill="'+c.pri+'">PRESS ‹DEL› TO ENTER SETUP · SYSTEM OK · NO ERRORS DETECTED«/text>';
+  return svgFrame(520,290,t,inner);}
+
+function holoBannerSvg(p,t){
+  var c=t.c,W=640,H=190,inner="";
+  inner+='«defs>«linearGradient id="hb-grad-'+t.id+'" x1="0" y1="0" x2="1" y2="0">«stop offset="0" stop-color="'+c.pri+'"/>«stop offset="0.7" stop-color="'+c.sec+'"/>«stop offset="1" stop-color="'+c.acc+'"/>«/linearGradient>«/defs>';
+  inner+='«rect width="'+W+'" height="'+H+'" fill="'+c.bg+'"/>';
+  inner+='«rect x="2" y="2" width="'+(W-4)+'" height="'+(H-4)+'" fill="none" stroke="'+c.line+'" stroke-width="2"/>';
+  inner+='«line x1="16" y1="16" x2="40" y2="16" stroke="'+c.pri+'" stroke-width="2"/>«line x1="16" y1="16" x2="16" y2="40" stroke="'+c.pri+'" stroke-width="2"/>';
+  inner+='«line x1="'+(W-16)+'" y1="16" x2="'+(W-40)+'" y2="16" stroke="'+c.pri+'" stroke-width="2"/>«line x1="'+(W-16)+'" y1="16" x2="'+(W-16)+'" y2="40" stroke="'+c.pri+'" stroke-width="2"/>';
+  inner+='«line x1="16" y1="'+(H-16)+'" x2="40" y2="'+(H-16)+'" stroke="'+c.pri+'" stroke-width="2"/>«line x1="16" y1="'+(H-16)+'" x2="16" y2="'+(H-40)+'" stroke="'+c.pri+'" stroke-width="2"/>';
+  inner+='«line x1="'+(W-16)+'" y1="'+(H-16)+'" x2="'+(W-40)+'" y2="'+(H-16)+'" stroke="'+c.pri+'" stroke-width="2"/>«line x1="'+(W-16)+'" y1="'+(H-16)+'" x2="'+(W-16)+'" y2="'+(H-40)+'" stroke="'+c.pri+'" stroke-width="2"/>';
+  inner+='«text x="36" y="44" font-family="'+fontOf(t.fb)+'" font-size="10" fill="'+c.muted+'" letter-spacing="4">SYSTEM // OPERATOR IDENTIFICATION«/text>';
+  inner+='«text x="36" y="98" font-family="'+fontOf(t.fd)+'" font-size="44" fill="url(#hb-grad-'+t.id+')" font-weight="900">@'+esc(p.username.toUpperCase())+"«/text>";
+  inner+='«text x="36" y="126" font-family="'+fontOf(t.fb)+'" font-size="12" fill="'+c.sec+'" letter-spacing="1">'+(p.bio?esc(p.bio.slice(0,55)):"FULL-STACK SOFTWARE ARCHITECT · RETRO CYBERNETICS")+"«/text>";
+  inner+='«rect x="36" y="146" width="94" height="22" fill="'+c.panel2+'" stroke="'+c.line+'"/>';
+  inner+='«text x="44" y="161" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.pri+'" font-weight="bold">★ '+fmt(p.stars)+' STARS«/text>';
+  inner+='«rect x="138" y="146" width="94" height="22" fill="'+c.panel2+'" stroke="'+c.line+'"/>';
+  inner+='«text x="146" y="161" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.acc+'" font-weight="bold">📦 '+p.publicRepos+' REPOS«/text>';
+  inner+='«rect x="240" y="146" width="110" height="22" fill="'+c.panel2+'" stroke="'+c.line+'"/>';
+  inner+='«text x="248" y="161" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.sec+'" font-weight="bold">⚡ '+p.currentStreak+'D STREAK«/text>';
+  inner+='«text x="'+(W-36)+'" y="161" text-anchor="end" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">CYBERGRID TERMINAL · EST. 2026«/text>';
+  return '«svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">'+inner+"«/svg>";}
+
+function statRadarSvg(p,t){
+  var c=t.c,W=380,H=300,cx=190,cy=155,R=90,inner="";
+  var labels=["VELOCITY","STREAK","STARS","REPOS","POLYGLOT"];
+  var v1=Math.min(1,p.currentStreak/30||0.4);
+  var v2=Math.min(1,p.streak/60||0.5);
+  var v3=Math.min(1,p.stars/200||0.45);
+  var v4=Math.min(1,p.publicRepos/40||0.6);
+  var v5=Math.min(1,p.langs.length/6||0.7);
+  var vals=[v1,v2,v3,v4,v5];
+  inner+='«text x="20" y="32" font-family="'+fontOf(t.fd)+'" font-size="16" fill="'+c.pri+'">COMBAT RADAR // @'+esc(p.username.toUpperCase())+"«/text>";
+  inner+='«text x="360" y="32" text-anchor="end" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">RPG STAT MATRIX«/text>';
+  inner+='«rect x="20" y="40" width="340" height="1" fill="'+c.line+'"/>';
+  for(var r=1;r«=4;r++){
+    var cr=R*(r/4),pts=[];
+    for(var a=0;a«5;a++){
+      var ang=-Math.PI/2+a*(Math.PI*2/5);
+      pts.push((cx+cr*Math.cos(ang))+","+(cy+cr*Math.sin(ang)));
+    }
+    inner+='«polygon points="'+pts.join(" ")+'" fill="none" stroke="'+c.line+'" stroke-width="1" stroke-dasharray="2 2"/>';
+  }
+  for(var b=0;b«5;b++){
+    var angb=-Math.PI/2+b*(Math.PI*2/5);
+    inner+='«line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+R*Math.cos(angb))+'" y2="'+(cy+R*Math.sin(angb))+'" stroke="'+c.line+'"/>';
+    var lx=cx+(R+18)*Math.cos(angb),ly=cy+(R+18)*Math.sin(angb);
+    inner+='«text x="'+lx+'" y="'+(ly+4)+'" text-anchor="middle" font-family="'+fontOf(t.fb)+'" font-size="8" fill="'+c.sec+'" font-weight="bold">'+labels[b]+"«/text>";
+  }
+  var poly=[];
+  for(var k=0;k«5;k++){
+    var vk=Math.max(0.2,vals[k]),angk=-Math.PI/2+k*(Math.PI*2/5);
+    poly.push((cx+R*vk*Math.cos(angk))+","+(cy+R*vk*Math.sin(angk)));
+  }
+  inner+='«polygon points="'+poly.join(" ")+'" fill="'+c.pri+'" fill-opacity="0.25" stroke="'+c.pri+'" stroke-width="2.5"/>';
+  for(var m=0;m«5;m++){
+    var vm=Math.max(0.2,vals[m]),angm=-Math.PI/2+m*(Math.PI*2/5);
+    inner+='«circle cx="'+(cx+R*vm*Math.cos(angm))+'" cy="'+(cy+R*vm*Math.sin(angm))+'" r="3.5" fill="'+c.acc+'"/>';
+  }
+  inner+='«text x="190" y="282" text-anchor="middle" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">POWER LEVEL: '+(Math.round((v1+v2+v3+v4+v5)*200))+" // CLASS: ARCHITECT«/text>";
+  return svgFrame(380,300,t,inner);}
+
+function wordmarkSvg(txt,t,depth){
+  var c=t.c,s=Math.max(14,Math.min(40,Math.floor(430/Math.max(1,txt.length)))),W=560,H=210,layers="",cx=W/2,cy=128;
+  for(var i=depth;i>=1;i--){layers+='«text x="'+(cx+i*2.2)+'" y="'+(cy+i*2.2)+'" text-anchor="middle" font-family="'+fontOf("var(--f-px)")+'" font-size="'+s+'" fill="'+mix(c.lo,"#000000",i/(depth+2))+'">'+esc(txt)+"«/text>";}
+  layers+='«text x="'+(cx-1)+'" y="'+(cy-1)+'" text-anchor="middle" font-family="'+fontOf("var(--f-px)")+'" font-size="'+s+'" fill="'+c.hi+'" opacity="0.55">'+esc(txt)+"«/text>";
+  layers+='«text x="'+cx+'" y="'+cy+'" text-anchor="middle" font-family="'+fontOf("var(--f-px)")+'" font-size="'+s+'" fill="url(#wm-'+t.id+')" stroke="'+c.line+'" stroke-width="0.6">'+esc(txt)+"«/text>";
+  return '«svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">'+
+   '«defs>«linearGradient id="wm-'+t.id+'" x1="0" y1="0" x2="0" y2="1">«stop offset="0" stop-color="'+mix(c.pri,"#ffffff",0.45)+'"/>«stop offset="0.5" stop-color="'+c.pri+'"/>«stop offset="1" stop-color="'+mix(c.pri,c.sec,0.6)+'"/>«/linearGradient>«/defs>'+
+   '«rect width="'+W+'" height="'+H+'" fill="'+c.bg+'"/>«rect x="1.5" y="1.5" width="'+(W-3)+'" height="'+(H-3)+'" fill="none" stroke="'+c.line+'" stroke-width="3"/>'+
+   layers+'«text x="16" y="24" font-family="'+fontOf(t.fb)+'" font-size="10" fill="'+c.muted+'" letter-spacing="3">3D WORDMARK · '+esc(t.name)+'«/text>«text x="'+(W-16)+'" y="24" text-anchor="end" font-family="'+fontOf(t.fb)+'" font-size="10" fill="'+c.muted+'" letter-spacing="3">PROFILE.EXE«/text>«/svg>';}
+
+function wrappedSvg(p,t){
+  var c=t.c,inner="";
+  inner+='«text x="260" y="78" text-anchor="middle" font-family="'+fontOf(t.fd)+'" font-size="40" fill="'+c.pri+'">'+esc(p.username.toUpperCase())+" WRAPPED«/text>";
+  inner+='«text x="260" y="100" text-anchor="middle" font-family="'+fontOf(t.fb)+'" font-size="11" fill="'+c.muted+'" letter-spacing="4">YEAR IN REVIEW · '+esc(t.name)+"«/text>";
+  var tiles=[["TOP LANGUAGE",p.langs[0][0]],["MOST ACTIVE",p.activeMonth],["LONGEST STREAK",p.streak+" DAYS"],["STARS EARNED",fmt(p.stars)]];
+  for(var i=0;i«4;i++){var tx=40+(i%2)*230,ty=126+Math.floor(i/2)*118;
+    inner+='«rect x="'+tx+'" y="'+ty+'" width="210" height="98" fill="'+c.panel2+'" stroke="'+c.line+'"/>';
+    inner+='«text x="'+(tx+14)+'" y="'+(ty+26)+'" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">'+tiles[i][0]+"«/text>";
+    inner+='«text x="'+(tx+14)+'" y="'+(ty+64)+'" font-family="'+fontOf(t.fd)+'" font-size="30" fill="'+(i%2?c.acc:c.pri)+'">'+esc(String(tiles[i][1])).slice(0,12)+"«/text>";}
+  inner+='«text x="40" y="392" font-family="'+fontOf(t.fb)+'" font-size="9" fill="'+c.muted+'" letter-spacing="2">COMMIT HEATMAP · LAST 12 WEEKS«/text>';
+  for(var d=0;d«p.grid.length;d++){var col=Math.floor(d/7),row=d%7,v=p.grid[d];
+    var fill=v===0?c.panel2:(v===1?mix(c.pri,c.bg,0.55):(v«=3?mix(c.pri,c.bg,0.2):c.pri));
+    inner+='«rect x="'+(40+col*37)+'" y="'+(404+row*37)+'" width="30" height="30" fill="'+fill+'"/>';}
+  inner+='«text x="260" y="692" text-anchor="middle" font-family="'+fontOf(t.fb)+'" font-size="11" fill="'+c.muted+'" letter-spacing="4">NO PAYWALL · NO WATERMARK · JUST VIBES«/text>';
+  return svgFrame(520,716,t,inner);}
+
+/* GitHub + AI Provider */
+var GH="https://api.github.com";
+function ghHeaders(){var h={Accept:"application/vnd.github+json"};var tk=store.get("px_ghtoken");if(tk)h.Authorization="Bearer "+tk;return h;}
+function gh(path){return fetch(GH+path,{headers:ghHeaders()}).then(function(r){
+  if(r.status===404)throw new Error("That username does not exist on GitHub (404). Check the spelling.");
+  if(r.status===403||r.status===429)throw new Error("GitHub rate limit hit (60/hr unauthenticated). Add a token in the key panel, wait a bit, or USE DEMO DATA.");
+  if(!r.ok)throw new Error("GitHub returned HTTP "+r.status+".");
+  return r.json();});}
+function fetchProfile(u){
+  u=u.trim().replace(/^@/,"");if(!u)return Promise.reject(new Error("Type a GitHub handle first."));
+  return gh("/users/"+encodeURIComponent(u)).then(function(basic){
+    return Promise.all([gh("/users/"+encodeURIComponent(u)+"/repos?sort=stars&per_page=8&direction=desc").catch(function(){return[];}),
+      gh("/users/"+encodeURIComponent(u)+"/events/public?per_page=100").catch(function(){return[];})])
+    .then(function(arr){
+      var repos=arr[0],events=arr[1];
+      var lc={},stars=0;
+      var rl=repos.filter(function(r){return!r.fork;}).slice(0,6).map(function(r){stars+=r.stargazers_count||0;
+        if(r.language)lc[r.language]=(lc[r.language]||0)+1+(r.stargazers_count||0)/50;
+        return{name:r.name,desc:r.description||"",stars:r.stargazers_count||0,lang:r.language||"?",topics:(r.topics||[]).slice(0,4),url:r.html_url};});
+      var langs=Object.keys(lc).map(function(k){return[k,lc[k]];}).sort(function(a,b){return b[1]-a[1];});
+      var tot=langs.reduce(function(s,l){return s+l[1];},0)||1;
+      langs=langs.slice(0,6).map(function(l){return[l[0],Math.round(l[1]/tot*100)];});
+      if(!langs.length)langs=[["Generalist",100]];
+      var days={};events.forEach(function(e){var d=(e.created_at||"").slice(0,10);if(d)days[d]=(days[d]||0)+1;});
+      var keys=Object.keys(days).sort();var cur=0,best=0,run=0,prev=null;
+      keys.forEach(function(d){var dt=new Date(d+"T12:00:00Z");
+        if(prev&&(dt-prev)===86400000)run++;else run=1;prev=dt;if(run>best)best=run;});
+      var today=new Date();today.setHours(12,0,0,0);
+      var check=new Date(today);run=0;
+      for(var back=0;back«400;back++){var iso=check.toISOString().slice(0,10);
+        if(days[iso]){run++;cur=run;check=new Date(check.getTime()-86400000);}
+        else if(back===0){check=new Date(check.getTime()-86400000);}
+        else break;}
+      var grid=[],pat=[0,1,2,0,3,1,0,0,2,4,1,0,1,0];
+      for(var g=0;g«84;g++){var dtk=new Date(today.getTime()-(83-g)*86400000).toISOString().slice(0,10);
+        grid.push(days[dtk]!==undefined?Math.min(4,days[dtk]):pat[g%14]);}
+      return{isDemo:false,username:basic.login,name:basic.name||basic.login,location:basic.location||"—",
+        bio:basic.bio||"—",followers:basic.followers||0,following:basic.following||0,publicRepos:basic.public_repos||0,
+        stars:stars,joined:(basic.created_at||"").slice(0,4)||"2020",avatarUrl:basic.avatar_url||"",
+        langs:langs,streak:best||cur||1,currentStreak:cur||0,activeMonth:"RECENT",repos:rl,grid:grid};
+    });});}
+
+function profileSummary(p){
+  return "GITHUB HANDLE: @"+p.username+"\n"+
+  "NAME: "+p.name+"\n"+
+  "LOCATION: "+p.location+"\n"+
+  "BIO: "+p.bio+"\n"+
+  "STATS: "+p.publicRepos+" public repos · "+p.followers+" followers · "+p.stars+" stars · longest streak "+p.streak+" days\n"+
+  "TOP LANGUAGES: "+p.langs.map(function(l){return l[0]+" ("+l[1]+"%)";}).join(", ")+"\n"+
+  "TOP REPOSITORIES:\n"+p.repos.map(function(r){return "- "+r.name+" ("+r.lang+", ★"+r.stars+"): "+(r.desc||"no description")+" [topics: "+(r.topics.join(", ")||"—")+"]";}).join("\n");}
+
+function buildSystem(o){
+  var tone=TONES.find(function(t){return t.id===o.tone;});
+  var p=o.profile;
+  var u=p.username;
+  var n=cleanName(p.name)||u;
+  var th=theme(S.themeId)||THEMES[0];
+  var isLight=(th.id==="ice");
+  var bgClean=(th.c.panel||"#07130a").replace("#","");
+  var priClean=(th.c.pri||"#00ff66").replace("#","");
+  var secClean=(th.c.sec||"#7dffa8").replace("#","");
+  var accClean=(th.c.acc||"#d4ff3f").replace("#","");
+  var inkClean=(th.c.ink||"#d8ffe4").replace("#","");
+  var mutedClean=(th.c.muted||"#5f8f6f").replace("#","");
+  var skillTheme=isLight?"light":"dark";
+  var loc=(p.location&&p.location!=="—")?p.location.replace(/[,;]/g," "):"Earth";
+
+  return "You are PROFILE.EXE, an elite AI README engine creating visually stunning, GitSkins-tier GitHub Profile READMEs.\n"+
+  "TONE DIRECTIVE: "+(tone?tone.sys:"High-impact brutalist engineer")+".\n"+
+  "ACTIVE THEME: "+th.name+" ("+th.era+", background: #"+bgClean+", primary: #"+priClean+", secondary: #"+secClean+", accent: #"+accClean+").\n\n"+
+  "STRUCTURE SPECIFICATION (Follow Exactly):\n"+
+  "1. HERO HEADER: Centered dynamic banner.\n"+
+  "   - Dynamic Capsule Render Banner: «div align=\"center\">«img src=\"https://capsule-render.vercel.app/api?type=waving&color="+bgClean+"&text="+encodeURIComponent("■ "+n.toUpperCase()+" ■")+"&height=190&fontSize=38&fontColor="+priClean+"&stroke="+priClean+"&strokeWidth=2&desc=FULL-STACK%20DEVELOPER%20%C2%B7%20OPEN-SOURCE&descAlignY=66&descColor="+secClean+"\" width=\"100%\" alt=\"Header Banner\"/>«br/>\n"+
+  "   - Animated Typing SVG: «img src=\"https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color="+priClean+"&center=true&vCenter=true&width=460&lines="+encodeURIComponent(n)+";Full+Stack+Software+Architect;Building+High-Throughput+Platforms;Compiling+Past+Midnight\" alt=\"Typing\"/>«br/>\n"+
+  "   - 3-4 Styled Shields Badges: «img src=\"https://img.shields.io/badge/STATUS-SHIPPING-"+priClean+"?style=for-the-badge&logo=gnubash&logoColor="+(isLight?"ffffff":"010502")+"\"/> «img src=\"https://img.shields.io/badge/LOCATION-"+encodeURIComponent(loc)+"-"+bgClean+"?style=for-the-badge&logo=googlemaps&logoColor="+priClean+"\"/> «img src=\"https://komarev.com/ghpvc/?username="+u+"&color="+priClean+"&style=for-the-badge&label=PROFILE+VIEWS\"/>«/div>\n\n"+
+  (o.ascii?"2. ASCII CODE BLOCK:\n```\n"+o.ascii+"\n```\n\n":"")+
+  "3. EXECUTIVE SUMMARY / ABOUT ME:\n"+
+  "   - ⚡ **Primary Directive**: 2 crisp sentences tailored to "+(p.bio||"crafting robust, modern software architectures")+".\n"+
+  "   - 🔭 **Current Focus**: Engineering modern full-stack web platforms with high availability and speed.\n"+
+  "   - 🌱 **Exploring**: Distributed systems, high-performance web tooling, and reactive interfaces.\n"+
+  "   - 💬 **Ask Me About**: "+(p.langs.slice(0,3).map(function(l){return l[0];}).join(", ")||"Web engineering, architecture, frontend craft")+".\n\n"+
+  "4. WEAPONS OF CHOICE (TECH STACK):\n"+
+  "   - Main Icon cluster: «div align=\"center\">«img src=\"https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,tailwind,python,fastapi,postgres,docker,git,linux&theme="+skillTheme+"\" alt=\"Tech Stack\"/>«/div>\n"+
+  "   - Interactive Collapsible Deep Radar:\n"+
+  "     «details>«summary>«b>⚡ Expand Deep Tech Stack & Ecosystem Matrix«/b>«/summary>«br/>\n"+
+  "     - **Languages**: `TypeScript`, `JavaScript`, `Python`, `Go`, `SQL`, `Bash`\n"+
+  "     - **Frameworks & UI**: `React`, `Next.js`, `Node.js`, `FastAPI`, `TailwindCSS`\n"+
+  "     - **Data & Cloud**: `PostgreSQL`, `Redis`, `Docker`, `Git`, `CI/CD Pipelines`\n"+
+  "     «/details>\n\n"+
+  "5. TELEMETRY & LIVE GITHUB STATS (Synchronized to Theme Colors):\n"+
+  "   «div align=\"center\">\n"+
+  "     «img src=\"https://github-readme-stats.vercel.app/api?username="+u+"&show_icons=true&hide_border=true&bg_color="+bgClean+"&title_color="+priClean+"&text_color="+inkClean+"&icon_color="+accClean+"&border_radius=4\" height=\"165\"/>\n"+
+  "     «img src=\"https://github-readme-streak-stats.herokuapp.com/?user="+u+"&hide_border=true&background="+bgClean+"&ring="+priClean+"&fire="+accClean+"&currStreakLabel="+secClean+"&currStreakNum="+priClean+"&sideNums="+inkClean+"&sideLabels="+mutedClean+"&border_radius=4\" height=\"165\"/>\n"+
+  "     «br/>\n"+
+  "     «img src=\"https://github-readme-activity-graph.vercel.app/graph?username="+u+"&bg_color="+bgClean+"&color="+priClean+"&line="+priClean+"&point="+secClean+"&area=true&hide_border=true\" width=\"100%\"/>\n"+
+  "   «/div>\n\n"+
+  "6. FEATURED REPOSITORIES (PORTFOLIO MATRIX):\n"+
+  "   A clean GFM table with columns: `Repository`, `Description`, `Tech Stack`, `Signal`.\n"+
+  "   Include these real repositories: "+p.repos.slice(0,4).map(function(r){return "**["+r.name+"](https://github.com/"+u+"/"+r.name+")** ("+r.lang+")";}).join(", ")+".\n\n"+
+  "7. OPEN SECURE CHANNEL / SOCIALS:\n"+
+  "   «div align=\"center\">\n"+
+  "     «a href=\"mailto:"+u+"@developer.mail\">«img src=\"https://img.shields.io/badge/EMAIL-"+priClean+"?style=for-the-badge&logo=gmail&logoColor="+(isLight?"ffffff":"010502")+"\"/>«/a>\n"+
+  "     «a href=\"https://github.com/"+u+"\">«img src=\"https://img.shields.io/badge/GITHUB-"+bgClean+"?style=for-the-badge&logo=github&logoColor="+priClean+"\"/>«/a>\n"+
+  "     «a href=\"https://linkedin.com/in/"+u+"\">«img src=\"https://img.shields.io/badge/LINKEDIN-"+priClean+"?style=for-the-badge&logo=linkedin&logoColor="+(isLight?"ffffff":"010502")+"\"/>«/a>\n"+
+  "   «/div>\n\n"+
+  "CRITICAL RULES:\n"+
+  "- Output ONLY raw valid markdown.\n"+
+  "- Use the real username '"+u+"' in all URLs.\n"+
+  "- Ensure exact theme color consistency for all badges and SVGs.\n"+
+  "- Keep it under 150 lines. Dense, expressive, and ready to paste into GitHub.";
+}
+function buildUser(o){return "Compile a complete GitHub profile README.md from this live data.\n\n"+profileSummary(o.profile)+"\n\nGo.";}
+function buildRefine(md,o){return "This is pass 1 of a GitHub profile README you compiled. Critique it harshly (weak hook? generic blurbs? flat structure? missing badges?) and return a fully improved version.\n\nHARD RULES: output ONLY the improved markdown, keep every real fact/username/repo intact, stay under 140 lines.\n\nPASS 1 DRAFT:\n"+md;}
+
+function callBackendAI(sys,user){
+  return fetch("/api/generate",{
+    method:"POST",
+    headers:{"content-type":"application/json"},
+    body:JSON.stringify({system:sys,user:user})})
+  .then(function(r){
+    if(!r.ok)return r.json().then(function(j){throw new Error((j&&j.error)||("Server HTTP "+r.status));},function(){throw new Error("Server HTTP "+r.status);});
+    return r.json();})
+  .then(function(d){
+    if(d.error)throw new Error(d.error);
+    var t=(d.markdown||"").trim();
+    if(!t)throw new Error("Empty AI response. Please try again.");
+    return t;});}
+
+/* state */
+var S={themeId:store.get("px_theme")||"phosphor",tab:"generate",tpl:"phosphor",raw:false,
+  profile:null,salt:1,wm:"ABHISHEK",depth:6,
+  g:{user:"codewithabhiishek",tone:"y2k",ascii:true,asciiId:"banner",md:"",stage:"idle",err:null,passes:0,view:"split",
+     log:["READY. Enter your GitHub handle and hit COMPILE README."]}};
+if(!theme(S.themeId))S.themeId="phosphor";
+
+function cur(){return theme(S.themeId);}
+function log(l){S.g.log.push(l);if(S.g.log.length>80)S.g.log.shift();
+  var el=document.getElementById("glog");if(el){el.innerHTML=S.g.log.map(function(x){return '«div style="color:'+(x.indexOf("ERROR")===0?"var(--t-acc)":"inherit")+'">'+esc(x)+"«/div>";}).join("")+(S.g.stage!=="idle"?'«span class="blink" style="color:var(--t-pri)">█«/span>':"");el.scrollTop=el.scrollHeight;}}
+
+/* render */
+function win(title,bar,body,sf){return '«section class="win '+(sf||cur().sf)+'">«header class="win-h">«div class="win-t">«span class="dots">«i style="background:var(--t-acc)">«/i>«i style="background:var(--t-sec)">«/i>«i style="background:var(--t-pri)">«/i>«/span>«h2>'+title+"«/h2>«/div>"+(bar?'«div class="row" style="flex-shrink:0">'+bar+"«/div>":"")+'«/header>«div class="win-b">'+body+"«/div>«/section>";}
+
+function headerHtml(){
+  var chips=THEMES.map(function(th){return '«button class="chip'+(th.id===S.themeId?" on":"")+'" data-act="theme" data-id="'+th.id+'" title="'+esc(th.name)+" · "+esc(th.era)+'">'+th.sw.map(function(s){return '«i style="background:'+s+'">«/i>';}).join("")+"«/button>";}).join("");
+  var icons=["M9 1L3 9h4l-1 6 6-8H8l1-6z","M2 4h4l2 2h6v7H2z","M8 1v4M8 11v4M1 8h4M11 8h4M3 3l2.5 2.5M10.5 10.5L13 13M13 3l-2.5 2.5M5.5 10.5L3 13","M2 3h12v10H2z M5 6l2.5 2L5 10 M9 11h3"];
+  var tabs=[["generate","GENERATE","MODE A · GROQ AI"],["templates","TEMPLATES","MODE B · FREE"],["visuals","VISUALS","7× SVG ASSETS"],["wrapped","WRAPPED","YEAR REVIEW"]]
+   .map(function(x,i){return '«button class="tab'+(S.tab===x[0]?" on":"")+'" data-act="tab" data-tab="'+x[0]+'">«b>«svg width="12" height="12" viewBox="0 0 16 16">«path d="'+icons[i]+'" fill="none" stroke="currentColor" stroke-width="1.6"/>«/svg>'+("0"+(i+1)).slice(-2)+"_"+x[1]+"«/b>«span>"+x[2]+"«/span>«/button>";}).join("");
+  return '«header class="hdr">'+
+   '«div class="hdr-in">'+
+     '«div style="display:flex;align-items:center;gap:.75rem;min-width:0">'+
+       '«svg width="32" height="32" viewBox="0 0 17 17" style="image-rendering:pixelated;flex-shrink:0">«rect width="17" height="17" fill="var(--t-deep)"/>«rect x="1" y="1" width="15" height="15" fill="none" stroke="var(--t-line)"/>«rect x="3" y="3" width="4" height="4" fill="var(--t-pri)"/>«rect x="10" y="3" width="4" height="4" fill="var(--t-pri)"/>«rect x="3" y="10" width="11" height="2" fill="var(--t-acc)"/>«rect x="5" y="13" width="7" height="1" fill="var(--t-sec)"/>«/svg>'+
+       '«div style="min-width:0">«h1 class="logo-t glow-txt">PROFILE«span style="color:var(--t-sec)">.«/span>EXE«/h1>«p class="logo-s">Y2K GitHub profile toolkit · Powered by Groq AI«/p>«/div>'+
+     '«/div>'+
+     '«div class="chip-group">'+chips+'«/div>'+
+     '«div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap">'+
+       '«span style="display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;color:var(--t-pri)">«i class="led" style="background:var(--t-pri);color:var(--t-pri)">«/i>GROQ: ONLINE«/span>'+
+       '«span style="display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;color:var(--t-muted)">«i class="led" style="background:'+(S.profile?"var(--t-sec)":"var(--t-muted)")+';color:'+(S.profile?"var(--t-sec)":"var(--t-muted)")+'">«/i>'+(S.profile?"@"+esc(S.profile.username.slice(0,12)):"NO SRC")+"«/span>"+
+     '«/div>'+
+   '«/div>'+
+   '«div class="ticker">«div class="ticker-in">«span>★ POWERED BY GROQ AI ★ 10 THEMED SKINS ★ 7× RETRO SVG ASSETS ★ TECH MATRIX ★ BIOS CARD ★ COMBAT RADAR ★ PIXEL AVATARS ★ 3D WORDMARKS ★ YEAR-WRAPPED ★ ZERO WATERMARK «/span>«span>★ POWERED BY GROQ AI ★ 10 THEMED SKINS ★ 7× RETRO SVG ASSETS ★ TECH MATRIX ★ BIOS CARD ★ COMBAT RADAR ★ PIXEL AVATARS ★ 3D WORDMARKS ★ YEAR-WRAPPED ★ ZERO WATERMARK «/span>«/div>«/div>'+
+   '«nav class="tabs">'+tabs+'«/nav>«/header>';}
+
+function pickerHtml(label){
+  if(S.profile){var p=S.profile;
+    return '«div class="pfcard sf-inset">«div class="ava">'+(p.avatarUrl?'«img src="'+p.avatarUrl+'" alt="">':esc(p.username.slice(0,2).toUpperCase()))+"«/div>"+
+    '«div style="min-width:0;flex:1">«p style="margin:0;font-family:var(--f-ui);font-weight:700;font-size:13px;color:var(--t-pri)">@'+esc(p.username)+(p.isDemo?' «span style="font-family:var(--f-px);font-size:7px;background:var(--t-acc);color:var(--t-deep);padding:2px 5px">DEMO DATA«/span>':"")+"«/p>"+
+    '«p style="margin:2px 0 0;font-family:var(--f-mono);font-size:10px;color:var(--t-muted)">'+fmt(p.followers)+" followers · "+p.publicRepos+" repos · streak "+p.currentStreak+"d«/p>«/div>"+
+    '«button class="btn btn-sm" data-act="eject">CHANGE«/button>«/div>';}
+  return '«form data-form="load" class="stack" style="gap:.5rem">«span class="lbl">'+label+'«/span>«div class="row" style="flex-wrap:nowrap">«input id="userInp" class="inp" placeholder="github handle or url…" value="'+esc(S.g.user)+'" autocomplete="off">«button class="btn" type="submit">LOAD«/button>«/div>'+
+  '«button class="btn btn-sm" type="button" data-act="demo">⚡ USE DEMO DATA — NO NETWORK NEEDED«/button>«/form>';}
+
+function generateHtml(){
+  var g=S.g,busy=g.stage!=="idle";
+  var tones=TONES.map(function(t){return '«button class="tone'+(g.tone===t.id?" on":"")+'" data-act="tone" data-id="'+t.id+'">«b>'+t.name+"«/b>«span>"+t.blurb+"«/span>«/button>";}).join("");
+  var asciiSel=g.ascii?'«select class="inp" id="asciiSel" style="padding:.4rem .6rem;font-size:.8rem">'+ASCII.map(function(a){return '«option value="'+a.id+'"'+(a.id===g.asciiId?" selected":"")+">"+a.label+"«/option>";}).join("")+"«/select>":"";
+  var outBar="";
+  if(g.md)outBar='«div class="seg">'+["split","edit","preview"].map(function(m){return '«button data-act="view" data-view="'+m+'" class="'+(g.view===m?"on":"")+'">'+m.toUpperCase()+"«/button>";}).join("")+"«/div>"+
+   '«button class="btn btn-sm" data-act="copymd">COPY MD«/button>«button class="btn btn-sm" data-act="dlmd">.MD«/button>';
+  var body="";
+  if(!g.md&&g.stage==="idle"){
+    body='«div class="emptybox">«pre>┌──────────────────────────────┐\n│  NO OUTPUT BUFFERED YET      │\n│                              │\n│  1. load handle    (step 1)  │\n│  2. pick tone      (step 2)  │\n│  3. hit COMPILE    (step 3)  │\n└──────────────────────────────┘«/pre>'+
+    '«p class="note" style="max-width:380px">The compiled README lands here as live markdown — edit the raw side, watch the preview update, then copy it into your «b style="color:var(--t-pri)">username/username«/b> repo.«/p>«/div>';}
+  else if(g.md){
+    var showE=g.view!=="preview",showP=g.view!=="edit";
+    body='«div class="split'+(g.view!=="split"?" one":"")+'">'+
+     (showE?'«div style="border-right:1px solid var(--t-line);min-height:0">«textarea id="mdEditor" class="md-editor thin" spellcheck="false">'+esc(g.md)+"«/textarea>«/div>":"")+
+     (showP?'«div class="preview thin">«div class="md">'+mdRender(g.md)+"«/div>«/div>":"")+"«/div>";}
+  else body='«div class="busybox">TRANSMITTING VIA GROQ AI CLOUD«span class="blink">▊«/span>«/div>';
+
+  var left=
+   win("STEP 1 · SOURCE","","«div style='padding:.75rem'>"+pickerHtml("ENTER GITHUB USERNAME")+"«/div>")+
+   win("STEP 2 · STYLE & VIBE","","«div class='stack' style='padding:.75rem;gap:.7rem'>«div style='display:grid;grid-template-columns:1fr 1fr;gap:.5rem'>"+tones+"«/div>"+
+    "«label style='display:flex;align-items:center;gap:.5rem;cursor:pointer;font-family:var(--f-ui);font-size:11px;font-weight:700;letter-spacing:.14em'>«input type='checkbox' id='asciiChk'"+(g.ascii?" checked":"")+"> INCLUDE ASCII BANNER«/label>"+asciiSel+"«/div>")+
+   win("STEP 3 · COMPILE README","","«div class='stack' style='padding:.75rem;gap:.7rem'>"+
+    "«div style='font-family:var(--f-mono);font-size:11px;color:var(--t-pri)'>⚡ AI ENGINE: GROQ CLOUD (GPT-OSS 120B / LLAMA 3.3) · READY«/div>"+
+    "«button class='btn btn-pri' style='padding:.75rem;font-size:13px' data-act='compile' "+(busy?"disabled":"")+">"+(g.stage==="generating"?"COMPILING WITH GROQ AI…":g.stage==="refining"?"REFINING…":"⚡ COMPILE README")+"«/button>"+
+    (g.md?"«button class='btn' data-act='refine' "+(busy||g.passes>=2?"disabled":"")+" title='"+(g.passes>=2?"2-pass limit reached":"Critique-and-improve pass")+"'>↻ "+(g.passes>=2?"MAX PASSES (2/2)":"REFINE — CRITIQUE PASS (2/2)")+"«/button>":"")+
+    (g.err?"«div class='errbox'>⚠ "+esc(g.err)+"«/div>":"")+
+    "«div id='glog' class='logbox sf-inset thin'>"+g.log.map(function(x){return "«div style='color:"+(x.indexOf("ERROR")===0?"var(--t-acc)":"inherit")+"'>"+esc(x)+"«/div>";}).join("")+(busy?"«span class='blink' style='color:var(--t-pri)'>█«/span>":"")+"«/div>«/div>");
+  return '«div class="grid2">«div class="stack">'+left+"«/div>"+win("OUTPUT · README.MD",outBar,'«div class="output">'+body+"«/div>")+"«/div>";}
+
+function cleanName(n){
+  return (n||"").replace(/\s*\(.*?\)\s*/g, "").trim() || "DEVELOPER";
+}
+
+function interpolateTemplate(rawMd){
+  var p=S.profile||DEMO;
+  var u=p.username;
+  var n=cleanName(p.name)||u;
+  var nUpper=n.toUpperCase();
+  var loc=p.location&&p.location!=="—"?p.location.replace(/[,;]/g, " "):"Earth";
+  var nEnc=encodeURIComponent(nUpper);
+  var locEnc=encodeURIComponent(loc);
+
+  var res = rawMd
+    .replace(/text=%E2%96%A0%20\[YOUR%20NAME\]%20%E2%96%A0/g, "text=%E2%96%A0%20"+nEnc+"%20%E2%96%A0")
+    .replace(/text=%E2%96%A0%20\[YOUR NAME\]%20%E2%96%A0/g, "text=%E2%96%A0%20"+nEnc+"%20%E2%96%A0")
+    .replace(/text=%E2%97%88%20\[YOUR NAME\]%20%E2%97%88/g, "text=%E2%97%88%20"+nEnc+"%20%E2%97%88")
+    .replace(/text=%E2%9C%A7%20\[YOUR NAME\]%20%E2%9C%A7/g, "text=%E2%9C%A7%20"+nEnc+"%20%E2%9C%A7")
+    .replace(/text=%E2%96%B6%20\[YOUR NAME\]/g, "text=%E2%96%B6%20"+nEnc)
+    .replace(/text=%E2%98%85%20\[YOUR NAME\]/g, "text=%E2%98%85%20"+nEnc)
+    .replace(/text=%E2%9C%A6%20\[YOUR NAME\]/g, "text=%E2%9C%A6%20"+nEnc)
+    .replace(/text=%E2%96%B8%20\[YOUR NAME\]/g, "text=%E2%96%B8%20"+nEnc)
+    .replace(/text=%F0%9F%94%A5%20\[YOUR NAME\]/g, "text=%F0%9F%94%A5%20"+nEnc)
+    .replace(/text=%3E_%20\[YOUR NAME\]/g, "text=%3E_%20"+nEnc)
+    .replace(/\[YOUR%20LOCATION\]/g, locEnc)
+    .replace(/\[YOUR%20NAME\]/g, nEnc)
+    .replace(/\[YOUR-USERNAME\]/g, u)
+    .replace(/\[YOUR_USERNAME\]/g, u)
+    .replace(/\[YOUR LOCATION\]/g, loc)
+    .replace(/\[Your Location\]/g, loc)
+    .replace(/\[Your Name\]/g, n)
+    .replace(/\[YOUR NAME\]/g, nUpper)
+    .replace(/\[Your Handle\]/g, "@"+u)
+    .replace(/\[YOUR HANDLE\]/g, "@"+u)
+    .replace(/\[Your Email\]/g, u.toLowerCase()+"@developer.mail")
+    .replace(/\[YOUR EMAIL\]/g, u.toUpperCase()+"@DEVELOPER.MAIL")
+    .replace(/\[Your Website\]/g, "https://github.com/"+u)
+    .replace(/\[YOUR WEBSITE\]/g, "https://github.com/"+u)
+    .replace(/\[Your Twitter Handle\]/g, u)
+    .replace(/\[YOUR TWITTER\]/g, u);
+  return res;
+}
+
+function templatesHtml(){
+  if(!TEMPLATES.length){
+    return win("TEMPLATE DATA MISSING","","«div class='emptybox'>«pre>THE TEMPLATE BLOCK NEVER EXECUTED.\nGENERATE / VISUALS / WRAPPED STILL WORK.«/pre>«/div>");
+  }
+  var t=template(S.tpl)||TEMPLATES[0],th=theme(t.id);
+  var list=TEMPLATES.map(function(tp,i){var tt=theme(tp.id);
+    return '«button class="tplbtn'+(tp.id===S.tpl?" on":"")+'" data-act="tpl" data-id="'+tp.id+'">«b>«span class="dots" style="gap:3px">'+tt.sw.map(function(s){return '«i style="width:7px;height:7px;background:'+s+'">«/i>';}).join("")+"«/span>"+("0"+(i+1)).slice(-2)+" "+esc(tt.name)+"«/b>«span>"+esc(tp.vibe)+"«/span>«/button>";}).join("");
+  var bar='«div class="row" style="gap:4px;align-items:center">'+
+   '«div class="seg">«button data-act="rawtoggle" class="'+(S.raw?"":"on")+'">PREVIEW«/button>«button data-act="rawtoggle" class="'+(S.raw?"on":"")+'">RAW«/button>«/div>'+
+   '«button class="btn btn-sm" data-act="copytpl">COPY MD«/button>«button class="btn btn-sm" data-act="dltpl">.MD«/button>'+
+   '«button class="btn btn-sm btn-pri" data-act="applyskin" title="Re-skin the whole app to this template theme">◐ APPLY SKIN«/button>«/div>';
+  var activeMd=interpolateTemplate(t.md);
+  var body=S.raw?'«pre class="md-editor thin" style="min-height:680px;height:100%;white-space:pre-wrap">'+esc(activeMd)+"«/pre>":'«div class="preview thin" style="min-height:680px;height:100%"><div class="md" style="--t-pri:'+th.c.pri+';--t-sec:'+th.c.sec+';--t-acc:'+th.c.acc+';--t-line:'+th.c.line+';--t-panel2:'+th.c.panel2+';--t-deep:'+th.c.deep+';--t-ink:'+th.c.ink+';--t-muted:'+th.c.muted+';background:'+th.c.panel+';color:'+th.c.ink+';padding:1.4rem;border:1px solid '+th.c.line+'">'+mdRender(activeMd)+"«/div>«/div>";
+  return '«div class="note" style="margin:-.3rem 0 .9rem">MODE B — 10× visual-dense templates styled for each theme skin. «b style="color:var(--t-pri)">Auto-populated with live handle @'+(S.profile?esc(S.profile.username):"demo")+' & ready to paste into GitHub.«/b>«/div>'+
+  '«div class="grid2 grid2b">«div>'+win("INDEX · "+TEMPLATES.length+" TEMPLATES","","«div class='tplrow thin' style='padding:.5rem;max-height:760px;overflow-y:auto'>"+list+"«/div>")+"«/div>"+
+  win("TEMPLATE · "+esc(theme(t.id).name),bar,body)+"«/div>";}
+
+function assetBlock(title,svg,acts,embed){
+  return win(title,acts,'«div class="svgwrap">'+svg+"«/div>"+(embed?'«div class="embed thin">'+esc(embed)+"«/div>":""));}
+
+function visualsHtml(){
+  var p=S.profile||DEMO,t=cur();
+  var av=avatarSvg(p.username,t,S.salt),st=statsCardSvg(p,t),wm=wordmarkSvg(S.wm,t,S.depth);
+  var mx=techMatrixSvg(p,t),bios=biosCardSvg(p,t),hb=holoBannerSvg(p,t),rd=statRadarSvg(p,t);
+
+  var note=p.isDemo?'«div class="note" style="margin:-.3rem 0 .9rem">Rendering from «b style="color:var(--t-acc)">DEMO DATA«/b> — load your own handle below to make these yours. 7× custom SVG widgets, downloadable & embeddable.«/div>':
+   '«div class="note" style="margin:-.3rem 0 .9rem">Rendering from «b style="color:var(--t-pri)">@'+esc(p.username)+"«/b>. 7× custom SVG widgets: copy SVG, download SVG, or embed in any README.«/div>";
+
+  var avActs='«button class="btn btn-sm" data-act="roll">↻ REROLL«/button>«button class="btn btn-sm" data-act="copysvg" data-what="avatar">COPY«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="avatar">↓«/button>';
+  var stActs='«button class="btn btn-sm" data-act="copysvg" data-what="stats">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="stats">↓«/button>';
+  var wmActs='«button class="btn btn-sm" data-act="copysvg" data-what="word">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="word">↓«/button>';
+  var mxActs='«button class="btn btn-sm" data-act="copysvg" data-what="matrix">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="matrix">↓«/button>';
+  var bioActs='«button class="btn btn-sm" data-act="copysvg" data-what="bios">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="bios">↓«/button>';
+  var hbActs='«button class="btn btn-sm" data-act="copysvg" data-what="holo">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="holo">↓«/button>';
+  var rdActs='«button class="btn btn-sm" data-act="copysvg" data-what="radar">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="radar">↓«/button>';
+
+  return note+
+   '«div class="stack" style="margin-bottom:1.15rem">'+
+     win("VISUALS DATA SOURCE","","«div style='padding:.75rem'>"+pickerHtml("LOAD YOUR GITHUB PROFILE")+"«/div>")+
+     assetBlock("01 · HOLOGRAPHIC BANNER · 640×190",hb,hbActs,"Wide header banner for GitHub README header with CRT scanlines & telemetry")+
+   "«/div>"+
+   '«div class="viz-grid" id="vizgrid">'+
+     assetBlock("02 · TECH MATRIX · 520×260",mx,mxActs,"Silicon hardware registers with memory offsets & top languages")+
+     assetBlock("04 · BIOS CARD · 520×290",bios,bioActs,"1999 BIOS POST boot screen telemetry report")+
+     assetBlock("06 · STATS CARD · 468×300",st,stActs,"github-readme-stats style retro telemetry card")+
+     assetBlock("05 · STAT RADAR · 380×300",rd,rdActs,"Cyberpunk RPG skill polygon mapping velocity, streak, repos & stars")+
+     assetBlock("03 · PIXEL AVATAR · SEED #"+S.salt,av,avActs,"Deterministic 8×8 mirrored pixel art avatar")+
+     win('07 · 3D WORDMARK · DEPTH «span id="wmDepthLbl">'+S.depth+"«/span>",wmActs,
+       '«div class="svgwrap">«span id="wmSvg">'+wm+'«/span>«/div>«div class="embed thin">layered extrusion · gradient face«/div>'+
+       '«div class="row" style="gap:.6rem;padding:.5rem .75rem;background:var(--t-panel2)">«input id="wmText" class="inp" style="max-width:180px" maxlength="16" value="'+esc(S.wm)+'" placeholder="HANDLE…">«span class="lbl">DEPTH«/span>«input id="wmDepth" type="range" min="2" max="12" value="'+S.depth+'" style="accent-color:var(--t-pri);flex:1">«/div>')+
+   "«/div>";}
+
+function wrappedHtml(){
+  var p=S.profile||DEMO,t=cur();
+  var port=p.repos.slice(0,4).map(function(r,i){
+    return '«div class="sf-inset" style="padding:.75rem .85rem;margin-bottom:.5rem">«div class="row" style="justify-content:space-between">«b style="font-family:var(--f-crt);font-size:19px;color:var(--t-pri)">'+("0"+(i+1)).slice(-2)+" · "+esc(r.name)+"«/b>«span style='font-family:var(--f-mono);font-size:10px;color:var(--t-acc)'>★ "+r.stars+"«/span>«/div>"+
+    '«p class="note" style="margin:.3rem 0 .45rem;color:var(--t-sec)">'+esc(r.desc)+"«/p>"+
+    '«div class="row" style="gap:4px">'+(r.topics||[]).map(function(tp){return '«span style="font-family:var(--f-mono);font-size:9px;padding:2px 6px;border:1px solid var(--t-line);color:var(--t-sec)">'+esc(tp)+"«/span>";}).join("")+
+    '«a href="'+r.url+'" target="_blank" rel="noopener" style="margin-left:auto;font-family:var(--f-mono);font-size:10px;color:var(--t-acc)">repo →«/a>«/div>«/div>';}).join("");
+  return '«div class="grid2">«div class="stack">'+
+   win("01 · DATA SOURCE","","«div style='padding:.75rem'>"+pickerHtml("WRAPPED SOURCE")+"«/div>")+
+   win("02 · REPO MATRIX · TOP WORKS",'«button class="btn btn-sm" data-act="copyport">COPY MD«/button>',"«div style='padding:.75rem;max-height:480px;overflow-y:auto'>"+port+"«/div>",null)+"«/div>"+
+   win("YEAR IN REVIEW · 520×716",'«button class="btn btn-sm" data-act="copysvg" data-what="wrap">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="wrap">↓ PNG-READY SVG«/button>',
+    '«div class="svgwrap" style="padding:1.25rem">'+wrappedSvg(p,t)+"«/div>")+"«/div>";}
+
+function footerHtml(){
+  var t=cur();
+  return '«footer class="sbar">«div class="sbar-in thin">«span style="color:var(--t-pri)">■ SKIN: '+esc(t.name)+"«/span>"+
+  "«span>AI: GROQ CLOUD (ACTIVE)«/span>«span>SRC: "+(S.profile?"@"+esc(S.profile.username)+(S.profile.isDemo?" (demo)":""):"—")+"«/span>"+
+  '«span style="margin-left:auto;color:var(--t-sec)">free · open source · 7× SVG assets · zero watermark«/span>'+
+  '«span>v1.3.2026 «span class="blink" style="color:var(--t-pri)">▊«/span>«/span>«/div>«/footer>';}
+
+function render(){
+  var pane=S.tab==="generate"?generateHtml():S.tab==="templates"?templatesHtml():S.tab==="visuals"?visualsHtml():wrappedHtml();
+  document.getElementById("app").innerHTML=headerHtml()+'«main>«div class="pane">'+pane+"«/div>«/main>"+footerHtml();
+  var gl=document.getElementById("glog");if(gl)gl.scrollTop=gl.scrollHeight;}
+
+/* actions */
+function svgFor(what){
+  var p=S.profile||DEMO,t=cur();
+  if(what==="avatar")return avatarSvg(p.username,t,S.salt);
+  if(what==="stats")return statsCardSvg(p,t);
+  if(what==="word")return wordmarkSvg(S.wm,t,S.depth);
+  if(what==="matrix")return techMatrixSvg(p,t);
+  if(what==="bios")return biosCardSvg(p,t);
+  if(what==="holo")return holoBannerSvg(p,t);
+  if(what==="radar")return statRadarSvg(p,t);
+  return wrappedSvg(p,t);}
+
+function doCompile(){
+  var g=S.g;
+  g.err=null;g.stage="generating";g.md="";g.passes=0;g.log=[];
+  log("COMPILE START · skin="+cur().name+" · tone="+g.tone);render();
+  log("» profile locked: @"+S.profile.username+(S.profile.isDemo?" (demo data)":"")+" — "+S.profile.publicRepos+" repos … OK");
+  var o={profile:S.profile,tone:g.tone,themeName:cur().name,ascii:g.ascii?asciiText(g.asciiId):null};
+  log("» transmitting prompt to Groq AI Cloud …");
+  callBackendAI(buildSystem(o),buildUser(o)).then(function(draft){
+    g.md=draft;g.passes=1;g.stage="idle";
+    log("» draft received: "+(draft.length/1024).toFixed(1)+" KB markdown");
+    log("COMPILE OK · pass 1/2 complete. Ready to ship or refine.");render();toast("README draft compiled with Groq AI");
+  }).catch(function(e){g.stage="idle";g.err=e.message;log("ERROR: "+e.message);render();toast("Generation failed: "+e.message,"err");});
+}
+
+function compile(){
+  var g=S.g;
+  var inp=document.getElementById("userInp");
+  var u=(inp?inp.value:g.user).trim().replace(/^https?:\/\/github\.com\//i,"").replace(/^@/,"").replace(/\/+$/,"");
+  if(!S.profile && u){
+    g.user=u;g.stage="generating";log("» fetching GitHub data for @"+u+" …");render();
+    fetchProfile(u).then(function(p){
+      S.profile=p;
+      toast("@"+p.username+" loaded");
+      doCompile();
+    }).catch(function(err){
+      g.stage="idle";g.err=err.message;log("ERROR: "+err.message);toast(err.message,"err");render();
+    });
+    return;
+  }
+  if(!S.profile){g.err="Type your GitHub username (or click USE DEMO DATA).";render();return;}
+  doCompile();
+}
+
+function refine(){
+  var g=S.g;if(!g.md||g.stage!=="idle"||!S.profile)return;
+  g.err=null;g.stage="refining";log("» REFINE: sending draft back for critique pass …");render();
+  var o={profile:S.profile,tone:g.tone,themeName:cur().name};
+  callBackendAI(buildSystem(o),buildRefine(g.md,o)).then(function(d){
+    g.md=d;g.passes=2;g.stage="idle";log("» REFINE OK · pass 2/2 — max passes reached.");render();toast("Refinement pass complete");
+  }).catch(function(e){g.stage="idle";g.err=e.message;log("ERROR: "+e.message);render();toast("Refinement failed","err");});}
+
+document.addEventListener("click",function(e){
+  var el=e.target.closest?e.target.closest("[data-act]"):null;if(!el)return;
+  var act=el.getAttribute("data-act");
+  if(act==="tab"){S.tab=el.getAttribute("data-tab");render();}
+  else if(act==="theme"){S.themeId=el.getAttribute("data-id");S.tpl=S.themeId;applyTheme(cur());render();toast("Skin loaded: "+cur().name,"info");}
+  else if(act==="tpl"){S.tpl=el.getAttribute("data-id");S.themeId=S.tpl;applyTheme(cur());S.raw=false;render();}
+  else if(act==="rawtoggle"){S.raw=!S.raw;render();}
+  else if(act==="applyskin"){var tp=template(S.tpl);S.themeId=tp.id;S.tpl=tp.id;applyTheme(cur());render();toast("Skin loaded: "+cur().name,"info");}
+  else if(act==="copytpl"){var tp=template(S.tpl)||TEMPLATES[0];copyText(interpolateTemplate(tp.md)).then(function(ok){toast(ok?"Template copied with your handle!":"Copy failed","err");});}
+  else if(act==="dltpl"){var tp2=template(S.tpl)||TEMPLATES[0];download((S.profile?S.profile.username:tp2.id)+"-README.md",interpolateTemplate(tp2.md),"text/markdown");toast("Template downloaded");}
+  else if(act==="demo"){S.profile=JSON.parse(JSON.stringify(DEMO));toast("Demo profile loaded — @"+DEMO.username);render();}
+  else if(act==="eject"){S.profile=null;render();toast("Profile unloaded","info");}
+  else if(act==="tone"){S.g.tone=el.getAttribute("data-id");render();}
+  else if(act==="compile"){compile();}
+  else if(act==="refine"){refine();}
+  else if(act==="view"){S.g.view=el.getAttribute("data-view");render();}
+  else if(act==="copymd"){copyText(S.g.md).then(function(ok){toast(ok?"Markdown copied to clipboard":"Copy failed","err");});}
+  else if(act==="dlmd"){download((S.profile?S.profile.username:"profile")+"-README.md",S.g.md,"text/markdown");toast("README.md downloaded");}
+  else if(act==="roll"){S.salt++;renderVisualsOnly();}
+  else if(act==="copysvg"){
+    var what=el.getAttribute("data-what");
+    copyText(svgFor(what)).then(function(ok){toast(ok?"SVG source copied":"Copy failed","err");});}
+  else if(act==="dlsvg"){
+    var w=el.getAttribute("data-what");
+    download(w+"-"+cur().id+".svg",svgFor(w));
+    toast("SVG downloaded");}
+  else if(act==="copyport"){var p=S.profile||DEMO;
+    copyText("# "+p.username+" — selected works\n\n"+p.repos.slice(0,4).map(function(r){return "- **["+r.name+"]("+r.url+")** ★"+r.stars+" — "+r.desc;}).join("\n"))
+    .then(function(ok){toast(ok?"Portfolio markdown copied":"Copy failed","err");});}});
+
+function renderVisualsOnly(){if(S.tab==="visuals"){var main=document.querySelector("main");if(main)main.innerHTML='«div class="pane">'+visualsHtml()+"«/div>";}}
+
+document.addEventListener("submit",function(e){
+  var f=e.target.closest?e.target.closest("[data-form]"):null;if(!f||f.getAttribute("data-form")!=="load")return;
+  e.preventDefault();
+  var inp=document.getElementById("userInp");var u=inp?inp.value:S.g.user;S.g.user=u;
+  toast("Contacting GitHub…","info");
+  fetchProfile(u).then(function(p){S.profile=p;toast("@"+p.username+" loaded — "+p.publicRepos+" repos");render();})
+  .catch(function(err){toast(err.message,"err");S.g.err=err.message;if(S.tab==="generate"){render();}});});
+
+document.addEventListener("input",function(e){
+  var t=e.target;if(!t||!t.id)return;
+  if(t.id==="mdEditor"){S.g.md=t.value;var pv=document.querySelector(".preview .md");if(pv)pv.innerHTML=mdRender(t.value);}
+  else if(t.id==="wmText"||t.id==="wmDepth"){
+    if(t.id==="wmText")S.wm=(t.value||"HANDLE").toUpperCase().slice(0,16);
+    if(t.id==="wmDepth")S.depth=+t.value;
+    var slot=document.getElementById("wmSvg"),lbl=document.getElementById("wmDepthLbl");
+    if(slot)slot.innerHTML=wordmarkSvg(S.wm,cur(),S.depth);
+    if(lbl)lbl.textContent=String(S.depth);}});
+document.addEventListener("change",function(e){
+  var t=e.target;if(!t||!t.id)return;
+  if(t.id==="asciiChk"){S.g.ascii=t.checked;render();}
+  else if(t.id==="asciiSel"){S.g.asciiId=t.value;}});
+document.addEventListener("focusout",function(e){
+  if(e.target&&e.target.id==="keyInp")S.g.keyInput=e.target.value;
+  if(e.target&&e.target.id==="userInp")S.g.user=e.target.value;},true);
+
+/* boot */
+var savedTheme=theme(S.themeId);applyTheme(savedTheme);
+render();
+window.__PX_APP__=1;
+if(window.__PX_WATCH__)clearTimeout(window.__PX_WATCH__);
+setTimeout(function(){toast("SYSTEM ONLINE · "+THEMES.length+" skins loaded");},400);
+})();
+</script>
+
+<script>
+/* LOADER — decodes the inert app block (« → <) and executes it.
+   This block itself contains no tag-shaped tokens either. */
+(function () {
+  function fail(msg) {
+    var d = document.getElementById("bootdiag");
+    if (d) { d.style.color = "#ff3b2f"; d.style.fontSize = "1rem"; d.innerHTML = "BOOT FAULT \u2014 " + msg; return; }
+    document.body.insertAdjacentHTML("afterbegin",
+      "\x3cdiv style='position:fixed;inset:0;z-index:99999;background:#010502;display:flex;align-items:center;justify-content:center;padding:2rem'>" +
+      "\x3cdiv style='font-family:monospace;color:#ff3b2f;border:2px solid #ff3b2f;padding:1.5rem;background:#0b0202;max-width:640px'>BOOT FAULT \u2014 " + msg + "\x3c/div>\x3c/div>");
+  }
+  try {
+    var srcEl = document.getElementById("px-app");
+    if (!srcEl) { fail("app source block is missing from the document"); return; }
+    var code = srcEl.textContent.replace(/\u00ab/g, "\x3c");
+    var el = document.createElement("script");
+    el.textContent = code;
+    document.body.appendChild(el);
+  } catch (err) { fail(String((err && err.message) || err)); }
+})();
+</script>
+</body>
+</html>
