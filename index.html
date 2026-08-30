@@ -273,7 +273,7 @@ main{max-width:1440px;width:100%;margin:0 auto;padding:1.25rem 1.25rem 4.5rem;bo
 .md summary:hover{color:var(--t-acc)}
 
 /* ---------- toasts ---------- */
-#toasts{position:fixed;bottom:3.2rem;right:1rem;z-index:90;display:flex;flex-direction:column;gap:.45rem;align-items:flex-end;pointer-events:none}
+#toasts{position:fixed;bottom:3.2rem;right:1rem;z-index:200;display:flex;flex-direction:column;gap:.45rem;align-items:flex-end;pointer-events:none}
 .toast{pointer-events:auto;display:flex;align-items:center;gap:.6rem;padding:.55rem .85rem;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.02em;color:var(--t-ink);width:260px;box-sizing:border-box;animation:tin .25s cubic-bezier(.2,.8,.3,1) both}
 .toast span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .toast.err{color:var(--t-acc);border-color:var(--t-acc)}
@@ -1764,6 +1764,26 @@ function refine(){
     g.md=d;g.passes=2;g.stage="idle";log("» REFINE OK · pass 2/2 — max passes reached.");render();toast("Refinement pass complete");
   }).catch(function(e){g.stage="idle";g.err=e.message;log("ERROR: "+e.message);render();toast("Refinement failed","err");});}
 
+function flashBtn(btn, text){
+  if(!btn)return;
+  var orig=btn.innerHTML;
+  var origBg=btn.style.background;
+  var origColor=btn.style.color;
+  var origShadow=btn.style.boxShadow;
+  btn.innerHTML=text||"✓ COPIED!";
+  btn.style.background="var(--t-pri)";
+  btn.style.color="var(--t-deep)";
+  btn.style.boxShadow="0 0 16px var(--t-pri)";
+  btn.style.borderColor="var(--t-pri)";
+  setTimeout(function(){
+    btn.innerHTML=orig;
+    btn.style.background=origBg;
+    btn.style.color=origColor;
+    btn.style.boxShadow=origShadow;
+    btn.style.borderColor="";
+  },1400);
+}
+
 window.addEventListener("keydown",function(e){
   if((e.key==="Escape" || e.key==="Esc" || e.keyCode===27) && S.modal){
     S.modal=null;
@@ -1784,16 +1804,32 @@ document.addEventListener("click",function(e){
   else if(act==="tpl"){S.tpl=el.getAttribute("data-id");S.themeId=S.tpl;applyTheme(cur());S.raw=false;render();}
   else if(act==="rawtoggle"){S.raw=!S.raw;render();}
   else if(act==="applyskin"){var tp=template(S.tpl);S.themeId=tp.id;S.tpl=tp.id;applyTheme(cur());render();toast("Skin loaded: "+cur().name,"info");}
-  else if(act==="copytpl"){var tp=template(S.tpl)||TEMPLATES[0];copyText(interpolateTemplate(tp.md)).then(function(ok){toast(ok?"Template copied with your handle!":"Copy failed","err");});}
-  else if(act==="dltpl"){var tp2=template(S.tpl)||TEMPLATES[0];download((S.profile?S.profile.username:tp2.id)+"-README.md",interpolateTemplate(tp2.md),"text/markdown");toast("Template downloaded");}
+  else if(act==="copytpl"){
+    var tp=template(S.tpl)||TEMPLATES[0];
+    flashBtn(el,"✓ COPIED!");
+    copyText(interpolateTemplate(tp.md)).then(function(ok){toast(ok?"Template copied to clipboard!":"Copy failed",ok?"info":"err");});
+  }
+  else if(act==="dltpl"){
+    var tp2=template(S.tpl)||TEMPLATES[0];
+    flashBtn(el,"✓ SAVED!");
+    download((S.profile?S.profile.username:tp2.id)+"-README.md",interpolateTemplate(tp2.md),"text/markdown");
+    toast("Template downloaded");
+  }
   else if(act==="demo"){S.profile=JSON.parse(JSON.stringify(DEMO));toast("Demo profile loaded — @"+DEMO.username);render();}
   else if(act==="eject"){S.profile=null;render();toast("Profile unloaded","info");}
   else if(act==="tone"){S.g.tone=el.getAttribute("data-id");render();}
   else if(act==="compile"){compile();}
   else if(act==="refine"){refine();}
   else if(act==="view"){S.g.view=el.getAttribute("data-view");render();}
-  else if(act==="copymd"){copyText(S.g.md).then(function(ok){toast(ok?"Markdown copied to clipboard":"Copy failed","err");});}
-  else if(act==="dlmd"){download((S.profile?S.profile.username:"profile")+"-README.md",S.g.md,"text/markdown");toast("README.md downloaded");}
+  else if(act==="copymd"){
+    flashBtn(el,"✓ COPIED!");
+    copyText(S.g.md).then(function(ok){toast(ok?"Markdown copied to clipboard!":"Copy failed",ok?"info":"err");});
+  }
+  else if(act==="dlmd"){
+    flashBtn(el,"✓ SAVED!");
+    download((S.profile?S.profile.username:"profile")+"-README.md",S.g.md,"text/markdown");
+    toast("README.md downloaded");
+  }
   else if(act==="roll"){S.salt++;renderVisualsOnly();}
   else if(act==="zoomsvg"){
     var what=el.getAttribute("data-what");
@@ -1809,14 +1845,21 @@ document.addEventListener("click",function(e){
   }
   else if(act==="copysvg"){
     var what=el.getAttribute("data-what");
-    copyText(svgFor(what)).then(function(ok){toast(ok?"SVG source copied":"Copy failed","err");});}
+    flashBtn(el,"✓ COPIED!");
+    copyText(svgFor(what)).then(function(ok){toast(ok?"SVG source copied to clipboard!":"Copy failed",ok?"info":"err");});
+  }
   else if(act==="dlsvg"){
     var w=el.getAttribute("data-what");
+    flashBtn(el,"✓ SAVED!");
     download(w+"-"+cur().id+".svg",svgFor(w));
-    toast("SVG downloaded");}
-  else if(act==="copyport"){var p=S.profile||DEMO;
+    toast("SVG downloaded ("+w+"-"+cur().id+".svg)");
+  }
+  else if(act==="copyport"){
+    var p=S.profile||DEMO;
+    flashBtn(el,"✓ COPIED!");
     copyText("# "+p.username+" — selected works\n\n"+p.repos.slice(0,4).map(function(r){return "- **["+r.name+"]("+r.url+")** ★"+r.stars+" — "+r.desc;}).join("\n"))
-    .then(function(ok){toast(ok?"Portfolio markdown copied":"Copy failed","err");});}});
+    .then(function(ok){toast(ok?"Portfolio markdown copied!":"Copy failed",ok?"info":"err");});
+  }});
 
 function renderVisualsOnly(){if(S.tab==="visuals"){var main=document.querySelector("main");if(main)main.innerHTML='«div class="pane">'+visualsHtml()+"«/div>";}}
 
