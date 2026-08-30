@@ -1940,24 +1940,11 @@ function templatesHtml(){
     return win("TEMPLATE DATA MISSING","","«div class='emptybox'>«pre>THE TEMPLATE BLOCK NEVER EXECUTED.\nGENERATE / VISUALS / WRAPPED STILL WORK.«/pre>«/div>");
   }
   var t=template(S.tpl)||TEMPLATES[0],th=theme(t.id);
-  var isStack = S.tplView === "stack";
-
-  var sideTabs = '«div class="seg" style="width:100%;margin-bottom:.55rem;display:flex">'+
-    '«button data-act="tplview" data-view="templates" class="'+(!isStack?"on":"")+'" style="flex:1;padding:.45rem .6rem;font-size:10px">01 · BLUEPRINTS ('+TEMPLATES.length+')«/button>'+
-    '«button data-act="tplview" data-view="stack" class="'+(isStack?"on":"")+'" style="flex:1;padding:.45rem .6rem;font-size:10px">🛠️ TECH STACK ('+S.skills.length+')«/button>'+
-  '«/div>';
 
   var list=TEMPLATES.map(function(tp,i){var tt=theme(tp.id);
     return '«button class="tplbtn'+(tp.id===S.tpl?" on":"")+'" data-act="tpl" data-id="'+tp.id+'">«b>«span class="dots" style="gap:3px">'+tt.sw.map(function(s){return '«i style="width:7px;height:7px;background:'+s+'">«/i>';}).join("")+"«/span>"+("0"+(i+1)).slice(-2)+" "+esc(tt.name)+"«/b>«span>"+esc(tp.vibe)+"«/span>«/button>";}).join("");
 
   var stackBuilder = skillBuilderHtml(th);
-
-  var leftContent = !isStack ?
-    ('«div class="tplrow thin" style="padding:.5rem;max-height:640px;overflow-y:auto">'+list+'«/div>'+
-     '«div style="padding:.55rem .75rem;background:var(--t-panel2);border-top:1px solid var(--t-line)">'+
-       '«button class="btn btn-sm btn-pri" data-act="tplview" data-view="stack" style="width:100%;padding:.45rem">🛠️ CUSTOMIZE TECH STACK & ICONS ('+S.skills.length+' ACTIVE) →«/button>'+
-     '«/div>') :
-    stackBuilder;
 
   var bar='«div class="row" style="gap:4px;align-items:center">'+
    '«div class="seg">«button data-act="rawtoggle" class="'+(S.raw?"":"on")+'">PREVIEW«/button>«button data-act="rawtoggle" class="'+(S.raw?"on":"")+'">RAW«/button>«/div>'+
@@ -1965,14 +1952,14 @@ function templatesHtml(){
    '«button class="btn btn-sm btn-pri" data-act="applyskin" title="Re-skin the whole app to this template theme">◐ APPLY SKIN«/button>«/div>';
 
   var activeMd=interpolateTemplate(t.md);
-  var body=S.raw?'«pre class="md-editor thin" style="min-height:680px;height:100%;white-space:pre-wrap">'+esc(activeMd)+"«/pre>":'«div class="preview thin" style="min-height:680px;height:100%"><div class="md" style="--t-pri:'+th.c.pri+';--t-sec:'+th.c.sec+';--t-acc:'+th.c.acc+';--t-line:'+th.c.line+';--t-panel2:'+th.c.panel2+';--t-deep:'+th.c.deep+';--t-ink:'+th.c.ink+';--t-muted:'+th.c.muted+';background:'+th.c.panel+';color:'+th.c.ink+';padding:1.4rem;border:1px solid '+th.c.line+'">'+mdRender(activeMd)+"«/div>«/div>";
+  var body=S.raw?'«pre class="md-editor thin" style="min-height:780px;height:100%;white-space:pre-wrap">'+esc(activeMd)+"«/pre>":'«div class="preview thin" style="min-height:780px;height:100%">«div class="md" style="--t-pri:'+th.c.pri+';--t-sec:'+th.c.sec+';--t-acc:'+th.c.acc+';--t-line:'+th.c.line+';--t-panel2:'+th.c.panel2+';--t-deep:'+th.c.deep+';--t-ink:'+th.c.ink+';--t-muted:'+th.c.muted+';background:'+th.c.panel+';color:'+th.c.ink+';padding:1.4rem;border:1px solid '+th.c.line+'">'+mdRender(activeMd)+"«/div>«/div>";
 
-  return '«div class="note" style="margin:-.3rem 0 .9rem">MODE B — 10× visual-dense templates with «b style="color:var(--t-pri)">interactive Tech Stack Customizer & real-time badge synthesis.«/b> Auto-populated with @'+(S.profile?esc(S.profile.username):"demo")+' & ready to ship.«/div>'+
+  return '«div class="note" style="margin:-.3rem 0 .9rem">MODE B — 10× visual-dense templates with «b style="color:var(--t-pri)">interactive Tech Stack Customizer & real-time badge synthesis.«/b> Select any blueprint on the left, customize your tech icons below, and watch your README update live.«/div>'+
   '«div class="grid2 grid2b">«div class="stack">'+
-    sideTabs+
-    win(!isStack ? "INDEX · "+TEMPLATES.length+" TEMPLATES" : "02 · TECH STACK & SKILL ENGINE", "", leftContent)+
+    win("01 · BLUEPRINT SELECTOR ("+TEMPLATES.length+")", "", '«div class="tplrow thin" style="padding:.5rem;max-height:220px;overflow-y:auto">'+list+'«/div>')+
+    win("02 · TECH STACK & SKILL ENGINE ("+S.skills.length+" ACTIVE)", "", stackBuilder)+
   '«/div>'+
-  win("TEMPLATE · "+esc(theme(t.id).name),bar,body)+"«/div>";}
+  win("TEMPLATE PREVIEW · "+esc(theme(t.id).name),bar,body)+"«/div>";}
 
 function assetBlock(title,svg,acts,embed,what){
   return win(title,acts,
