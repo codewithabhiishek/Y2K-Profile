@@ -181,6 +181,16 @@ main{max-width:1440px;width:100%;margin:0 auto;padding:1.25rem 1.25rem 4.5rem;bo
 @keyframes modalFadeIn{from{opacity:0}to{opacity:1}}
 @keyframes modalPop{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 
+/* ---------- tech stack customizer ---------- */
+.skill-grid{display:flex;flex-wrap:wrap;gap:4px;max-height:280px;overflow-y:auto;padding:.5rem;background:color-mix(in srgb,var(--t-deep) 90%,black);border:1px solid var(--t-line);border-radius:var(--t-rad);box-sizing:border-box}
+.skill-chip{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;font-family:var(--f-mono);font-size:10px;color:var(--t-sec);background:color-mix(in srgb,var(--t-panel2) 80%,transparent);border:1px solid var(--t-line);border-radius:2px;cursor:pointer;user-select:none;transition:all .12s ease}
+.skill-chip:hover{color:var(--t-ink);border-color:var(--t-pri);background:color-mix(in srgb,var(--t-pri) 15%,transparent)}
+.skill-chip.on{color:var(--t-deep);background:var(--t-pri);border-color:var(--t-pri);font-weight:bold;box-shadow:0 0 8px color-mix(in srgb,var(--t-pri) 40%,transparent)}
+.skill-cat-lbl{width:100%;font-family:var(--f-ui);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--t-muted);margin:.45rem 0 .2rem;padding-left:2px;border-bottom:1px dashed var(--t-line);padding-bottom:2px}
+.skill-cat-lbl:first-child{margin-top:0}
+.skill-preview{padding:.6rem .75rem;display:flex;flex-direction:column;align-items:center;justify-content:center;background:color-mix(in srgb,var(--t-deep) 94%,black);border-radius:var(--t-rad);border:1px solid var(--t-line);min-height:56px;overflow-x:auto;box-sizing:border-box}
+.skill-preview img{max-width:100%;height:auto;object-fit:contain}
+
 .output{flex:1;min-height:640px;display:flex;flex-direction:column;min-width:0;max-width:100%;box-sizing:border-box}
 .split{flex:1;display:grid;min-height:0;min-width:0;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr);max-width:100%;box-sizing:border-box}
 .split.one{grid-template-columns:1fr}
@@ -1469,25 +1479,58 @@ function buildSystem(o){
   "- Ensure exact theme color consistency for all badges and SVGs.\n"+
   "- Keep it under 150 lines. Dense, expressive, and ready to paste into GitHub.";
 }
-function buildUser(o){return "Compile a complete GitHub profile README.md from this live data.\n\n"+profileSummary(o.profile)+"\n\nGo.";}
-function buildRefine(md,o){return "This is pass 1 of a GitHub profile README you compiled. Critique it harshly (weak hook? generic blurbs? flat structure? missing badges?) and return a fully improved version.\n\nHARD RULES: output ONLY the improved markdown, keep every real fact/username/repo intact, stay under 140 lines.\n\nPASS 1 DRAFT:\n"+md;}
 
-function callBackendAI(sys,user){
-  return fetch("/api/generate",{
-    method:"POST",
-    headers:{"content-type":"application/json"},
-    body:JSON.stringify({system:sys,user:user})})
-  .then(function(r){
-    if(!r.ok)return r.json().then(function(j){throw new Error((j&&j.error)||("Server HTTP "+r.status));},function(){throw new Error("Server HTTP "+r.status);});
-    return r.json();})
-  .then(function(d){
-    if(d.error)throw new Error(d.error);
-    var t=(d.markdown||"").trim();
-    if(!t)throw new Error("Empty AI response. Please try again.");
-    return t;});}
+/* skills catalog & presets */
+var ALL_SKILLS = [
+  {cat:"Languages", items:[
+    {id:"ts",name:"TypeScript"},{id:"js",name:"JavaScript"},{id:"python",name:"Python"},
+    {id:"rust",name:"Rust"},{id:"go",name:"Go"},{id:"cpp",name:"C++"},{id:"c",name:"C"},
+    {id:"java",name:"Java"},{id:"cs",name:"C#"},{id:"php",name:"PHP"},{id:"ruby",name:"Ruby"},
+    {id:"swift",name:"Swift"},{id:"kotlin",name:"Kotlin"},{id:"dart",name:"Dart"},{id:"bash",name:"Bash"}
+  ]},
+  {cat:"Frontend & UI", items:[
+    {id:"react",name:"React"},{id:"nextjs",name:"Next.js"},{id:"vue",name:"Vue.js"},
+    {id:"svelte",name:"Svelte"},{id:"angular",name:"Angular"},{id:"tailwind",name:"Tailwind"},
+    {id:"html",name:"HTML5"},{id:"css",name:"CSS3"},{id:"vite",name:"Vite"},
+    {id:"redux",name:"Redux"},{id:"threejs",name:"Three.js"},{id:"flutter",name:"Flutter"}
+  ]},
+  {cat:"Backend & Runtime", items:[
+    {id:"nodejs",name:"Node.js"},{id:"fastapi",name:"FastAPI"},{id:"express",name:"Express"},
+    {id:"django",name:"Django"},{id:"graphql",name:"GraphQL"},{id:"nestjs",name:"NestJS"},
+    {id:"flask",name:"Flask"},{id:"spring",name:"Spring"},{id:"bun",name:"Bun"}
+  ]},
+  {cat:"Databases & Storage", items:[
+    {id:"postgres",name:"PostgreSQL"},{id:"mongodb",name:"MongoDB"},{id:"mysql",name:"MySQL"},
+    {id:"redis",name:"Redis"},{id:"sqlite",name:"SQLite"},{id:"supabase",name:"Supabase"},
+    {id:"prisma",name:"Prisma"},{id:"firebase",name:"Firebase"}
+  ]},
+  {cat:"Cloud & DevOps", items:[
+    {id:"docker",name:"Docker"},{id:"kubernetes",name:"Kubernetes"},{id:"aws",name:"AWS"},
+    {id:"gcp",name:"GCP"},{id:"azure",name:"Azure"},{id:"linux",name:"Linux"},
+    {id:"git",name:"Git"},{id:"github",name:"GitHub"},{id:"actions",name:"GH Actions"},
+    {id:"nginx",name:"Nginx"},{id:"terraform",name:"Terraform"}
+  ]},
+  {cat:"Tools & Design", items:[
+    {id:"figma",name:"Figma"},{id:"blender",name:"Blender"},{id:"postman",name:"Postman"},
+    {id:"neovim",name:"Neovim"},{id:"vscode",name:"VS Code"}
+  ]}
+];
+
+var SKILL_PRESETS = {
+  fullstack: ["ts","js","react","nextjs","nodejs","tailwind","postgres","docker","git"],
+  frontend: ["ts","js","react","nextjs","vue","svelte","tailwind","html","css","vite","figma"],
+  backend: ["python","fastapi","go","rust","nodejs","postgres","redis","docker","linux","git"],
+  cloud: ["docker","kubernetes","aws","gcp","linux","git","github","actions","terraform"],
+  ai: ["python","fastapi","postgres","docker","linux","git","bash"]
+};
 
 /* state */
-var S={themeId:store.get("px_theme")||"phosphor",tab:"generate",tpl:"phosphor",raw:false,
+var defaultSkills = ["js","ts","react","nextjs","nodejs","tailwind","python","fastapi","postgres","docker","git","linux"];
+var savedSkills = null;
+try { savedSkills = store.get("px_skills") ? JSON.parse(store.get("px_skills")) : null; } catch(e){}
+var S={themeId:store.get("px_theme")||"phosphor",tab:"generate",tpl:"phosphor",tplView:"templates",
+  skills:(savedSkills&&Array.isArray(savedSkills)&&savedSkills.length)?savedSkills:defaultSkills,
+  raw:false,modal:null,
   profile:null,salt:1,wm:"ABHISHEK",depth:6,
   g:{user:"codewithabhiishek",tone:"y2k",ascii:true,asciiId:"banner",md:"",stage:"idle",err:null,passes:0,view:"split",
      log:["READY. Enter your GitHub handle and hit COMPILE README."]}};
@@ -1529,39 +1572,11 @@ function pickerHtml(label){
   return '«form data-form="load" class="stack" style="gap:.5rem">«span class="lbl">'+label+'«/span>«div class="row" style="flex-wrap:nowrap">«input id="userInp" class="inp" placeholder="github handle or url…" value="'+esc(S.g.user)+'" autocomplete="off">«button class="btn" type="submit">LOAD«/button>«/div>'+
   '«button class="btn btn-sm" type="button" data-act="demo">⚡ USE DEMO DATA — NO NETWORK NEEDED«/button>«/form>';}
 
-function generateHtml(){
-  var g=S.g,busy=g.stage!=="idle";
-  var tones=TONES.map(function(t){return '«button class="tone'+(g.tone===t.id?" on":"")+'" data-act="tone" data-id="'+t.id+'">«b>'+t.name+"«/b>«span>"+t.blurb+"«/span>«/button>";}).join("");
-  var asciiSel=g.ascii?'«select class="inp" id="asciiSel" style="padding:.4rem .6rem;font-size:.8rem">'+ASCII.map(function(a){return '«option value="'+a.id+'"'+(a.id===g.asciiId?" selected":"")+">"+a.label+"«/option>";}).join("")+"«/select>":"";
-  var outBar="";
-  if(g.md)outBar='«div class="seg">'+["split","edit","preview"].map(function(m){return '«button data-act="view" data-view="'+m+'" class="'+(g.view===m?"on":"")+'">'+m.toUpperCase()+"«/button>";}).join("")+"«/div>"+
-   '«button class="btn btn-sm" data-act="copymd">COPY MD«/button>«button class="btn btn-sm" data-act="dlmd">.MD«/button>';
-  var body="";
-  if(!g.md&&g.stage==="idle"){
-    body='«div class="emptybox">«pre>┌──────────────────────────────┐\n│  NO OUTPUT BUFFERED YET      │\n│                              │\n│  1. load handle    (step 1)  │\n│  2. pick tone      (step 2)  │\n│  3. hit COMPILE    (step 3)  │\n└──────────────────────────────┘«/pre>'+
-    '«p class="note" style="max-width:380px">The compiled README lands here as live markdown — edit the raw side, watch the preview update, then copy it into your «b style="color:var(--t-pri)">username/username«/b> repo.«/p>«/div>';}
-  else if(g.md){
-    var showE=g.view!=="preview",showP=g.view!=="edit";
-    body='«div class="split'+(g.view!=="split"?" one":"")+'">'+
-     (showE?'«div style="border-right:1px solid var(--t-line);min-height:0">«textarea id="mdEditor" class="md-editor thin" spellcheck="false">'+esc(g.md)+"«/textarea>«/div>":"")+
-     (showP?'«div class="preview thin">«div class="md">'+mdRender(g.md)+"«/div>«/div>":"")+"«/div>";}
-  else body='«div class="busybox">COMPILING AI PROFILE README«span class="blink">▊«/span>«/div>';
-
-  var left=
-   win("STEP 1 · SOURCE","","«div style='padding:.75rem'>"+pickerHtml("ENTER GITHUB USERNAME")+"«/div>")+
-   win("STEP 2 · STYLE & VIBE","","«div class='stack' style='padding:.75rem;gap:.7rem'>«div style='display:grid;grid-template-columns:1fr 1fr;gap:.5rem'>"+tones+"«/div>"+
-    "«label style='display:flex;align-items:center;gap:.5rem;cursor:pointer;font-family:var(--f-ui);font-size:11px;font-weight:700;letter-spacing:.14em'>«input type='checkbox' id='asciiChk'"+(g.ascii?" checked":"")+"> INCLUDE ASCII BANNER«/label>"+asciiSel+"«/div>")+
-   win("STEP 3 · COMPILE README","","«div class='stack' style='padding:.75rem;gap:.7rem'>"+
-    "«div style='font-family:var(--f-mono);font-size:11px;color:var(--t-pri)'>⚡ AI ENGINE: NEURAL COMPILER · READY«/div>"+
-    "«div style='font-family:var(--f-mono);font-size:9.5px;color:var(--t-muted)'>💡 Tip: Add your custom API key in .env or Settings for custom models & higher limits.«/div>"+
-    "«button class='btn btn-pri' style='padding:.75rem;font-size:13px' data-act='compile' "+(busy?"disabled":"")+">"+(g.stage==="generating"?"COMPILING README…":g.stage==="refining"?"REFINING…":"⚡ COMPILE README")+"«/button>"+
-    (g.md?"«button class='btn' data-act='refine' "+(busy||g.passes>=2?"disabled":"")+" title='"+(g.passes>=2?"2-pass limit reached":"Critique-and-improve pass")+"'>↻ "+(g.passes>=2?"MAX PASSES (2/2)":"REFINE — CRITIQUE PASS (2/2)")+"«/button>":"")+
-    (g.err?"«div class='errbox'>⚠ "+esc(g.err)+"«/div>":"")+
-    "«div id='glog' class='logbox sf-inset thin'>"+g.log.map(function(x){return "«div style='color:"+(x.indexOf("ERROR")===0?"var(--t-acc)":"inherit")+"'>"+esc(x)+"«/div>";}).join("")+(busy?"«span class='blink' style='color:var(--t-pri)'>█«/span>":"")+"«/div>«/div>");
-  return '«div class="grid2">«div class="stack">'+left+"«/div>"+win("OUTPUT · README.MD",outBar,'«div class="output">'+body+"«/div>")+"«/div>";}
-
 function cleanName(n){
-  return (n||"").replace(/\s*\(.*?\)\s*/g, "").trim() || "DEVELOPER";
+  if(!n)return "";
+  return n.replace(/[\u{1F300}-\u{1FAFF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}]/gu, "")
+          .replace(/[^\x20-\x7E]/g, "")
+          .trim();
 }
 
 function interpolateTemplate(rawMd){
@@ -1572,8 +1587,10 @@ function interpolateTemplate(rawMd){
   var loc=p.location&&p.location!=="—"?p.location.replace(/[,;]/g, " "):"Earth";
   var nEnc=encodeURIComponent(nUpper);
   var locEnc=encodeURIComponent(loc);
+  var skillsList = (S.skills && S.skills.length > 0) ? S.skills.join(",") : "js,ts,react,nextjs,nodejs,tailwind,python,fastapi,postgres,docker,git,linux";
 
   var res = rawMd
+    .replace(/https:\/\/skillicons\.dev\/icons\?i=[a-zA-Z0-9_,+-]+/g, "https://skillicons.dev/icons?i=" + skillsList)
     .replace(/text=%E2%96%A0%20\[YOUR%20NAME\]%20%E2%96%A0/g, "text=%E2%96%A0%20"+nEnc+"%20%E2%96%A0")
     .replace(/text=%E2%96%A0%20\[YOUR NAME\]%20%E2%96%A0/g, "text=%E2%96%A0%20"+nEnc+"%20%E2%96%A0")
     .replace(/text=%E2%97%88%20\[YOUR NAME\]%20%E2%97%88/g, "text=%E2%97%88%20"+nEnc+"%20%E2%97%88")
@@ -1603,21 +1620,87 @@ function interpolateTemplate(rawMd){
   return res;
 }
 
+function skillBuilderHtml(th){
+  var presets = [
+    ["fullstack","⚡ FULLSTACK"],
+    ["frontend","🎨 FRONTEND"],
+    ["backend","⚙️ BACKEND"],
+    ["cloud","☁️ CLOUD"],
+    ["ai","🤖 AI/DATA"],
+    ["clear","✕ CLEAR"]
+  ].map(function(p){
+    return '«button class="btn btn-sm" data-act="skillpreset" data-preset="'+p[0]+'" style="padding:3px 7px;font-size:9.5px">'+p[1]+'«/button>';
+  }).join("");
+
+  var categoriesHtml = ALL_SKILLS.map(function(cat){
+    var chips = cat.items.map(function(item){
+      var isOn = S.skills.indexOf(item.id) !== -1;
+      return '«button class="skill-chip'+(isOn?" on":"")+'" data-act="toggleskill" data-skill="'+item.id+'" title="Toggle '+esc(item.name)+' ('+item.id+')">'+
+        '«span>'+(isOn?"✓ ":"")+esc(item.name)+'«/span>'+
+      '«/button>';
+    }).join("");
+    return '«div class="skill-cat-lbl">'+esc(cat.cat)+'«/div>'+chips;
+  }).join("");
+
+  var skillTheme = (th.id === "cream" || th.id === "matrix_ghost") ? "light" : "dark";
+  var skillsUrl = "https://skillicons.dev/icons?i=" + (S.skills.length ? S.skills.join(",") : "js") + "&theme=" + skillTheme;
+
+  return '«div class="stack" style="padding:.65rem;gap:.6rem">'+
+    '«div class="row" style="justify-content:space-between;align-items:center">'+
+      '«div class="lbl">QUICK PRESETS«/div>'+
+      '«span style="font-family:var(--f-mono);font-size:10px;color:var(--t-pri);font-weight:bold">'+S.skills.length+' ACTIVE ICONS«/span>'+
+    '«/div>'+
+    '«div class="row" style="gap:4px;flex-wrap:wrap">'+presets+'«/div>'+
+    '«div class="lbl" style="margin-top:.3rem">SKILLS INVENTORY (CLICK TO TOGGLE)«/div>'+
+    '«div class="skill-grid thin">'+categoriesHtml+'«/div>'+
+    '«form data-form="addskill" class="row" style="gap:4px;margin-top:.3rem">'+
+      '«input id="customSkillInp" class="inp" style="flex:1;padding:.35rem .55rem;font-size:10.5px" placeholder="Custom icon slug (e.g. wasm, tauri, solidity)…">'+
+      '«button class="btn btn-sm btn-pri" type="submit">+ ADD«/button>'+
+    '«/form>'+
+    '«div class="lbl" style="margin-top:.3rem">LIVE TECH STACK PREVIEW«/div>'+
+    '«div class="skill-preview thin">'+
+      (S.skills.length ? '«img src="'+skillsUrl+'" alt="Tech Stack Preview"/>' : '«span class="note">No skills active. Click chips above or choose a preset.«/span>')+
+    '«/div>'+
+  '«/div>';
+}
+
 function templatesHtml(){
   if(!TEMPLATES.length){
     return win("TEMPLATE DATA MISSING","","«div class='emptybox'>«pre>THE TEMPLATE BLOCK NEVER EXECUTED.\nGENERATE / VISUALS / WRAPPED STILL WORK.«/pre>«/div>");
   }
   var t=template(S.tpl)||TEMPLATES[0],th=theme(t.id);
+  var isStack = S.tplView === "stack";
+
+  var sideTabs = '«div class="seg" style="width:100%;margin-bottom:.55rem;display:flex">'+
+    '«button data-act="tplview" data-view="templates" class="'+(!isStack?"on":"")+'" style="flex:1;padding:.45rem .6rem;font-size:10px">01 · BLUEPRINTS ('+TEMPLATES.length+')«/button>'+
+    '«button data-act="tplview" data-view="stack" class="'+(isStack?"on":"")+'" style="flex:1;padding:.45rem .6rem;font-size:10px">🛠️ TECH STACK ('+S.skills.length+')«/button>'+
+  '«/div>';
+
   var list=TEMPLATES.map(function(tp,i){var tt=theme(tp.id);
     return '«button class="tplbtn'+(tp.id===S.tpl?" on":"")+'" data-act="tpl" data-id="'+tp.id+'">«b>«span class="dots" style="gap:3px">'+tt.sw.map(function(s){return '«i style="width:7px;height:7px;background:'+s+'">«/i>';}).join("")+"«/span>"+("0"+(i+1)).slice(-2)+" "+esc(tt.name)+"«/b>«span>"+esc(tp.vibe)+"«/span>«/button>";}).join("");
+
+  var stackBuilder = skillBuilderHtml(th);
+
+  var leftContent = !isStack ?
+    ('«div class="tplrow thin" style="padding:.5rem;max-height:640px;overflow-y:auto">'+list+'«/div>'+
+     '«div style="padding:.55rem .75rem;background:var(--t-panel2);border-top:1px solid var(--t-line)">'+
+       '«button class="btn btn-sm btn-pri" data-act="tplview" data-view="stack" style="width:100%;padding:.45rem">🛠️ CUSTOMIZE TECH STACK & ICONS ('+S.skills.length+' ACTIVE) →«/button>'+
+     '«/div>') :
+    stackBuilder;
+
   var bar='«div class="row" style="gap:4px;align-items:center">'+
    '«div class="seg">«button data-act="rawtoggle" class="'+(S.raw?"":"on")+'">PREVIEW«/button>«button data-act="rawtoggle" class="'+(S.raw?"on":"")+'">RAW«/button>«/div>'+
    '«button class="btn btn-sm" data-act="copytpl">COPY MD«/button>«button class="btn btn-sm" data-act="dltpl">.MD«/button>'+
    '«button class="btn btn-sm btn-pri" data-act="applyskin" title="Re-skin the whole app to this template theme">◐ APPLY SKIN«/button>«/div>';
+
   var activeMd=interpolateTemplate(t.md);
   var body=S.raw?'«pre class="md-editor thin" style="min-height:680px;height:100%;white-space:pre-wrap">'+esc(activeMd)+"«/pre>":'«div class="preview thin" style="min-height:680px;height:100%"><div class="md" style="--t-pri:'+th.c.pri+';--t-sec:'+th.c.sec+';--t-acc:'+th.c.acc+';--t-line:'+th.c.line+';--t-panel2:'+th.c.panel2+';--t-deep:'+th.c.deep+';--t-ink:'+th.c.ink+';--t-muted:'+th.c.muted+';background:'+th.c.panel+';color:'+th.c.ink+';padding:1.4rem;border:1px solid '+th.c.line+'">'+mdRender(activeMd)+"«/div>«/div>";
-  return '«div class="note" style="margin:-.3rem 0 .9rem">MODE B — 10× visual-dense templates styled for each theme skin. «b style="color:var(--t-pri)">Auto-populated with live handle @'+(S.profile?esc(S.profile.username):"demo")+' & ready to paste into GitHub.«/b>«/div>'+
-  '«div class="grid2 grid2b">«div>'+win("INDEX · "+TEMPLATES.length+" TEMPLATES","","«div class='tplrow thin' style='padding:.5rem;max-height:760px;overflow-y:auto'>"+list+"«/div>")+"«/div>"+
+
+  return '«div class="note" style="margin:-.3rem 0 .9rem">MODE B — 10× visual-dense templates with «b style="color:var(--t-pri)">interactive Tech Stack Customizer & real-time badge synthesis.«/b> Auto-populated with @'+(S.profile?esc(S.profile.username):"demo")+' & ready to ship.«/div>'+
+  '«div class="grid2 grid2b">«div class="stack">'+
+    sideTabs+
+    win(!isStack ? "INDEX · "+TEMPLATES.length+" TEMPLATES" : "02 · TECH STACK & SKILL ENGINE", "", leftContent)+
+  '«/div>'+
   win("TEMPLATE · "+esc(theme(t.id).name),bar,body)+"«/div>";}
 
 function assetBlock(title,svg,acts,embed,what){
@@ -1802,6 +1885,29 @@ document.addEventListener("click",function(e){
   if(act==="tab"){S.tab=el.getAttribute("data-tab");render();}
   else if(act==="theme"){S.themeId=el.getAttribute("data-id");S.tpl=S.themeId;applyTheme(cur());render();toast("Skin loaded: "+cur().name,"info");}
   else if(act==="tpl"){S.tpl=el.getAttribute("data-id");S.themeId=S.tpl;applyTheme(cur());S.raw=false;render();}
+  else if(act==="tplview"){S.tplView=el.getAttribute("data-view");render();}
+  else if(act==="toggleskill"){
+    var sk=el.getAttribute("data-skill");
+    var idx=S.skills.indexOf(sk);
+    if(idx===-1){
+      S.skills.push(sk);
+    }else{
+      S.skills.splice(idx,1);
+    }
+    store.set("px_skills",JSON.stringify(S.skills));
+    render();
+  }
+  else if(act==="skillpreset"){
+    var p=el.getAttribute("data-preset");
+    if(p==="clear"){
+      S.skills=[];
+    }else if(SKILL_PRESETS[p]){
+      S.skills=JSON.parse(JSON.stringify(SKILL_PRESETS[p]));
+    }
+    store.set("px_skills",JSON.stringify(S.skills));
+    toast("Preset applied: "+p.toUpperCase(),"info");
+    render();
+  }
   else if(act==="rawtoggle"){S.raw=!S.raw;render();}
   else if(act==="applyskin"){var tp=template(S.tpl);S.themeId=tp.id;S.tpl=tp.id;applyTheme(cur());render();toast("Skin loaded: "+cur().name,"info");}
   else if(act==="copytpl"){
@@ -1864,12 +1970,31 @@ document.addEventListener("click",function(e){
 function renderVisualsOnly(){if(S.tab==="visuals"){var main=document.querySelector("main");if(main)main.innerHTML='«div class="pane">'+visualsHtml()+"«/div>";}}
 
 document.addEventListener("submit",function(e){
-  var f=e.target.closest?e.target.closest("[data-form]"):null;if(!f||f.getAttribute("data-form")!=="load")return;
-  e.preventDefault();
-  var inp=document.getElementById("userInp");var u=inp?inp.value:S.g.user;S.g.user=u;
-  toast("Contacting GitHub…","info");
-  fetchProfile(u).then(function(p){S.profile=p;toast("@"+p.username+" loaded — "+p.publicRepos+" repos");render();})
-  .catch(function(err){toast(err.message,"err");S.g.err=err.message;if(S.tab==="generate"){render();}});});
+  var f=e.target.closest?e.target.closest("[data-form]"):null;if(!f)return;
+  var formType=f.getAttribute("data-form");
+  if(formType==="load"){
+    e.preventDefault();
+    var inp=document.getElementById("userInp");var u=inp?inp.value:S.g.user;S.g.user=u;
+    toast("Contacting GitHub…","info");
+    fetchProfile(u).then(function(p){S.profile=p;toast("@"+p.username+" loaded — "+p.publicRepos+" repos");render();})
+    .catch(function(err){toast(err.message,"err");S.g.err=err.message;if(S.tab==="generate"){render();}});
+  }
+  else if(formType==="addskill"){
+    e.preventDefault();
+    var inp2=document.getElementById("customSkillInp");
+    if(!inp2)return;
+    var raw=(inp2.value||"").trim().toLowerCase().replace(/[^a-z0-9_,-]/g,"");
+    if(!raw)return;
+    var parts=raw.split(",");
+    parts.forEach(function(s){
+      s=s.trim();
+      if(s && S.skills.indexOf(s)===-1)S.skills.push(s);
+    });
+    store.set("px_skills",JSON.stringify(S.skills));
+    toast("Added "+raw+" to stack!","info");
+    render();
+  }
+});
 
 document.addEventListener("input",function(e){
   var t=e.target;if(!t||!t.id)return;
