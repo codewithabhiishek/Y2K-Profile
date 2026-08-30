@@ -12,21 +12,10 @@ function backendAiPlugin() {
   ];
 
   // In-memory rate limiting store
-  // ip -> { count, windowStart, lastRequestTime }
   const ipStore = new Map();
   const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
   const MAX_REQUESTS_PER_WINDOW = 5; // Max 5 compiles per 10 min
   const MIN_COOLDOWN_MS = 10 * 1000; // Minimum 10s between requests
-
-  // Clean up stale rate-limit records every 5 minutes
-  setInterval(() => {
-    const now = Date.now();
-    for (const [ip, record] of ipStore.entries()) {
-      if (now - record.windowStart > WINDOW_MS && now - record.lastRequestTime > WINDOW_MS) {
-        ipStore.delete(ip);
-      }
-    }
-  }, 5 * 60 * 1000);
 
   // Global rate limiter to protect total upstream quota
   let globalCount = 0;
@@ -36,6 +25,17 @@ function backendAiPlugin() {
   return {
     name: "backend-ai-plugin",
     configureServer(server) {
+      // Clean up stale rate-limit records every 5 minutes (unref ensures build never hangs)
+      const cleanupTimer = setInterval(() => {
+        const now = Date.now();
+        for (const [ip, record] of ipStore.entries()) {
+          if (now - record.windowStart > WINDOW_MS && now - record.lastRequestTime > WINDOW_MS) {
+            ipStore.delete(ip);
+          }
+        }
+      }, 5 * 60 * 1000);
+      if (cleanupTimer.unref) cleanupTimer.unref();
+
       server.middlewares.use(async (req, res, next) => {
         if (req.url === "/api/generate" && req.method === "POST") {
           const now = Date.now();
