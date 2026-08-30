@@ -164,11 +164,22 @@ main{max-width:1440px;width:100%;margin:0 auto;padding:1.25rem 1.25rem 4.5rem;bo
 .seg button:hover{color:var(--t-ink);background:color-mix(in srgb,var(--t-panel) 80%,transparent)}
 .seg button.on{background:var(--t-pri);color:var(--t-deep);font-weight:bold}
 
-.svgwrap{padding:.55rem .75rem;display:flex;justify-content:center;align-items:center;overflow:hidden;width:100%;min-height:105px;max-height:165px;background:color-mix(in srgb,var(--t-deep) 90%,black);border-radius:var(--t-rad);box-sizing:border-box}
-.svgwrap svg{max-width:100%;max-height:150px;width:auto;height:auto;display:block;box-shadow:0 6px 20px rgba(0,0,0,.65);border-radius:2px;object-fit:contain}
+.svgwrap{position:relative;padding:.55rem .75rem;display:flex;justify-content:center;align-items:center;overflow:hidden;width:100%;min-height:105px;max-height:165px;background:color-mix(in srgb,var(--t-deep) 90%,black);border:1px solid transparent;border-radius:var(--t-rad);box-sizing:border-box;cursor:zoom-in;transition:border-color .15s ease,box-shadow .2s ease}
+.svgwrap:hover{border-color:var(--t-pri);box-shadow:0 0 16px color-mix(in srgb,var(--t-pri) 30%,transparent),inset 0 0 12px color-mix(in srgb,var(--t-pri) 12%,transparent)}
+.svgwrap:hover::after{content:"⛶ CLICK TO ZOOM";position:absolute;bottom:6px;right:8px;font-family:var(--f-px);font-size:7.5px;line-height:1;letter-spacing:.08em;color:var(--t-pri);background:color-mix(in srgb,var(--t-panel2) 90%,black);padding:3px 6px;border:1px solid var(--t-pri);border-radius:2px;box-shadow:0 2px 8px rgba(0,0,0,.7);pointer-events:none;animation:fadeIn .15s ease}
+.svgwrap svg{max-width:100%;max-height:150px;width:auto;height:auto;display:block;box-shadow:0 6px 20px rgba(0,0,0,.65);border-radius:2px;object-fit:contain;transition:transform .18s ease}
+.svgwrap:hover svg{transform:scale(1.025)}
 .svgwrap.svgwrap-tall{min-height:260px;max-height:480px;padding:.75rem 1rem}
 .svgwrap.svgwrap-tall svg{max-height:450px;max-width:100%;width:auto;height:auto}
 .embed{font-family:var(--f-mono);font-size:9.5px;color:var(--t-muted);padding:.35rem .55rem;white-space:nowrap;overflow-x:auto;background:color-mix(in srgb,var(--t-deep) 80%,var(--t-panel));border-top:1px solid var(--t-line);box-sizing:border-box}
+
+.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1.25rem;box-sizing:border-box;animation:modalFadeIn .15s ease-out}
+.modal-card{width:100%;max-width:860px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 0 40px color-mix(in srgb,var(--t-pri) 40%,transparent),0 16px 50px rgba(0,0,0,.9);border:2px solid var(--t-pri);border-radius:var(--t-rad);overflow:hidden;animation:modalPop .18s cubic-bezier(.16,1,.3,1)}
+.modal-body{padding:1.5rem;display:flex;justify-content:center;align-items:center;background:color-mix(in srgb,var(--t-deep) 94%,black);overflow:auto;flex:1}
+.modal-svg-wrap{display:flex;justify-content:center;align-items:center;width:100%}
+.modal-svg-wrap svg{max-width:100%;max-height:62vh;width:auto;height:auto;display:block;box-shadow:0 12px 40px rgba(0,0,0,.8);border-radius:2px}
+@keyframes modalFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes modalPop{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 
 .output{flex:1;min-height:640px;display:flex;flex-direction:column;min-width:0;max-width:100%;box-sizing:border-box}
 .split{flex:1;display:grid;min-height:0;min-width:0;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr);max-width:100%;box-sizing:border-box}
@@ -509,10 +520,10 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=07130a&title_color=00ff66&text_color=d8ffe4&icon_color=d4ff3f&border_radius=4\" alt=\"GitHub Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=07130a&title_color=00ff66&text_color=d8ffe4&icon_color=d4ff3f&border_radius=4\" alt=\"GitHub Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=07130a&ring=00ff66&fire=d4ff3f&currStreakLabel=7dffa8&currStreakNum=00ff66&sideNums=d8ffe4&sideLabels=5f8f6f&border_radius=4\" alt=\"Streak Stats\" height=\"165\"/>",
 "  \x3cbr/>",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api/top-langs/?username=[YOUR-USERNAME]&layout=compact&hide_border=true&bg_color=07130a&title_color=00ff66&text_color=d8ffe4&border_radius=4\" alt=\"Top Languages\" height=\"145\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=[YOUR-USERNAME]&layout=compact&hide_border=true&bg_color=07130a&title_color=00ff66&text_color=d8ffe4&border_radius=4\" alt=\"Top Languages\" height=\"145\"/>",
 "\x3c/div>",
 "",
 "\x3c/details>",
@@ -587,7 +598,7 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1d1206&title_color=ffb000&text_color=ffe9c4&icon_color=ff6b1a&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1d1206&title_color=ffb000&text_color=ffe9c4&icon_color=ff6b1a&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=1d1206&ring=ffb000&fire=ff6b1a&currStreakLabel=ffd27f&currStreakNum=ffb000&sideNums=ffe9c4&sideLabels=9c7b4a&border_radius=4\" alt=\"Streak\" height=\"165\"/>",
 "\x3c/div>",
 "",
@@ -650,7 +661,7 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=06222a&title_color=00e5ff&text_color=d9fbff&icon_color=f5d300&border_radius=0\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=06222a&title_color=00e5ff&text_color=d9fbff&icon_color=f5d300&border_radius=0\" alt=\"Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=06222a&ring=00e5ff&fire=f5d300&currStreakLabel=64f0d8&currStreakNum=00e5ff&sideNums=d9fbff&sideLabels=5e93a0&border_radius=0\" alt=\"Streak\" height=\"165\"/>",
 "\x3c/div>",
 "",
@@ -713,7 +724,7 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=eef4f9&title_color=0a84d0&text_color=17324a&icon_color=f5a300&border_radius=8\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=eef4f9&title_color=0a84d0&text_color=17324a&icon_color=f5a300&border_radius=8\" alt=\"Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=eef4f9&ring=0a84d0&fire=f5a300&currStreakLabel=12b0c9&currStreakNum=0a84d0&sideNums=17324a&sideLabels=5c7690&border_radius=8\" alt=\"Streak\" height=\"165\"/>",
 "\x3c/div>",
 "",
@@ -777,7 +788,7 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1a222c&title_color=c9d6e4&text_color=e8eef5&icon_color=00b3ff&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1a222c&title_color=c9d6e4&text_color=e8eef5&icon_color=00b3ff&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=1a222c&ring=c9d6e4&fire=00b3ff&currStreakLabel=7fd4ff&currStreakNum=c9d6e4&sideNums=e8eef5&sideLabels=7f93a8&border_radius=4\" alt=\"Streak\" height=\"165\"/>",
 "\x3c/div>",
 "",
@@ -821,7 +832,7 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=141a10&title_color=b4ff00&text_color=eaffdc&icon_color=00ffd0&border_radius=0\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=141a10&title_color=b4ff00&text_color=eaffdc&icon_color=00ffd0&border_radius=0\" alt=\"Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=141a10&ring=b4ff00&fire=00ffd0&currStreakLabel=e0ff7a&currStreakNum=b4ff00&sideNums=eaffdc&sideLabels=7f9a6b&border_radius=0\" alt=\"Streak\" height=\"165\"/>",
 "\x3c/div>",
 "",
@@ -881,7 +892,7 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1e0808&title_color=ff3b2f&text_color=ffe3dd&icon_color=ffd23f&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1e0808&title_color=ff3b2f&text_color=ffe3dd&icon_color=ffd23f&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=1e0808&ring=ff3b2f&fire=ffd23f&currStreakLabel=ff8a70&currStreakNum=ff3b2f&sideNums=ffe3dd&sideLabels=a06a5f&border_radius=4\" alt=\"Streak\" height=\"165\"/>",
 "\x3c/div>",
 "",
@@ -944,7 +955,7 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=0a241c&title_color=3dffb0&text_color=e2fff2&icon_color=ffd75e&border_radius=8\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=0a241c&title_color=3dffb0&text_color=e2fff2&icon_color=ffd75e&border_radius=8\" alt=\"Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=0a241c&ring=3dffb0&fire=ffd75e&currStreakLabel=b0ffe0&currStreakNum=3dffb0&sideNums=e2fff2&sideLabels=6ba38c&border_radius=8\" alt=\"Streak\" height=\"165\"/>",
 "\x3c/div>",
 "",
@@ -1008,7 +1019,7 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1f2716&title_color=9bbc0f&text_color=dce8b8&icon_color=e8f0a0&border_radius=0\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1f2716&title_color=9bbc0f&text_color=dce8b8&icon_color=e8f0a0&border_radius=0\" alt=\"Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=1f2716&ring=9bbc0f&fire=e8f0a0&currStreakLabel=c4d64f&currStreakNum=9bbc0f&sideNums=dce8b8&sideLabels=8a9768&border_radius=0\" alt=\"Streak\" height=\"165\"/>",
 "\x3c/div>",
 "",
@@ -1068,7 +1079,7 @@ window.__TEMPLATES__ = [
 "\x3cbr/>",
 "",
 "\x3cdiv align=\"center\">",
-"  \x3cimg src=\"https://github-readme-stats.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=240905&title_color=ff5500&text_color=ffe8d6&icon_color=ffd000&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
+"  \x3cimg src=\"https://github-readme-stats-sigma-five.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=240905&title_color=ff5500&text_color=ffe8d6&icon_color=ffd000&border_radius=4\" alt=\"Stats\" height=\"165\"/>",
 "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=240905&ring=ff5500&fire=ffd000&currStreakLabel=ff884d&currStreakNum=ff5500&sideNums=ffe8d6&sideLabels=a86b5b&border_radius=4\" alt=\"Streak\" height=\"165\"/>",
 "\x3c/div>",
 "",
@@ -1438,7 +1449,7 @@ function buildSystem(o){
   "     «/details>\n\n"+
   "5. TELEMETRY & LIVE GITHUB STATS (Synchronized to Theme Colors):\n"+
   "   «div align=\"center\">\n"+
-  "     «img src=\"https://github-readme-stats.vercel.app/api?username="+u+"&show_icons=true&hide_border=true&bg_color="+bgClean+"&title_color="+priClean+"&text_color="+inkClean+"&icon_color="+accClean+"&border_radius=4\" height=\"165\"/>\n"+
+  "     «img src=\"https://github-readme-stats-sigma-five.vercel.app/api?username="+u+"&show_icons=true&hide_border=true&bg_color="+bgClean+"&title_color="+priClean+"&text_color="+inkClean+"&icon_color="+accClean+"&border_radius=4\" height=\"165\"/>\n"+
   "     «img src=\"https://github-readme-streak-stats.herokuapp.com/?user="+u+"&hide_border=true&background="+bgClean+"&ring="+priClean+"&fire="+accClean+"&currStreakLabel="+secClean+"&currStreakNum="+priClean+"&sideNums="+inkClean+"&sideLabels="+mutedClean+"&border_radius=4\" height=\"165\"/>\n"+
   "     «br/>\n"+
   "     «img src=\"https://github-readme-activity-graph.vercel.app/graph?username="+u+"&bg_color="+bgClean+"&color="+priClean+"&line="+priClean+"&point="+secClean+"&area=true&hide_border=true\" width=\"100%\"/>\n"+
@@ -1609,8 +1620,12 @@ function templatesHtml(){
   '«div class="grid2 grid2b">«div>'+win("INDEX · "+TEMPLATES.length+" TEMPLATES","","«div class='tplrow thin' style='padding:.5rem;max-height:760px;overflow-y:auto'>"+list+"«/div>")+"«/div>"+
   win("TEMPLATE · "+esc(theme(t.id).name),bar,body)+"«/div>";}
 
-function assetBlock(title,svg,acts,embed){
-  return win(title,acts,'«div class="svgwrap">'+svg+"«/div>"+(embed?'«div class="embed thin">'+esc(embed)+"«/div>":""));}
+function assetBlock(title,svg,acts,embed,what){
+  return win(title,acts,
+    '«div class="svgwrap" data-act="zoomsvg" data-what="'+(what||"")+'" data-title="'+esc(title)+'" data-desc="'+esc(embed||"")+'" title="Click to zoom & inspect in high resolution">'+
+      svg+
+    '«/div>'+
+    (embed?'«div class="embed thin">'+esc(embed)+"«/div>":""));}
 
 function visualsHtml(){
   var p=S.profile||DEMO,t=cur();
@@ -1618,7 +1633,7 @@ function visualsHtml(){
   var mx=techMatrixSvg(p,t),bios=biosCardSvg(p,t),hb=holoBannerSvg(p,t),rd=statRadarSvg(p,t);
 
   var note=p.isDemo?'«div class="note" style="margin:-.3rem 0 .75rem">Rendering from «b style="color:var(--t-acc)">DEMO DATA«/b> — load your own handle below to make these yours. 7× custom SVG widgets, downloadable & embeddable.«/div>':
-   '«div class="note" style="margin:-.3rem 0 .75rem">Rendering from «b style="color:var(--t-pri)">@'+esc(p.username)+"«/b>. 7× custom SVG widgets: copy SVG, download SVG, or embed in any README.«/div>";
+   '«div class="note" style="margin:-.3rem 0 .75rem">Rendering from «b style="color:var(--t-pri)">@'+esc(p.username)+"«/b>. 7× custom SVG widgets: copy SVG, download SVG, or click any card to inspect in full-res zoom.«/div>";
 
   var avActs='«button class="btn btn-sm" data-act="roll">↻ REROLL«/button>«button class="btn btn-sm" data-act="copysvg" data-what="avatar">COPY«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="avatar">↓«/button>';
   var stActs='«button class="btn btn-sm" data-act="copysvg" data-what="stats">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="stats">↓«/button>';
@@ -1633,14 +1648,14 @@ function visualsHtml(){
      win("00 · VISUALS DATA SOURCE · LOAD GITHUB HANDLE","","«div style='padding:.5rem .75rem'>"+pickerHtml("LOAD GITHUB PROFILE")+"«/div>")+
    "«/div>"+
    '«div class="viz-grid" id="vizgrid">'+
-     assetBlock("01 · HOLOGRAPHIC BANNER · 640×190",hb,hbActs,"Wide header banner for GitHub README header with CRT scanlines & telemetry")+
-     assetBlock("02 · TECH MATRIX · 520×260",mx,mxActs,"Silicon hardware registers with memory offsets & top languages")+
-     assetBlock("03 · BIOS CARD · 520×290",bios,bioActs,"1999 BIOS POST boot screen telemetry report")+
-     assetBlock("04 · STATS CARD · 468×300",st,stActs,"github-readme-stats style retro telemetry card")+
-     assetBlock("05 · STAT RADAR · 380×300",rd,rdActs,"Cyberpunk RPG skill polygon mapping velocity, streak, repos & stars")+
-     assetBlock("06 · PIXEL AVATAR · SEED #"+S.salt,av,avActs,"Deterministic 8×8 mirrored pixel art avatar")+
+     assetBlock("01 · HOLOGRAPHIC BANNER · 640×190",hb,hbActs,"Wide header banner for GitHub README header with CRT scanlines & telemetry","holo")+
+     assetBlock("02 · TECH MATRIX · 520×260",mx,mxActs,"Silicon hardware registers with memory offsets & top languages","matrix")+
+     assetBlock("03 · BIOS CARD · 520×290",bios,bioActs,"1999 BIOS POST boot screen telemetry report","bios")+
+     assetBlock("04 · STATS CARD · 468×300",st,stActs,"github-readme-stats style retro telemetry card","stats")+
+     assetBlock("05 · STAT RADAR · 380×300",rd,rdActs,"Cyberpunk RPG skill polygon mapping velocity, streak, repos & stars","radar")+
+     assetBlock("06 · PIXEL AVATAR · SEED #"+S.salt,av,avActs,"Deterministic 8×8 mirrored pixel art avatar","avatar")+
      win('07 · 3D WORDMARK · DEPTH «span id="wmDepthLbl">'+S.depth+"«/span>",wmActs,
-       '«div class="svgwrap">«span id="wmSvg">'+wm+'«/span>«/div>«div class="embed thin">layered extrusion · gradient face«/div>'+
+       '«div class="svgwrap" data-act="zoomsvg" data-what="word" data-title="07 · 3D WORDMARK" data-desc="Layered extrusion gradient face wordmark" title="Click to zoom & inspect in high resolution">«span id="wmSvg">'+wm+'«/span>«/div>«div class="embed thin">layered extrusion · gradient face«/div>'+
        '«div class="row" style="gap:.5rem;padding:.4rem .65rem;background:var(--t-panel2)">«input id="wmText" class="inp" style="max-width:160px;padding:.35rem .55rem;font-size:.8rem" maxlength="16" value="'+esc(S.wm)+'" placeholder="HANDLE…">«span class="lbl">DEPTH«/span>«input id="wmDepth" type="range" min="2" max="12" value="'+S.depth+'" style="accent-color:var(--t-pri);flex:1">«/div>')+
    "«/div>";}
 
@@ -1655,7 +1670,7 @@ function wrappedHtml(){
    win("01 · DATA SOURCE","","«div style='padding:.55rem .75rem'>"+pickerHtml("WRAPPED SOURCE")+"«/div>")+
    win("02 · REPO MATRIX · TOP WORKS",'«button class="btn btn-sm" data-act="copyport">COPY MD«/button>',"«div style='padding:.55rem;max-height:340px;overflow-y:auto'>"+port+"«/div>",null)+"«/div>"+
    win("YEAR IN REVIEW · 520×716",'«button class="btn btn-sm" data-act="copysvg" data-what="wrap">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="wrap">↓ PNG-READY SVG«/button>',
-    '«div class="svgwrap svgwrap-tall">'+wrappedSvg(p,t)+"«/div>")+"«/div>";}
+    '«div class="svgwrap svgwrap-tall" data-act="zoomsvg" data-what="wrap" data-title="YEAR IN REVIEW · 520×716" data-desc="High-resolution year in review developer card" title="Click to zoom & inspect in high resolution">'+wrappedSvg(p,t)+"«/div>")+"«/div>";}
 
 function footerHtml(){
   var t=cur();
@@ -1668,9 +1683,32 @@ function footerHtml(){
   '«span style="color:var(--t-muted)">v1.3.2026 «span class="blink" style="color:var(--t-pri)">▊«/span>«/span>«/div>'+
   '«/div>«/footer>';}
 
+function modalHtml(){
+  if(!S.modal)return "";
+  var m=S.modal;
+  return '«div class="modal-overlay">'+
+    '«div class="modal-card win sf-bevel">'+
+      '«header class="win-h">'+
+        '«div class="win-t">«span class="dots">«i style="background:var(--t-acc)">«/i>«i style="background:var(--t-sec)">«/i>«i style="background:var(--t-pri)">«/i>«/span>«h2>⛶ HIGH-RES INSPECT · '+esc(m.title)+'«/h2>«/div>'+
+        '«div class="row" style="gap:5px">'+
+          (m.what?'«button class="btn btn-sm" data-act="copysvg" data-what="'+m.what+'">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="'+m.what+'">↓ DOWNLOAD«/button>':"")+
+          '«button class="btn btn-sm btn-pri" data-act="closemodal">✕ ESC«/button>'+
+        '«/div>'+
+      '«/header>'+
+      '«div class="modal-body">'+
+        '«div class="modal-svg-wrap">'+m.svg+'«/div>'+
+      '«/div>'+
+      '«div class="embed thin" style="padding:.5rem .85rem;display:flex;justify-content:space-between;align-items:center">'+
+        '«span>'+esc(m.desc||"High-resolution vector render")+'«/span>'+
+        '«span style="color:var(--t-sec);font-size:9.5px">CLICK OUTSIDE OR PRESS ESC TO CLOSE«/span>'+
+      '«/div>'+
+    '«/div>'+
+  '«/div>';
+}
+
 function render(){
   var pane=S.tab==="generate"?generateHtml():S.tab==="templates"?templatesHtml():S.tab==="visuals"?visualsHtml():wrappedHtml();
-  document.getElementById("app").innerHTML=headerHtml()+'«main>«div class="pane">'+pane+"«/div>«/main>"+footerHtml();
+  document.getElementById("app").innerHTML=headerHtml()+'«main>«div class="pane">'+pane+"«/div>«/main>"+footerHtml()+modalHtml();
   var gl=document.getElementById("glog");if(gl)gl.scrollTop=gl.scrollHeight;}
 
 /* actions */
@@ -1726,7 +1764,19 @@ function refine(){
     g.md=d;g.passes=2;g.stage="idle";log("» REFINE OK · pass 2/2 — max passes reached.");render();toast("Refinement pass complete");
   }).catch(function(e){g.stage="idle";g.err=e.message;log("ERROR: "+e.message);render();toast("Refinement failed","err");});}
 
+window.addEventListener("keydown",function(e){
+  if((e.key==="Escape" || e.key==="Esc" || e.keyCode===27) && S.modal){
+    S.modal=null;
+    render();
+  }
+});
+
 document.addEventListener("click",function(e){
+  if(e.target.classList && e.target.classList.contains("modal-overlay")){
+    S.modal=null;
+    render();
+    return;
+  }
   var el=e.target.closest?e.target.closest("[data-act]"):null;if(!el)return;
   var act=el.getAttribute("data-act");
   if(act==="tab"){S.tab=el.getAttribute("data-tab");render();}
@@ -1745,6 +1795,18 @@ document.addEventListener("click",function(e){
   else if(act==="copymd"){copyText(S.g.md).then(function(ok){toast(ok?"Markdown copied to clipboard":"Copy failed","err");});}
   else if(act==="dlmd"){download((S.profile?S.profile.username:"profile")+"-README.md",S.g.md,"text/markdown");toast("README.md downloaded");}
   else if(act==="roll"){S.salt++;renderVisualsOnly();}
+  else if(act==="zoomsvg"){
+    var what=el.getAttribute("data-what");
+    var title=el.getAttribute("data-title")||"VECTOR ASSET";
+    var desc=el.getAttribute("data-desc")||"";
+    var svg=what?svgFor(what):(el.querySelector("svg")?el.querySelector("svg").outerHTML:"");
+    S.modal={what:what,title:title,desc:desc,svg:svg};
+    render();
+  }
+  else if(act==="closemodal"){
+    S.modal=null;
+    render();
+  }
   else if(act==="copysvg"){
     var what=el.getAttribute("data-what");
     copyText(svgFor(what)).then(function(ok){toast(ok?"SVG source copied":"Copy failed","err");});}
