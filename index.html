@@ -1451,11 +1451,14 @@ function wrappedHtml(){
 
 function footerHtml(){
   var t=cur();
-  return '«footer class="sbar">«div class="sbar-in thin">«span style="color:var(--t-pri)">■ SKIN: '+esc(t.name)+"«/span>"+
-  "«span>AI: ONLINE«/span>«span>SRC: "+(S.profile?"@"+esc(S.profile.username)+(S.profile.isDemo?" (demo)":""):"—")+"«/span>"+
-  '«a href="https://github.com/codewithabhiishek" target="_blank" rel="noopener" class="built-by" style="margin-left:auto">«span style="animation:pulse 1.2s infinite">⚡«/span> BUILT BY ABHISHEK«/a>'+
-  '«span style="color:var(--t-sec)">free · open source · 7× SVG assets · zero watermark«/span>'+
-  '«span>v1.3.2026 «span class="blink" style="color:var(--t-pri)">▊«/span>«/span>«/div>«/footer>';}
+  return '«footer class="sbar">«div class="sbar-in thin">'+
+  '«div style="display:flex;align-items:center;gap:1.2rem;flex:1;min-width:0">«span style="color:var(--t-pri)">■ SKIN: '+esc(t.name)+"«/span>"+
+  "«span>AI: ONLINE«/span>«span>SRC: "+(S.profile?"@"+esc(S.profile.username)+(S.profile.isDemo?" (demo)":""):"—")+"«/span>«/div>"+
+  '«div style="display:flex;align-items:center;justify-content:center;flex-shrink:0">«a href="https://github.com/codewithabhiishek" target="_blank" rel="noopener" class="built-by">«span style="animation:pulse 1.2s infinite">⚡«/span> BUILT BY ABHISHEK«/a>«/div>'+
+  '«div style="display:flex;align-items:center;justify-content:flex-end;gap:1.2rem;flex:1;min-width:0;color:var(--t-sec)">'+
+  '«span>free · open source · 7× SVG assets · zero watermark«/span>'+
+  '«span style="color:var(--t-muted)">v1.3.2026 «span class="blink" style="color:var(--t-pri)">▊«/span>«/span>«/div>'+
+  '«/div>«/footer>';}
 
 function render(){
   var pane=S.tab==="generate"?generateHtml():S.tab==="templates"?templatesHtml():S.tab==="visuals"?visualsHtml():wrappedHtml();
