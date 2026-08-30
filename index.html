@@ -1200,6 +1200,243 @@ function mdRender(src){
 
 /* SVG generators (themed, embeddable) */
 function fontOf(f){return f.replace("var(--f-crt)","'VT323', monospace").replace("var(--f-ui)","'Chakra Petch', sans-serif").replace("var(--f-mono)","'IBM Plex Mono', monospace").replace("var(--f-px)","'Press Start 2P', monospace");}
+function avatarSvg(name,t,salt,archOverride){
+  var arch = archOverride || S.avatarArchetype || "auto";
+  var seed = fnv1a((name||"dev").toLowerCase()+"|"+t.id+"|"+salt);
+  var r = rng(seed);
+  var archetypes = ["hacker","mech","ninja","skull","neko","wizard"];
+  var type = (arch === "auto" || !arch) ? archetypes[Math.floor(r() * archetypes.length)] : arch;
+  var c = t.c;
+
+  var grid = [];
+  for(var y=0; y<16; y++){
+    grid[y] = [];
+    for(var x=0; x<16; x++) grid[y][x] = 0;
+  }
+
+  function setP(x, y, v, noMirror){
+    if(x >= 0 && x < 16 && y >= 0 && y < 16){
+      grid[y][x] = v;
+      if(!noMirror && x < 8){
+        grid[y][15 - x] = v;
+      }
+    }
+  }
+
+  var var1 = r() > 0.5;
+  var var2 = r() > 0.5;
+  var var3 = r() > 0.5;
+
+  if(type === "hacker"){
+    for(var x=5; x<=7; x++) setP(x, 1, 1);
+    for(var x=4; x<=7; x++) setP(x, 2, 1);
+    for(var x=3; x<=7; x++) setP(x, 3, 1);
+    if(var1) setP(2, 2, 3);
+    if(var2) setP(6, 0, 3);
+    if(var3) setP(4, 1, 3);
+
+    for(var y=4; y<=10; y++){
+      for(var x=3; x<=7; x++) setP(x, y, 2);
+    }
+    for(var y=4; y<=10; y++) setP(3, y, 4);
+
+    for(var x=2; x<=7; x++){
+      setP(x, 5, 1);
+      setP(x, 6, 3);
+    }
+    setP(4, 5, 5); setP(5, 5, 5);
+    setP(6, 6, 5);
+
+    setP(7, 8, 4);
+    for(var x=5; x<=7; x++) setP(x, 9, 1);
+    for(var x=4; x<=7; x++) setP(x, 10, 4);
+    setP(6, 10, 3);
+
+    setP(1, 5, 1, true); setP(1, 6, 3, true); setP(1, 7, 1, true);
+    setP(2, 8, 1, true); setP(3, 8, 3, true);
+
+    for(var x=2; x<=7; x++) setP(x, 11, 4);
+    for(var x=1; x<=7; x++) setP(x, 12, 1);
+    for(var x=0; x<=7; x++) setP(x, 13, 2);
+    for(var x=0; x<=7; x++) setP(x, 14, 2);
+    for(var x=0; x<=7; x++) setP(x, 15, 4);
+    setP(4, 12, 3); setP(4, 13, 3); setP(4, 14, 3);
+    setP(7, 13, 3); setP(7, 14, 5);
+  }
+  else if(type === "mech"){
+    setP(3, 0, 3); setP(3, 1, 1); setP(4, 2, 1);
+    setP(7, 1, 1); setP(7, 2, 3);
+
+    for(var y=3; y<=10; y++){
+      for(var x=2; x<=7; x++) setP(x, y, 2);
+    }
+    for(var y=3; y<=10; y++) setP(2, y, 4);
+
+    for(var x=3; x<=7; x++){
+      setP(x, 5, 4);
+      setP(x, 6, 3);
+    }
+    setP(7, 6, 5); setP(6, 6, 5);
+
+    for(var x=3; x<=7; x++) setP(x, 8, 4);
+    setP(4, 9, 1); setP(6, 9, 1);
+    setP(4, 10, 1); setP(6, 10, 1);
+    setP(5, 9, 4); setP(7, 9, 4);
+    setP(5, 10, 4); setP(7, 10, 4);
+
+    for(var x=1; x<=7; x++) setP(x, 11, 4);
+    for(var x=0; x<=7; x++) setP(x, 12, 1);
+    for(var x=0; x<=7; x++) setP(x, 13, 2);
+    for(var x=0; x<=7; x++) setP(x, 14, 2);
+    for(var x=1; x<=7; x++) setP(x, 15, 4);
+    setP(6, 13, 3); setP(7, 13, 5);
+    setP(6, 14, 3); setP(7, 14, 3);
+    setP(0, 12, 3); setP(1, 12, 3);
+  }
+  else if(type === "ninja"){
+    for(var x=4; x<=7; x++) setP(x, 1, 4);
+    for(var x=3; x<=7; x++) setP(x, 2, 4);
+    for(var x=2; x<=7; x++) setP(x, 3, 4);
+
+    for(var x=2; x<=7; x++) setP(x, 4, 1);
+    setP(6, 4, 5); setP(7, 4, 3);
+
+    for(var y=5; y<=7; y++){
+      for(var x=2; x<=7; x++) setP(x, y, 4);
+    }
+    setP(4, 6, 3); setP(5, 6, 5);
+
+    for(var y=8; y<=11; y++){
+      for(var x=3; x<=7; x++) setP(x, y, 2);
+    }
+    for(var y=8; y<=11; y++) setP(3, y, 4);
+    setP(7, 9, 1); setP(7, 10, 1);
+
+    for(var x=2; x<=7; x++) setP(x, 12, 1);
+    for(var x=1; x<=7; x++) setP(x, 13, 4);
+    for(var x=0; x<=7; x++) setP(x, 14, 2);
+    for(var x=0; x<=7; x++) setP(x, 15, 2);
+    setP(3, 13, 3); setP(4, 14, 3);
+  }
+  else if(type === "skull"){
+    for(var x=4; x<=7; x++) setP(x, 1, 2);
+    for(var x=3; x<=7; x++) setP(x, 2, 2);
+    for(var x=2; x<=7; x++) setP(x, 3, 2);
+    for(var x=2; x<=7; x++) setP(x, 4, 2);
+    setP(5, 2, 4); setP(6, 3, 4);
+
+    for(var x=2; x<=7; x++) setP(x, 5, 2);
+    for(var x=2; x<=7; x++) setP(x, 6, 2);
+    for(var x=2; x<=7; x++) setP(x, 7, 2);
+    setP(2, 5, 4); setP(2, 6, 4); setP(2, 7, 4);
+
+    setP(4, 5, 4); setP(5, 5, 4);
+    setP(4, 6, 3); setP(5, 6, 5);
+    setP(4, 7, 4); setP(5, 7, 4);
+
+    setP(7, 8, 4); setP(6, 8, 2);
+
+    for(var x=3; x<=7; x++) setP(x, 9, 4);
+    setP(4, 10, 1); setP(6, 10, 1);
+    setP(5, 10, 4); setP(7, 10, 4);
+    for(var x=4; x<=7; x++) setP(x, 11, 2);
+
+    for(var x=2; x<=7; x++) setP(x, 12, 4);
+    for(var x=1; x<=7; x++) setP(x, 13, 4);
+    for(var x=0; x<=7; x++) setP(x, 14, 1);
+    for(var x=0; x<=7; x++) setP(x, 15, 2);
+    setP(7, 12, 3); setP(7, 13, 3); setP(7, 14, 3);
+  }
+  else if(type === "neko"){
+    setP(2, 0, 1); setP(3, 0, 1);
+    setP(2, 1, 1); setP(3, 1, 3); setP(4, 1, 1);
+    setP(2, 2, 1); setP(3, 2, 3); setP(4, 2, 3); setP(5, 2, 1);
+    setP(3, 3, 1); setP(4, 3, 3); setP(5, 3, 1);
+
+    for(var x=4; x<=7; x++) setP(x, 3, 2);
+    for(var x=2; x<=7; x++) setP(x, 4, 2);
+    setP(3, 4, 1); setP(5, 4, 1);
+
+    for(var y=5; y<=10; y++){
+      for(var x=2; x<=7; x++) setP(x, y, 2);
+    }
+    setP(2, 5, 4); setP(2, 6, 4); setP(2, 7, 4); setP(2, 8, 4);
+
+    setP(4, 6, 1); setP(5, 6, 3);
+    setP(4, 7, 3); setP(5, 7, 5);
+    setP(4, 8, 1); setP(5, 8, 3);
+
+    setP(1, 8, 3); setP(2, 8, 3);
+    setP(1, 9, 3); setP(2, 9, 3);
+
+    setP(7, 9, 4);
+    setP(6, 10, 4); setP(7, 10, 3);
+
+    for(var x=3; x<=7; x++) setP(x, 11, 4);
+    setP(7, 11, 3);
+    for(var x=1; x<=7; x++) setP(x, 12, 1);
+    for(var x=0; x<=7; x++) setP(x, 13, 2);
+    for(var x=0; x<=7; x++) setP(x, 14, 2);
+    for(var x=0; x<=7; x++) setP(x, 15, 4);
+    setP(2, 13, 3); setP(3, 13, 3);
+  }
+  else {
+    setP(7, 0, 3); setP(6, 1, 1); setP(7, 1, 1);
+    setP(5, 2, 1); setP(6, 2, 3); setP(7, 2, 1);
+    for(var x=4; x<=7; x++) setP(x, 3, 1);
+    for(var x=2; x<=7; x++) setP(x, 4, 1);
+    setP(5, 3, 5);
+
+    for(var y=5; y<=8; y++){
+      for(var x=2; x<=7; x++) setP(x, y, 4);
+    }
+    setP(4, 6, 3); setP(5, 6, 5);
+
+    for(var x=4; x<=7; x++) setP(x, 9, 2);
+    for(var x=4; x<=7; x++) setP(x, 10, 2);
+    for(var x=5; x<=7; x++) setP(x, 11, 3);
+    for(var x=5; x<=7; x++) setP(x, 12, 3);
+    setP(6, 13, 3); setP(7, 13, 5); setP(7, 14, 5);
+
+    for(var x=1; x<=4; x++) setP(x, 11, 1);
+    for(var x=0; x<=4; x++) setP(x, 12, 1);
+    for(var x=0; x<=5; x++) setP(x, 13, 2);
+    for(var x=0; x<=6; x++) setP(x, 14, 2);
+    for(var x=0; x<=7; x++) setP(x, 15, 4);
+    setP(3, 13, 3); setP(3, 14, 3);
+  }
+
+  var colorMap = [
+    "transparent",
+    c.pri,
+    c.sec,
+    c.acc,
+    mix(c.deep, c.panel, 0.6),
+    c.ink || "#ffffff"
+  ];
+
+  var P = 8;
+  var cells = "";
+  for(var y=0; y<16; y++){
+    for(var x=0; x<16; x++){
+      var val = grid[y][x];
+      if(val > 0){
+        var col = colorMap[val] || c.pri;
+        cells += '«rect x="'+(x*P)+'" y="'+(y*P)+'" width="'+P+'" height="'+P+'" fill="'+col+'"/>';
+      }
+    }
+  }
+
+  return '«svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 144 144">'+
+    '«rect width="144" height="144" fill="'+c.deep+'"/>'+
+    '«rect x="4" y="4" width="136" height="136" fill="'+c.panel+'" stroke="'+c.line+'" stroke-width="1.5" rx="2"/>'+
+    '«path d="M8 18V8H18 M126 8H136V18 M136 126V136H126 M18 136H8V126" fill="none" stroke="'+c.pri+'" stroke-width="1.5" opacity="0.65"/>'+
+    '«g transform="translate(8,8)">'+cells+'«/g>'+
+    '«rect x="4" y="4" width="136" height="3" fill="'+c.pri+'" opacity="0.85"/>'+
+    '«text x="134" y="137" text-anchor="end" font-family="'+fontOf(t.fb)+'" font-size="7" fill="'+c.muted+'" letter-spacing="1">['+type.toUpperCase()+']«/text>'+
+  '«/svg>';
+}
+
 function svgFrame(w,h,t,inner){var c=t.c;return '«svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'+
  '«defs>«linearGradient id="g-'+t.id+'" x1="0" y1="0" x2="1" y2="1">«stop offset="0" stop-color="'+c.pri+'"/>«stop offset="1" stop-color="'+c.acc+'"/>«/linearGradient>«/defs>'+
  '«rect width="'+w+'" height="'+h+'" fill="'+c.bg+'"/>'+
@@ -1530,6 +1767,7 @@ var savedSkills = null;
 try { savedSkills = store.get("px_skills") ? JSON.parse(store.get("px_skills")) : null; } catch(e){}
 var S={themeId:store.get("px_theme")||"phosphor",tab:"generate",tpl:"phosphor",tplView:"templates",
   skills:(savedSkills&&Array.isArray(savedSkills)&&savedSkills.length)?savedSkills:defaultSkills,
+  avatarArchetype:store.get("px_archetype")||"auto",
   raw:false,modal:null,
   profile:null,salt:1,wm:"ABHISHEK",depth:6,
   g:{user:"codewithabhiishek",tone:"y2k",ascii:true,asciiId:"banner",md:"",stage:"idle",err:null,passes:0,view:"split",
@@ -1727,6 +1965,20 @@ function visualsHtml(){
   var hbActs='«button class="btn btn-sm" data-act="copysvg" data-what="holo">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="holo">↓«/button>';
   var rdActs='«button class="btn btn-sm" data-act="copysvg" data-what="radar">COPY SVG«/button>«button class="btn btn-sm" data-act="dlsvg" data-what="radar">↓«/button>';
 
+  var archetypes = [
+    ["auto","⚡ AUTO"],
+    ["hacker","🕶️ HACKER"],
+    ["mech","🤖 MECH"],
+    ["ninja","🥷 NINJA"],
+    ["skull","💀 REAPER"],
+    ["neko","🐱 NEKO"],
+    ["wizard","🧙 WIZARD"]
+  ];
+  var archPills = archetypes.map(function(a){
+    var on = (S.avatarArchetype||"auto") === a[0];
+    return '«button class="btn btn-sm'+(on?" btn-pri":"")+'" data-act="avatararch" data-arch="'+a[0]+'" style="padding:2px 5px;font-size:8.5px">'+a[1]+'«/button>';
+  }).join("");
+
   return note+
    '«div style="margin-bottom:.85rem">'+
      win("00 · VISUALS DATA SOURCE · LOAD GITHUB HANDLE","","«div style='padding:.5rem .75rem'>"+pickerHtml("LOAD GITHUB PROFILE")+"«/div>")+
@@ -1737,7 +1989,9 @@ function visualsHtml(){
      assetBlock("03 · BIOS CARD · 520×290",bios,bioActs,"1999 BIOS POST boot screen telemetry report","bios")+
      assetBlock("04 · STATS CARD · 468×300",st,stActs,"github-readme-stats style retro telemetry card","stats")+
      assetBlock("05 · STAT RADAR · 380×300",rd,rdActs,"Cyberpunk RPG skill polygon mapping velocity, streak, repos & stars","radar")+
-     assetBlock("06 · PIXEL AVATAR · SEED #"+S.salt,av,avActs,"Deterministic 8×8 mirrored pixel art avatar","avatar")+
+     win('06 · PIXEL AVATAR · '+(S.avatarArchetype||"AUTO").toUpperCase()+' · SEED #'+S.salt,avActs,
+       '«div class="svgwrap" data-act="zoomsvg" data-what="avatar" data-title="06 · PIXEL AVATAR · '+(S.avatarArchetype||"AUTO").toUpperCase()+'" data-desc="16×16 High-definition retro cyberpunk character sprite" title="Click to zoom & inspect in high resolution">'+av+'«/div>'+
+       '«div class="embed thin" style="display:flex;gap:3px;flex-wrap:wrap;padding:.4rem .55rem;background:var(--t-panel2)">'+archPills+'«/div>')+
      win('07 · 3D WORDMARK · DEPTH «span id="wmDepthLbl">'+S.depth+"«/span>",wmActs,
        '«div class="svgwrap" data-act="zoomsvg" data-what="word" data-title="07 · 3D WORDMARK" data-desc="Layered extrusion gradient face wordmark" title="Click to zoom & inspect in high resolution">«span id="wmSvg">'+wm+'«/span>«/div>«div class="embed thin">layered extrusion · gradient face«/div>'+
        '«div class="row" style="gap:.5rem;padding:.4rem .65rem;background:var(--t-panel2)">«input id="wmText" class="inp" style="max-width:160px;padding:.35rem .55rem;font-size:.8rem" maxlength="16" value="'+esc(S.wm)+'" placeholder="HANDLE…">«span class="lbl">DEPTH«/span>«input id="wmDepth" type="range" min="2" max="12" value="'+S.depth+'" style="accent-color:var(--t-pri);flex:1">«/div>')+
@@ -1930,6 +2184,36 @@ document.addEventListener("click",function(e){
   if(act==="tab"){S.tab=el.getAttribute("data-tab");render();}
   else if(act==="guide"){S.modal="guide";render();}
   else if(act==="theme"){S.themeId=el.getAttribute("data-id");S.tpl=S.themeId;applyTheme(cur());render();toast("Skin loaded: "+cur().name,"info");}
+  else if(act==="tpl"){S.tpl=el.getAttribute("data-id");S.themeId=S.tpl;applyTheme(cur());S.raw=false;render();}
+  else if(act==="tplview"){S.tplView=el.getAttribute("data-view");render();}
+  else if(act==="toggleskill"){
+    var sk=el.getAttribute("data-skill");
+    var idx=S.skills.indexOf(sk);
+    if(idx===-1){
+      S.skills.push(sk);
+    }else{
+      S.skills.splice(idx,1);
+    }
+    store.set("px_skills",JSON.stringify(S.skills));
+    render();
+  }
+  else if(act==="skillpreset"){
+    var p=el.getAttribute("data-preset");
+    if(p==="clear"){
+      S.skills=[];
+    }else if(SKILL_PRESETS[p]){
+      S.skills=JSON.parse(JSON.stringify(SKILL_PRESETS[p]));
+    }
+    store.set("px_skills",JSON.stringify(S.skills));
+    toast("Preset applied: "+p.toUpperCase(),"info");
+    render();
+  }
+  else if(act==="avatararch"){
+    S.avatarArchetype=el.getAttribute("data-arch");
+    store.set("px_archetype",S.avatarArchetype);
+    toast("Avatar Archetype: "+S.avatarArchetype.toUpperCase(),"info");
+    renderVisualsOnly();
+  }
   else if(act==="tpl"){S.tpl=el.getAttribute("data-id");S.themeId=S.tpl;applyTheme(cur());S.raw=false;render();}
   else if(act==="tplview"){S.tplView=el.getAttribute("data-view");render();}
   else if(act==="toggleskill"){
