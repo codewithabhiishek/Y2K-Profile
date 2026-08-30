@@ -3,7 +3,7 @@
 <div align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=07130a&text=%E2%96%A0%20PROFILE.EXE%20%E2%96%A0&height=190&fontSize=42&fontColor=00ff66&stroke=00ff66&strokeWidth=2&desc=Y2K%20GITHUB%20PROFILE%20GENERATOR%20%C2%B7%20BUILT%20BY%20ABHISHEK%20%C2%B7%207%C3%97%20SVG%20STUDIO&descAlignY=66&descColor=7dffa8" width="100%" alt="PROFILE.EXE Header"/>
   <br/>
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=00FF66&center=true&vCenter=true&width=500&lines=High-Impact+GitHub+Profile+README+Generator;Built+by+Abhishek;10%C3%97+Curated+Theme+Skins+(Phosphor%2C+Amber%2C+Ice%2C+Cyber);7%C3%97+Downloadable+Pure+SVG+Profile+Widgets;100%25+Free+%C2%B7+Zero+Watermark+%C2%B7+Self-Contained" alt="Typing SVG"/>
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=16&pause=1000&color=00FF66&center=true&vCenter=true&width=620&lines=High-Impact+GitHub+Profile+README+Generator;Built+by+Abhishek;10%C3%97+Curated+Theme+Skins+(Phosphor%2C+Amber%2C+Ice%2C+Cyber);7%C3%97+Downloadable+Pure+SVG+Profile+Widgets;100%25+Free+%C2%B7+Zero+Watermark+%C2%B7+Self-Contained" alt="Typing SVG"/>
   <br/>
 
   [![Vite](https://img.shields.io/badge/Vite-6.4-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
