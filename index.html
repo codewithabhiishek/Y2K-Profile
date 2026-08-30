@@ -129,9 +129,9 @@ select.inp{color:var(--t-ink)}
 
 main{max-width:1440px;width:100%;margin:0 auto;padding:1.25rem 1.25rem 4.5rem;box-sizing:border-box}
 .pane{transform:translateZ(0)}
-.sbar{position:fixed;bottom:0;left:0;right:0;z-index:60;border-top:2px solid var(--t-line);background:var(--t-deep)}
-.sbar-in{max-width:1440px;margin:0 auto;padding:.4rem 1.25rem;display:flex;gap:1.5rem;align-items:center;
-  font-family:var(--f-mono);font-size:10.5px;color:var(--t-muted);white-space:nowrap;overflow-x:auto}
+.sbar{position:fixed;bottom:0;left:0;right:0;z-index:60;border-top:1px solid var(--t-line);background:color-mix(in srgb,var(--t-deep) 94%,black);backdrop-filter:blur(10px)}
+.sbar-in{width:100%;max-width:100%;box-sizing:border-box;margin:0 auto;padding:.45rem 1.5rem;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--f-mono);font-size:10.5px;color:var(--t-muted);white-space:nowrap}
 
 /* ---------- layouts & cards ---------- */
 .grid2{display:grid;gap:1.25rem;grid-template-columns:minmax(0, 420px) minmax(0, 1fr);align-items:stretch;min-width:0;width:100%;box-sizing:border-box}
@@ -2046,7 +2046,7 @@ function footerHtml(){
   var t=cur();
   var src=S.profile?"@"+esc(S.profile.username)+(S.profile.isDemo?" (demo)":""):"DEMO";
   return '«footer class="sbar">«div class="sbar-in thin">'+
-    '«div style="display:flex;align-items:center;gap:.65rem;min-width:0">'+
+    '«div style="display:flex;align-items:center;gap:.75rem;flex:1;justify-content:flex-start;min-width:0">'+
       '«span class="led" style="background:var(--t-pri);color:var(--t-pri);width:6px;height:6px">«/span>'+
       '«span style="color:var(--t-pri);font-weight:700">ONLINE«/span>'+
       '«span style="color:var(--t-line);opacity:0.6">|«/span>'+
@@ -2054,12 +2054,12 @@ function footerHtml(){
       '«span style="color:var(--t-line);opacity:0.6">|«/span>'+
       '«span>SRC: «b style="color:var(--t-sec)">'+src+'«/b>«/span>'+
     '«/div>'+
-    '«div style="display:flex;align-items:center;gap:.4rem;flex-shrink:0">'+
-      '«a href="https://github.com/codewithabhiishek" target="_blank" rel="noopener" class="built-by" style="padding:2px 10px;font-size:10px;text-decoration:none">'+
+    '«div style="display:flex;align-items:center;justify-content:center;flex:1;min-width:0">'+
+      '«a href="https://github.com/codewithabhiishek" target="_blank" rel="noopener" class="built-by" style="padding:3px 12px;font-size:10.5px;text-decoration:none">'+
         '«span style="animation:pulse 1.2s infinite;color:var(--t-acc)">⚡«/span> BUILT BY ABHISHEK'+
       '«/a>'+
     '«/div>'+
-    '«div style="display:flex;align-items:center;gap:.65rem;min-width:0;color:var(--t-muted)">'+
+    '«div style="display:flex;align-items:center;gap:.75rem;flex:1;justify-content:flex-end;min-width:0;color:var(--t-muted)">'+
       '«span>7× SVG SUITE«/span>'+
       '«span style="color:var(--t-line);opacity:0.6">|«/span>'+
       '«span>v1.3.2026 «span class="blink" style="color:var(--t-pri)">▊«/span>«/span>'+
