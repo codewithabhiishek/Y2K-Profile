@@ -1,14 +1,14 @@
 # 📟 PROFILE.EXE — Y2K GitHub Profile Generator & Studio
 
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=07130a&text=%E2%96%A0%20PROFILE.EXE%20%E2%96%A0&height=190&fontSize=42&fontColor=00ff66&stroke=00ff66&strokeWidth=2&desc=Y2K%20GITHUB%20PROFILE%20GENERATOR%20%C2%B7%20GROQ%20AI%20%C2%B7%207%C3%97%20SVG%20STUDIO&descAlignY=66&descColor=7dffa8" width="100%" alt="PROFILE.EXE Header"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=07130a&text=%E2%96%A0%20PROFILE.EXE%20%E2%96%A0&height=190&fontSize=42&fontColor=00ff66&stroke=00ff66&strokeWidth=2&desc=Y2K%20GITHUB%20PROFILE%20GENERATOR%20%C2%B7%20BUILT%20BY%20ABHISHEK%20%C2%B7%207%C3%97%20SVG%20STUDIO&descAlignY=66&descColor=7dffa8" width="100%" alt="PROFILE.EXE Header"/>
   <br/>
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=00FF66&center=true&vCenter=true&width=500&lines=High-Impact+GitHub+Profile+README+Generator;Powered+by+Groq+AI+Cloud+(Qwen+3.8-27B+%2B+GPT-OSS);10%C3%97+Curated+Theme+Skins+(Phosphor%2C+Amber%2C+Ice%2C+Cyber);7%C3%97+Downloadable+Pure+SVG+Profile+Widgets;100%25+Free+%C2%B7+Zero+Watermark+%C2%B7+Self-Contained" alt="Typing SVG"/>
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=00FF66&center=true&vCenter=true&width=500&lines=High-Impact+GitHub+Profile+README+Generator;Built+by+Abhishek;10%C3%97+Curated+Theme+Skins+(Phosphor%2C+Amber%2C+Ice%2C+Cyber);7%C3%97+Downloadable+Pure+SVG+Profile+Widgets;100%25+Free+%C2%B7+Zero+Watermark+%C2%B7+Self-Contained" alt="Typing SVG"/>
   <br/>
 
   [![Vite](https://img.shields.io/badge/Vite-6.4-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
   [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-  [![Groq Cloud](https://img.shields.io/badge/AI-Groq_Cloud-f55036?style=for-the-badge&logo=groq&logoColor=white)](https://groq.com/)
+  [![Author](https://img.shields.io/badge/Author-Abhishek-00ff66?style=for-the-badge&logoColor=07130a)](https://github.com/codewithabhiishek)
   [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
   [![License: MIT](https://img.shields.io/badge/License-MIT-00ff66?style=for-the-badge&logoColor=07130a)](LICENSE)
 </div>
@@ -17,7 +17,7 @@
 ┌─────────────────────────────────────────────────────────────┐
 │ 01000011 01011001 01000010 01000101 01010010 01010011 01010000 │
 │ >> SYSTEM: PROFILE.EXE v1.3.2026 // CRT RETRO CYBERNETICS   │
-│ >> ENGINE: GROQ HIGH-THROUGHPUT LPU CLOUD INFERENCE         │
+│ >> AUTHOR: BUILT BY ABHISHEK                                │
 │ >> STATUS: 100% OPERATIONAL · ZERO WATERMARKS · FREE        │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -26,7 +26,7 @@
 
 ## ⚡ What is PROFILE.EXE?
 
-**PROFILE.EXE** is a full-featured, self-contained GitHub Profile README builder, theme engine, and SVG widget studio. It transforms any public GitHub handle into high-craft, GitSkins-tier Markdown READMEs with interactive `<details>` drawers, animated SVGs, deterministic pixel avatars, CRT scanline banners, and telemetry cards.
+**PROFILE.EXE** is a full-featured, self-contained GitHub Profile README builder, theme engine, and SVG widget studio built by **Abhishek**. It transforms any public GitHub handle into high-craft, GitSkins-tier Markdown READMEs with interactive `<details>` drawers, animated SVGs, deterministic pixel avatars, CRT scanline banners, and telemetry cards.
 
 No paywalls. No watermarks. No rate limits.
 
@@ -36,7 +36,7 @@ No paywalls. No watermarks. No rate limits.
 
 | Mode | Key Features | Capabilities |
 | :--- | :--- | :--- |
-| **`01_GENERATE`** | **Groq AI Compiler** | Real-time GitHub profile scraping, multi-model fallback (`Qwen 3.8-27B`, `GPT-OSS 120B`, `Compound`), 4 tone presets, 7-style ASCII art selector, live split editor, and one-click critique/refine pass. |
+| **`01_GENERATE`** | **AI README Compiler** | Real-time GitHub profile scraping, multi-model fallback, 4 tone presets, 7-style ASCII art selector, live split editor, and one-click critique/refine pass. |
 | **`02_TEMPLATES`** | **10 Themed Blueprints** | Hand-crafted visual README templates matching every theme skin. Auto-populates with your live handle, featuring dynamic typing headers, skill icons, shields, and telemetry grids. |
 | **`03_VISUALS`** | **7× SVG Asset Studio** | 7 downloadable, zero-dependency pure SVGs: Holographic Banner (640×190), Tech Matrix (520×260), Deterministic Pixel Avatar, Y2K BIOS POST Card, RPG Combat Stat Radar, Telemetry Card, and 3D Extruded Wordmark. |
 | **`04_WRAPPED`** | **Year-in-Review & Portfolio** | Annual GitHub wrapped infographic card (520×716) plus one-click structured Markdown portfolio of your top repositories. |
@@ -72,9 +72,9 @@ npm install
 ### 2. Configure Environment (Optional for Local AI)
 Create a `.env` file in the root directory:
 ```bash
-GROQ_API_KEY="gsk_your_groq_api_key_here"
+# Optional: Add your API key for custom neural inference and higher rate limits
+GROQ_API_KEY="gsk_your_api_key_here"
 ```
-*(Get a free, instant key at [console.groq.com](https://console.groq.com/keys))*
 
 ### 3. Launch Development Server
 ```bash
@@ -89,13 +89,15 @@ npm run build
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## 🛠️ Stack & Architecture
 
-- **Frontend Core**: Vanilla JS + HTML5 + CSS Variables (Single self-contained `index.html` engine with zero runtime framework overhead)
-- **Tooling**: [Vite 6](https://vitejs.dev/) with hot module replacement & backend AI middleware
-- **AI Acceleration**: [Groq Cloud](https://groq.com/) with multi-model automatic fallback
-- **Styling**: Tailored CRT scanline filters, VT323 typography, and CSS micro-animations
-- **Asset Engine**: Pure SVG mathematical renderers (zero canvas dependencies)
+- **Core**: Single-page self-contained application architecture
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **UI Framework**: [React 18](https://react.dev/) + [Lucide Icons](https://lucide.dev/)
+- **AI Neural Acceleration**: Multi-model automatic fallback with high-throughput LPU inference
+- **Graphics Engine**: Pure zero-dependency SVG procedural generation (Radar, Matrix, Holo-Foil, 3D Extrusion)
+- **Styling**: Tailored dynamic CRT theme matrix and CSS Variables
+- **Type Checking**: TypeScript 5.7+
 
 ---
 

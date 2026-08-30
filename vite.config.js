@@ -20,9 +20,9 @@ function backendAiPlugin() {
           req.on("data", chunk => (body += chunk));
           req.on("end", async () => {
             try {
-              const { system, user } = JSON.parse(body || "{}");
+              const { system, user, apiKey } = JSON.parse(body || "{}");
               const env = loadEnv(process.env.NODE_ENV || "development", process.cwd(), "");
-              const groqKey = env.GROQ_API_KEY || process.env.GROQ_API_KEY || "";
+              const activeKey = apiKey || env.GROQ_API_KEY || env.AI_API_KEY || process.env.GROQ_API_KEY || process.env.AI_API_KEY || "";
 
               let lastError = null;
               let content = "";
@@ -33,7 +33,7 @@ function backendAiPlugin() {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
-                      "Authorization": `Bearer ${groqKey}`
+                      "Authorization": `Bearer ${activeKey}`
                     },
                     body: JSON.stringify({
                       model,
@@ -53,8 +53,7 @@ function backendAiPlugin() {
                   } else {
                     const errJson = await response.json().catch(() => ({}));
                     lastError = errJson?.error?.message || `HTTP ${response.status} on ${model}`;
-                    // If rate-limited, immediately try next model in the fallback array
-                    console.warn(`[PROFILE.EXE AI] Model ${model} returned error: ${lastError}. Trying fallback...`);
+                    console.warn(`[AI Engine] Model ${model} returned: ${lastError}. Trying fallback...`);
                   }
                 } catch (e) {
                   lastError = e.message;
@@ -64,7 +63,7 @@ function backendAiPlugin() {
               if (!content) {
                 res.statusCode = 429;
                 res.setHeader("Content-Type", "application/json");
-                return res.end(JSON.stringify({ error: lastError || "Failed to generate README across all AI models." }));
+                return res.end(JSON.stringify({ error: lastError || "Failed to generate README across available AI models. Please ensure an API key is configured." }));
               }
 
               content = content.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();

@@ -105,8 +105,17 @@ select.inp{color:var(--t-ink)}
 .chip i{width:9px;height:9px;display:inline-block;border-radius:1px}
 .chip:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.5);border-color:var(--t-pri)}
 .chip.on{border-color:var(--t-pri);box-shadow:0 0 12px color-mix(in srgb,var(--t-pri) 45%,transparent)}
-.ticker{overflow:hidden;border-top:1px solid var(--t-line);border-bottom:1px solid var(--t-line);background:color-mix(in srgb,var(--t-deep) 90%,black)}
-.ticker-in{display:inline-flex;white-space:nowrap;font-family:var(--f-crt);font-size:15px;color:var(--t-sec);padding:3px 0}
+.ticker{overflow:hidden;border-top:1px solid var(--t-line);border-bottom:1px solid var(--t-line);background:color-mix(in srgb,var(--t-deep) 90%,black);user-select:none;display:flex;width:100%}
+.ticker-in{display:flex;flex-shrink:0;width:max-content;white-space:nowrap;font-family:var(--f-crt);font-size:16px;line-height:1.4;color:var(--t-sec);padding:4px 0;animation:tickermove 35s linear infinite;will-change:transform}
+.ticker:hover .ticker-in{animation-play-state:paused}
+.ticker-in span{display:inline-flex;align-items:center;flex-shrink:0;padding:0 1rem;letter-spacing:.05em}
+@keyframes tickermove{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-50%,0,0)}}
+
+.built-by{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--f-ui);font-weight:700;font-size:11px;letter-spacing:.1em;color:var(--t-pri);text-decoration:none;padding:2px 8px;border-radius:var(--t-rad);border:1px solid color-mix(in srgb,var(--t-pri) 40%,transparent);background:color-mix(in srgb,var(--t-panel2) 60%,transparent);animation:built-glow 2.4s ease-in-out infinite alternate;transition:all .2s cubic-bezier(.2,.8,.3,1)}
+.built-by:hover{transform:translateY(-1px) scale(1.05);color:var(--t-acc);border-color:var(--t-acc);box-shadow:0 0 14px color-mix(in srgb,var(--t-acc) 60%,transparent)}
+@keyframes built-glow{0%{text-shadow:0 0 4px color-mix(in srgb,var(--t-pri) 40%,transparent);box-shadow:0 0 4px color-mix(in srgb,var(--t-pri) 20%,transparent);border-color:color-mix(in srgb,var(--t-pri) 35%,transparent)}50%{text-shadow:0 0 12px var(--t-pri),0 0 20px var(--t-sec);box-shadow:0 0 10px color-mix(in srgb,var(--t-pri) 45%,transparent);border-color:var(--t-pri);color:var(--t-sec)}100%{text-shadow:0 0 5px color-mix(in srgb,var(--t-pri) 50%,transparent);box-shadow:0 0 5px color-mix(in srgb,var(--t-pri) 25%,transparent);border-color:color-mix(in srgb,var(--t-pri) 40%,transparent)}}
+
+
 
 .tabs{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:0 1.25rem}
 .tab{text-align:center;background:transparent;border:none;border-top:3px solid transparent;cursor:pointer;
@@ -240,10 +249,10 @@ main{max-width:1440px;width:100%;margin:0 auto;padding:1.25rem 1.25rem 4.5rem;bo
 .md summary{cursor:pointer;color:var(--t-pri);font-family:var(--f-ui);font-weight:600;letter-spacing:.05em}
 
 /* ---------- toasts ---------- */
-#toasts{position:fixed;bottom:3.2rem;right:1rem;z-index:90;display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}
-.toast{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;font-family:var(--f-mono);font-size:12px;color:var(--t-ink);
-  animation:tin .25s cubic-bezier(.2,.8,.3,1) both;max-width:320px}
-.toast.err{color:var(--t-acc)}
+#toasts{position:fixed;bottom:3.2rem;right:1rem;z-index:90;display:flex;flex-direction:column;gap:.45rem;align-items:flex-end;pointer-events:none}
+.toast{pointer-events:auto;display:flex;align-items:center;gap:.6rem;padding:.55rem .85rem;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.02em;color:var(--t-ink);width:260px;box-sizing:border-box;animation:tin .25s cubic-bezier(.2,.8,.3,1) both}
+.toast span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast.err{color:var(--t-acc);border-color:var(--t-acc)}
 @keyframes tin{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
 .thin::-webkit-scrollbar{width:10px;height:10px}
 .thin::-webkit-scrollbar-track{background:var(--t-deep)}
@@ -1275,21 +1284,21 @@ function win(title,bar,body,sf){return '«section class="win '+(sf||cur().sf)+'"
 function headerHtml(){
   var chips=THEMES.map(function(th){return '«button class="chip'+(th.id===S.themeId?" on":"")+'" data-act="theme" data-id="'+th.id+'" title="'+esc(th.name)+" · "+esc(th.era)+'">'+th.sw.map(function(s){return '«i style="background:'+s+'">«/i>';}).join("")+"«/button>";}).join("");
   var icons=["M9 1L3 9h4l-1 6 6-8H8l1-6z","M2 4h4l2 2h6v7H2z","M8 1v4M8 11v4M1 8h4M11 8h4M3 3l2.5 2.5M10.5 10.5L13 13M13 3l-2.5 2.5M5.5 10.5L3 13","M2 3h12v10H2z M5 6l2.5 2L5 10 M9 11h3"];
-  var tabs=[["generate","GENERATE","MODE A · GROQ AI"],["templates","TEMPLATES","MODE B · FREE"],["visuals","VISUALS","7× SVG ASSETS"],["wrapped","WRAPPED","YEAR REVIEW"]]
+  var tabs=[["generate","GENERATE","MODE A · AI COMPILER"],["templates","TEMPLATES","MODE B · BLUEPRINTS"],["visuals","VISUALS","7× SVG ASSETS"],["wrapped","WRAPPED","YEAR REVIEW"]]
    .map(function(x,i){return '«button class="tab'+(S.tab===x[0]?" on":"")+'" data-act="tab" data-tab="'+x[0]+'">«b>«svg width="12" height="12" viewBox="0 0 16 16">«path d="'+icons[i]+'" fill="none" stroke="currentColor" stroke-width="1.6"/>«/svg>'+("0"+(i+1)).slice(-2)+"_"+x[1]+"«/b>«span>"+x[2]+"«/span>«/button>";}).join("");
   return '«header class="hdr">'+
    '«div class="hdr-in">'+
      '«div style="display:flex;align-items:center;gap:.75rem;min-width:0">'+
        '«svg width="32" height="32" viewBox="0 0 17 17" style="image-rendering:pixelated;flex-shrink:0">«rect width="17" height="17" fill="var(--t-deep)"/>«rect x="1" y="1" width="15" height="15" fill="none" stroke="var(--t-line)"/>«rect x="3" y="3" width="4" height="4" fill="var(--t-pri)"/>«rect x="10" y="3" width="4" height="4" fill="var(--t-pri)"/>«rect x="3" y="10" width="11" height="2" fill="var(--t-acc)"/>«rect x="5" y="13" width="7" height="1" fill="var(--t-sec)"/>«/svg>'+
-       '«div style="min-width:0">«h1 class="logo-t glow-txt">PROFILE«span style="color:var(--t-sec)">.«/span>EXE«/h1>«p class="logo-s">Y2K GitHub profile toolkit · Powered by Groq AI«/p>«/div>'+
+       '«div style="min-width:0">«h1 class="logo-t glow-txt">PROFILE«span style="color:var(--t-sec)">.«/span>EXE«/h1>«p class="logo-s">Y2K GitHub Profile Generator & Visual Studio«/p>«/div>'+
      '«/div>'+
      '«div class="chip-group">'+chips+'«/div>'+
      '«div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap">'+
-       '«span style="display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;color:var(--t-pri)">«i class="led" style="background:var(--t-pri);color:var(--t-pri)">«/i>GROQ: ONLINE«/span>'+
+       '«span style="display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;color:var(--t-pri)">«i class="led" style="background:var(--t-pri);color:var(--t-pri)">«/i>AI ENGINE: ONLINE«/span>'+
        '«span style="display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;color:var(--t-muted)">«i class="led" style="background:'+(S.profile?"var(--t-sec)":"var(--t-muted)")+';color:'+(S.profile?"var(--t-sec)":"var(--t-muted)")+'">«/i>'+(S.profile?"@"+esc(S.profile.username.slice(0,12)):"NO SRC")+"«/span>"+
      '«/div>'+
    '«/div>'+
-   '«div class="ticker">«div class="ticker-in">«span>★ POWERED BY GROQ AI ★ 10 THEMED SKINS ★ 7× RETRO SVG ASSETS ★ TECH MATRIX ★ BIOS CARD ★ COMBAT RADAR ★ PIXEL AVATARS ★ 3D WORDMARKS ★ YEAR-WRAPPED ★ ZERO WATERMARK «/span>«span>★ POWERED BY GROQ AI ★ 10 THEMED SKINS ★ 7× RETRO SVG ASSETS ★ TECH MATRIX ★ BIOS CARD ★ COMBAT RADAR ★ PIXEL AVATARS ★ 3D WORDMARKS ★ YEAR-WRAPPED ★ ZERO WATERMARK «/span>«/div>«/div>'+
+   '«div class="ticker">«div class="ticker-in">«span>★ BUILT BY ABHISHEK ★ 10 THEMED SKINS ★ AI README COMPILER ★ 7× RETRO SVG ASSETS ★ TECH MATRIX ★ BIOS CARD ★ COMBAT RADAR ★ PIXEL AVATARS ★ 3D WORDMARKS ★ YEAR-WRAPPED ★ ZERO WATERMARK «/span>«span>★ BUILT BY ABHISHEK ★ 10 THEMED SKINS ★ AI README COMPILER ★ 7× RETRO SVG ASSETS ★ TECH MATRIX ★ BIOS CARD ★ COMBAT RADAR ★ PIXEL AVATARS ★ 3D WORDMARKS ★ YEAR-WRAPPED ★ ZERO WATERMARK «/span>«span>★ BUILT BY ABHISHEK ★ 10 THEMED SKINS ★ AI README COMPILER ★ 7× RETRO SVG ASSETS ★ TECH MATRIX ★ BIOS CARD ★ COMBAT RADAR ★ PIXEL AVATARS ★ 3D WORDMARKS ★ YEAR-WRAPPED ★ ZERO WATERMARK «/span>«span>★ BUILT BY ABHISHEK ★ 10 THEMED SKINS ★ AI README COMPILER ★ 7× RETRO SVG ASSETS ★ TECH MATRIX ★ BIOS CARD ★ COMBAT RADAR ★ PIXEL AVATARS ★ 3D WORDMARKS ★ YEAR-WRAPPED ★ ZERO WATERMARK «/span>«/div>«/div>'+
    '«nav class="tabs">'+tabs+'«/nav>«/header>';}
 
 function pickerHtml(label){
@@ -1317,15 +1326,16 @@ function generateHtml(){
     body='«div class="split'+(g.view!=="split"?" one":"")+'">'+
      (showE?'«div style="border-right:1px solid var(--t-line);min-height:0">«textarea id="mdEditor" class="md-editor thin" spellcheck="false">'+esc(g.md)+"«/textarea>«/div>":"")+
      (showP?'«div class="preview thin">«div class="md">'+mdRender(g.md)+"«/div>«/div>":"")+"«/div>";}
-  else body='«div class="busybox">TRANSMITTING VIA GROQ AI CLOUD«span class="blink">▊«/span>«/div>';
+  else body='«div class="busybox">COMPILING AI PROFILE README«span class="blink">▊«/span>«/div>';
 
   var left=
    win("STEP 1 · SOURCE","","«div style='padding:.75rem'>"+pickerHtml("ENTER GITHUB USERNAME")+"«/div>")+
    win("STEP 2 · STYLE & VIBE","","«div class='stack' style='padding:.75rem;gap:.7rem'>«div style='display:grid;grid-template-columns:1fr 1fr;gap:.5rem'>"+tones+"«/div>"+
     "«label style='display:flex;align-items:center;gap:.5rem;cursor:pointer;font-family:var(--f-ui);font-size:11px;font-weight:700;letter-spacing:.14em'>«input type='checkbox' id='asciiChk'"+(g.ascii?" checked":"")+"> INCLUDE ASCII BANNER«/label>"+asciiSel+"«/div>")+
    win("STEP 3 · COMPILE README","","«div class='stack' style='padding:.75rem;gap:.7rem'>"+
-    "«div style='font-family:var(--f-mono);font-size:11px;color:var(--t-pri)'>⚡ AI ENGINE: GROQ CLOUD (GPT-OSS 120B / LLAMA 3.3) · READY«/div>"+
-    "«button class='btn btn-pri' style='padding:.75rem;font-size:13px' data-act='compile' "+(busy?"disabled":"")+">"+(g.stage==="generating"?"COMPILING WITH GROQ AI…":g.stage==="refining"?"REFINING…":"⚡ COMPILE README")+"«/button>"+
+    "«div style='font-family:var(--f-mono);font-size:11px;color:var(--t-pri)'>⚡ AI ENGINE: NEURAL COMPILER · READY«/div>"+
+    "«div style='font-family:var(--f-mono);font-size:9.5px;color:var(--t-muted)'>💡 Tip: Add your custom API key in .env or Settings for custom models & higher limits.«/div>"+
+    "«button class='btn btn-pri' style='padding:.75rem;font-size:13px' data-act='compile' "+(busy?"disabled":"")+">"+(g.stage==="generating"?"COMPILING README…":g.stage==="refining"?"REFINING…":"⚡ COMPILE README")+"«/button>"+
     (g.md?"«button class='btn' data-act='refine' "+(busy||g.passes>=2?"disabled":"")+" title='"+(g.passes>=2?"2-pass limit reached":"Critique-and-improve pass")+"'>↻ "+(g.passes>=2?"MAX PASSES (2/2)":"REFINE — CRITIQUE PASS (2/2)")+"«/button>":"")+
     (g.err?"«div class='errbox'>⚠ "+esc(g.err)+"«/div>":"")+
     "«div id='glog' class='logbox sf-inset thin'>"+g.log.map(function(x){return "«div style='color:"+(x.indexOf("ERROR")===0?"var(--t-acc)":"inherit")+"'>"+esc(x)+"«/div>";}).join("")+(busy?"«span class='blink' style='color:var(--t-pri)'>█«/span>":"")+"«/div>«/div>");
@@ -1442,8 +1452,9 @@ function wrappedHtml(){
 function footerHtml(){
   var t=cur();
   return '«footer class="sbar">«div class="sbar-in thin">«span style="color:var(--t-pri)">■ SKIN: '+esc(t.name)+"«/span>"+
-  "«span>AI: GROQ CLOUD (ACTIVE)«/span>«span>SRC: "+(S.profile?"@"+esc(S.profile.username)+(S.profile.isDemo?" (demo)":""):"—")+"«/span>"+
-  '«span style="margin-left:auto;color:var(--t-sec)">free · open source · 7× SVG assets · zero watermark«/span>'+
+  "«span>AI: ONLINE«/span>«span>SRC: "+(S.profile?"@"+esc(S.profile.username)+(S.profile.isDemo?" (demo)":""):"—")+"«/span>"+
+  '«a href="https://github.com/codewithabhiishek" target="_blank" rel="noopener" class="built-by" style="margin-left:auto">«span style="animation:pulse 1.2s infinite">⚡«/span> BUILT BY ABHISHEK«/a>'+
+  '«span style="color:var(--t-sec)">free · open source · 7× SVG assets · zero watermark«/span>'+
   '«span>v1.3.2026 «span class="blink" style="color:var(--t-pri)">▊«/span>«/span>«/div>«/footer>';}
 
 function render(){
@@ -1469,11 +1480,11 @@ function doCompile(){
   log("COMPILE START · skin="+cur().name+" · tone="+g.tone);render();
   log("» profile locked: @"+S.profile.username+(S.profile.isDemo?" (demo data)":"")+" — "+S.profile.publicRepos+" repos … OK");
   var o={profile:S.profile,tone:g.tone,themeName:cur().name,ascii:g.ascii?asciiText(g.asciiId):null};
-  log("» transmitting prompt to Groq AI Cloud …");
+  log("» transmitting prompt to AI Engine …");
   callBackendAI(buildSystem(o),buildUser(o)).then(function(draft){
     g.md=draft;g.passes=1;g.stage="idle";
     log("» draft received: "+(draft.length/1024).toFixed(1)+" KB markdown");
-    log("COMPILE OK · pass 1/2 complete. Ready to ship or refine.");render();toast("README draft compiled with Groq AI");
+    log("COMPILE OK · pass 1/2 complete. Ready to ship or refine.");render();toast("README draft compiled successfully!");
   }).catch(function(e){g.stage="idle";g.err=e.message;log("ERROR: "+e.message);render();toast("Generation failed: "+e.message,"err");});
 }
 
