@@ -1811,6 +1811,38 @@ function pickerHtml(label){
   return '«form data-form="load" class="stack" style="gap:.5rem">«span class="lbl">'+label+'«/span>«div class="row" style="flex-wrap:nowrap">«input id="userInp" class="inp" placeholder="github handle or url…" value="'+esc(S.g.user)+'" autocomplete="off">«button class="btn" type="submit">LOAD«/button>«/div>'+
   '«button class="btn btn-sm" type="button" data-act="demo">⚡ USE DEMO DATA — NO NETWORK NEEDED«/button>«/form>';}
 
+function generateHtml(){
+  var g=S.g,busy=g.stage!=="idle";
+  var tones=TONES.map(function(t){return '«button class="tone'+(g.tone===t.id?" on":"")+'" data-act="tone" data-id="'+t.id+'">«b>'+t.name+"«/b>«span>"+t.blurb+"«/span>«/button>";}).join("");
+  var asciiSel=g.ascii?'«select class="inp" id="asciiSel" style="padding:.4rem .6rem;font-size:.8rem">'+ASCII.map(function(a){return '«option value="'+a.id+'"'+(a.id===g.asciiId?" selected":"")+">"+a.label+"«/option>";}).join("")+"«/select>":"";
+  var outBar="";
+  if(g.md)outBar='«div class="seg">'+["split","edit","preview"].map(function(m){return '«button data-act="view" data-view="'+m+'" class="'+(g.view===m?"on":"")+'">'+m.toUpperCase()+"«/button>";}).join("")+"«/div>"+
+   '«button class="btn btn-sm" data-act="copymd">COPY MD«/button>«button class="btn btn-sm" data-act="dlmd">.MD«/button>';
+  var body="";
+  if(!g.md&&g.stage==="idle"){
+    body='«div class="emptybox">«pre>┌──────────────────────────────┐\n│  NO OUTPUT BUFFERED YET      │\n│                              │\n│  1. load handle    (step 1)  │\n│  2. pick tone      (step 2)  │\n│  3. hit COMPILE    (step 3)  │\n└──────────────────────────────┘«/pre>'+
+    '«p class="note" style="max-width:380px">The compiled README lands here as live markdown — edit the raw side, watch the preview update, then copy it into your «b style="color:var(--t-pri)">username/username«/b> repo.«/p>«/div>';}
+  else if(g.md){
+    var showE=g.view!=="preview",showP=g.view!=="edit";
+    body='«div class="split'+(g.view!=="split"?" one":"")+'">'+
+     (showE?'«div style="border-right:1px solid var(--t-line);min-height:0">«textarea id="mdEditor" class="md-editor thin" spellcheck="false">'+esc(g.md)+"«/textarea>«/div>":"")+
+     (showP?'«div class="preview thin">«div class="md">'+mdRender(g.md)+"«/div>«/div>":"")+"«/div>";}
+  else body='«div class="busybox">COMPILING AI PROFILE README«span class="blink">▊«/span>«/div>';
+
+  var left=
+   win("STEP 1 · SOURCE","","«div style='padding:.75rem'>"+pickerHtml("ENTER GITHUB USERNAME")+"«/div>")+
+   win("STEP 2 · STYLE & VIBE","","«div class='stack' style='padding:.75rem;gap:.7rem'>«div style='display:grid;grid-template-columns:1fr 1fr;gap:.5rem'>"+tones+"«/div>"+
+    "«label style='display:flex;align-items:center;gap:.5rem;cursor:pointer;font-family:var(--f-ui);font-size:11px;font-weight:700;letter-spacing:.14em'>«input type='checkbox' id='asciiChk'"+(g.ascii?" checked":"")+"> INCLUDE ASCII BANNER«/label>"+asciiSel+"«/div>")+
+   win("STEP 3 · COMPILE README","","«div class='stack' style='padding:.75rem;gap:.7rem'>"+
+    "«div style='font-family:var(--f-mono);font-size:11px;color:var(--t-pri)'>⚡ AI ENGINE: NEURAL COMPILER · READY«/div>"+
+    "«div style='font-family:var(--f-mono);font-size:9.5px;color:var(--t-muted)'>💡 Tip: Add your custom API key in .env or Settings for custom models & higher limits.«/div>"+
+    "«button class='btn btn-pri' style='padding:.75rem;font-size:13px' data-act='compile' "+(busy?"disabled":"")+">"+(g.stage==="generating"?"COMPILING README…":g.stage==="refining"?"REFINING…":"⚡ COMPILE README")+"«/button>"+
+    (g.md?"«button class='btn' data-act='refine' "+(busy||g.passes>=2?"disabled":"")+" title='"+(g.passes>=2?"2-pass limit reached":"Critique-and-improve pass")+"'>↻ "+(g.passes>=2?"MAX PASSES (2/2)":"REFINE — CRITIQUE PASS (2/2)")+"«/button>":"")+
+    (g.err?"«div class='errbox'>⚠ "+esc(g.err)+"«/div>":"")+
+    "«div id='glog' class='logbox sf-inset thin'>"+g.log.map(function(x){return "«div style='color:"+(x.indexOf("ERROR")===0?"var(--t-acc)":"inherit")+"'>"+esc(x)+"«/div>";}).join("")+(busy?"«span class='blink' style='color:var(--t-pri)'>█«/span>":"")+"«/div>«/div>");
+  return '«div class="grid2">«div class="stack">'+left+"«/div>"+win("OUTPUT · README.MD",outBar,'«div class="output">'+body+"«/div>")+"«/div>";
+}
+
 function cleanName(n){
   if(!n)return "";
   return n.replace(/[\u{1F300}-\u{1FAFF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}]/gu, "")
@@ -2012,13 +2044,26 @@ function wrappedHtml(){
 
 function footerHtml(){
   var t=cur();
+  var src=S.profile?"@"+esc(S.profile.username)+(S.profile.isDemo?" (demo)":""):"DEMO";
   return '«footer class="sbar">«div class="sbar-in thin">'+
-  '«div style="display:flex;align-items:center;gap:1.2rem;flex:1;min-width:0">«span style="color:var(--t-pri)">■ SKIN: '+esc(t.name)+"«/span>"+
-  "«span>AI: ONLINE«/span>«span>SRC: "+(S.profile?"@"+esc(S.profile.username)+(S.profile.isDemo?" (demo)":""):"—")+"«/span>«/div>"+
-  '«div style="display:flex;align-items:center;justify-content:center;flex-shrink:0">«a href="https://github.com/codewithabhiishek" target="_blank" rel="noopener" class="built-by">«span style="animation:pulse 1.2s infinite">⚡«/span> BUILT BY ABHISHEK«/a>«/div>'+
-  '«div style="display:flex;align-items:center;justify-content:flex-end;gap:1.2rem;flex:1;min-width:0;color:var(--t-sec)">'+
-  '«span>free · open source · 7× SVG assets · zero watermark«/span>'+
-  '«span style="color:var(--t-muted)">v1.3.2026 «span class="blink" style="color:var(--t-pri)">▊«/span>«/span>«/div>'+
+    '«div style="display:flex;align-items:center;gap:.65rem;min-width:0">'+
+      '«span class="led" style="background:var(--t-pri);color:var(--t-pri);width:6px;height:6px">«/span>'+
+      '«span style="color:var(--t-pri);font-weight:700">ONLINE«/span>'+
+      '«span style="color:var(--t-line);opacity:0.6">|«/span>'+
+      '«span>SKIN: «b style="color:var(--t-ink)">'+esc(t.name.toUpperCase())+'«/b>«/span>'+
+      '«span style="color:var(--t-line);opacity:0.6">|«/span>'+
+      '«span>SRC: «b style="color:var(--t-sec)">'+src+'«/b>«/span>'+
+    '«/div>'+
+    '«div style="display:flex;align-items:center;gap:.4rem;flex-shrink:0">'+
+      '«a href="https://github.com/codewithabhiishek" target="_blank" rel="noopener" class="built-by" style="padding:2px 10px;font-size:10px;text-decoration:none">'+
+        '«span style="animation:pulse 1.2s infinite;color:var(--t-acc)">⚡«/span> BUILT BY ABHISHEK'+
+      '«/a>'+
+    '«/div>'+
+    '«div style="display:flex;align-items:center;gap:.65rem;min-width:0;color:var(--t-muted)">'+
+      '«span>7× SVG SUITE«/span>'+
+      '«span style="color:var(--t-line);opacity:0.6">|«/span>'+
+      '«span>v1.3.2026 «span class="blink" style="color:var(--t-pri)">▊«/span>«/span>'+
+    '«/div>'+
   '«/div>«/footer>';}
 
 function modalHtml(){
