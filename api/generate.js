@@ -25,7 +25,13 @@ export default async function handler(req, res) {
   const clientIp = String(rawIp).split(",")[0].trim();
 
   try {
-    const { system, user, apiKey } = req.body || {};
+    let bodyData = req.body;
+    if (typeof bodyData === "string") {
+      try { bodyData = JSON.parse(bodyData || "{}"); } catch (e) { bodyData = {}; }
+    } else if (!bodyData) {
+      bodyData = {};
+    }
+    const { system, user, apiKey } = bodyData;
     const isCustomKey = Boolean(apiKey && String(apiKey).trim().length > 10);
 
     // Apply strict rate limiting ONLY if user is using the shared server API key
