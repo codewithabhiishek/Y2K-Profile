@@ -1703,6 +1703,45 @@ function buildSystem(o){
   "- Keep it under 150 lines. Dense, expressive, and ready to paste into GitHub.";
 }
 
+function buildUser(o){
+  var p=o.profile;
+  var u=p.username;
+  var n=cleanName(p.name)||u;
+  return "Generate a full-featured, visually stunning GitHub profile README for @"+u+" ("+n+").\n"+
+  "Location: "+(p.location||"Earth")+"\n"+
+  "Bio: "+(p.bio||"Full Stack Software Engineer")+"\n"+
+  "Stats: "+p.publicRepos+" public repos, "+p.stars+" stars, "+p.followers+" followers\n"+
+  "Top Languages: "+p.langs.map(function(l){return l[0]+" ("+l[1]+"%)";}).join(", ")+"\n"+
+  "Featured Projects: "+p.repos.slice(0,4).map(function(r){return r.name+" ("+(r.lang||"Code")+", ★"+r.stars+"): "+(r.desc||"Open source tool");}).join("; ")+"\n"+
+  "Tone selected: "+o.tone+". Produce high-craft raw markdown now.";
+}
+
+function buildRefine(md, o){
+  var p=o.profile;
+  return "Critique and polish this GitHub README for @"+p.username+":\n\n"+md+"\n\n"+
+  "Optimize formatting, make the project descriptions punchy, ensure all theme colors match "+o.themeName+", and return the final improved markdown.";
+}
+
+function callBackendAI(sys, usr){
+  var key=(S.g&&S.g.keyInput)?S.g.keyInput.trim():"";
+  return fetch("/api/generate",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({system:sys,user:usr,apiKey:key})
+  }).then(function(res){
+    return res.json().then(function(data){
+      if(!res.ok || data.error){
+        var errMsg=data.error||("AI service unavailable (HTTP "+res.status+")");
+        throw new Error(errMsg);
+      }
+      return data.markdown;
+    }).catch(function(e){
+      if(e.message)throw e;
+      throw new Error("Invalid response from AI engine (HTTP "+res.status+")");
+    });
+  });
+}
+
 /* skills catalog & presets */
 var ALL_SKILLS = [
   {cat:"Languages", items:[
