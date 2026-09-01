@@ -1,12 +1,5 @@
 /* ProfileExE — Template: CYBERGRID
-   Vibe: Netrunner brutalist profile. Jacked directly into the cyberspace grid.
-
-   Editing guide:
-   - Each string in the md array is one line of markdown
-   - Use \x3c for < (avoids CDN tag-stripping issues)
-   - Use \" for double-quotes inside strings
-   - Badge URLs: keep & as & (not &amp;) — they go into img src attrs
-   - After editing: save → Vite HMR reloads instantly in dev        */
+   Vibe: Netrunner brutalist profile. Jacked directly into the cyberspace grid. */
 
 "use strict";
 
@@ -23,30 +16,30 @@ var md = [
   "```",
   "┌───[ NETRUNNER DECK ]─────────────────────────────────────────┐",
   "│ OPERATOR  : @[YOUR-USERNAME]                                 │",
-  "│ INTERFACE : Neural WebSockets v2.4                           │",
-  "│ BANDWIDTH : 10 Gbps Direct Fiber Link                        │",
-  "│ SYSTEM    : Cyberpunk OS / Next-Gen Distributed Architecture │",
+  "│ ACCESS    : ROOT CLEARANCE · PROXY 0x88F0                     │",
+  "│ UPTIME    : 99.99% ONLINE                                    │",
+  "│ DIRECTIVE : FULL-STACK ARCHITECT & GRID RUNNER               │",
   "└──────────────────────────────────────────────────────────────┘",
   "```",
   "",
   "\x3cdetails open>",
-  "\x3csummary>\x3cb>⚙ 01 // CYBERDECK SPECIFICATIONS\x3c/b>\x3c/summary>",
+  "\x3csummary>\x3cb>⚡ 01 // GRID ACCESS DIRECTIVE\x3c/b>\x3c/summary>",
   "",
-  "Netrunner specializing in rapid UI synthesis, micro-architectures, and high-frequency digital experiences. Writing clean, expressive TypeScript and building responsive interfaces with pixel-level precision.",
+  "Operating across distributed web infrastructures, high-concurrency Node.js microservices, and reactive TypeScript interfaces.",
   "",
   "\x3c/details>",
   "",
   "\x3cdetails open>",
-  "\x3csummary>\x3cb>⚡ 02 // INSTALLED CYBERWARE (STACK)\x3c/b>\x3c/summary>",
+  "\x3csummary>\x3cb>🛠️ 02 // HARDWARE & CIPHERS (TECH STACK)\x3c/b>\x3c/summary>",
   "",
   "\x3cdiv align=\"center\">",
-  "  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=ts,react,nextjs,tailwind,nodejs,postgres,supabase,docker,git,linux&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+  "  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=ts,react,nextjs,tailwind,nodejs,postgres,redis,docker,git,linux&theme=dark\" alt=\"Skills\"/>\x3c/a>",
   "\x3c/div>",
   "",
   "\x3c/details>",
   "",
   "\x3cdetails open>",
-  "\x3csummary>\x3cb>🌐 03 // GRID TELEMETRY\x3c/b>\x3c/summary>",
+  "\x3csummary>\x3cb>📊 03 // GRID TELEMETRY\x3c/b>\x3c/summary>",
   "",
   "\x3cdiv align=\"center\">",
   "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=06222a&title_color=00e5ff&text_color=d9fbff&icon_color=f5d300&border_radius=0\" alt=\"Stats\" height=\"150\"/>",
@@ -56,15 +49,17 @@ var md = [
   "\x3c/details>",
   "",
   "\x3cdetails open>",
-  "\x3csummary>\x3cb>⚡ 04 // ACTIVE NODES (PROJECTS)\x3c/b>\x3c/summary>",
+  "\x3csummary>\x3cb>🌐 04 // ACTIVE NODES (PROJECTS)\x3c/b>\x3c/summary>",
   "",
-  "- 🌐 **[Y2K-Profile](https://github.com/[YOUR-USERNAME]/Y2K-Profile)** — Web-based retro profile generator with AI compiler · [Access Node →](https://github.com/[YOUR-USERNAME]/Y2K-Profile)",
-  "- ⚡ **[Zen-Sudoku](https://github.com/[YOUR-USERNAME]/Zen-Sudoku)** — Distraction-free Sudoku web application · [Access Node →](https://github.com/[YOUR-USERNAME]/Zen-Sudoku)",
+  "| Node | Protocol | Channel |",
+  "| :--- | :--- | :--- |",
+  "| **[Y2K-Profile](https://github.com/[YOUR-USERNAME]/Y2K-Profile)** | `React` `TypeScript` `Vite` | [Jack In →](https://github.com/[YOUR-USERNAME]/Y2K-Profile) |",
+  "| **[Hello-Museum](https://github.com/[YOUR-USERNAME]/Hello-Museum)** | `React` `Tailwind` | [Jack In →](https://github.com/[YOUR-USERNAME]/Hello-Museum) |",
   "",
   "\x3c/details>",
   "",
   "\x3cdetails>",
-  "\x3csummary>\x3cb>📡 05 // CYBERSPACE UPLINK\x3c/b>\x3c/summary>",
+  "\x3csummary>\x3cb>📡 05 // UPLINK CHANNELS\x3c/b>\x3c/summary>",
   "",
   "\x3cdiv align=\"center\">",
   "  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/TRANSMIT-00e5ff?style=for-the-badge&logo=gmail&logoColor=010a0d\"/>\x3c/a>",

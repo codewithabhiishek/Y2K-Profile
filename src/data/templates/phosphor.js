@@ -1,12 +1,5 @@
 /* ProfileExE — Template: PHOSPHOR
-   Vibe: CRT Matrix hacker station. Phosphor glow, telemetry, terminal loadout.
-
-   Editing guide:
-   - Each string in the md array is one line of markdown
-   - Use \x3c for < (avoids CDN tag-stripping issues)
-   - Use \" for double-quotes inside strings
-   - Badge URLs: keep & as & (not &amp;) — they go into img src attrs
-   - After editing: save → Vite HMR reloads instantly in dev        */
+   Vibe: CRT Matrix hacker station. Phosphor glow, telemetry, terminal loadout. */
 
 "use strict";
 
@@ -68,7 +61,6 @@ var md = [
   "| :--- | :--- | :--- | :--- |",
   "| **[Y2K-Profile](https://github.com/[YOUR-USERNAME]/Y2K-Profile)** | Y2K GitHub Profile Generator & Studio with AI | `React` `TypeScript` `Vite` | [⚡ Launch App →](https://github.com/[YOUR-USERNAME]/Y2K-Profile) |",
   "| **[Hello-Museum](https://github.com/[YOUR-USERNAME]/Hello-Museum)** | Museum of First Words — 120+ greetings gallery | `React` `Tailwind` `Audio` | [🏛️ Visit Exhibit →](https://github.com/[YOUR-USERNAME]/Hello-Museum) |",
-  "| **[Study-OS](https://github.com/[YOUR-USERNAME]/Study-OS)** | Cyberpunk productivity & focus dashboard | `TypeScript` `WebSockets` | [★ View Repo →](https://github.com/[YOUR-USERNAME]/Study-OS) |",
   "",
   "\x3c/details>",
   "",
@@ -79,12 +71,9 @@ var md = [
   "  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/EMAIL-00ff66?style=for-the-badge&logo=gmail&logoColor=010502\"/>\x3c/a>",
   "  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-07130a?style=for-the-badge&logo=github&logoColor=00ff66\"/>\x3c/a>",
   "  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/LINKEDIN-00ff66?style=for-the-badge&logo=linkedin&logoColor=010502\"/>\x3c/a>",
-  "  \x3ca href=\"https://twitter.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/TWITTER-07130a?style=for-the-badge&logo=x&logoColor=00ff66\"/>\x3c/a>",
   "\x3c/div>",
   "",
-  "\x3c/details>",
-  "",
-  "\x3cdiv align=\"center\">\x3cem style=\"color:#5f8f6f\">— @[YOUR-USERNAME] // terminal log est. 1999 —\x3c/em>\x3c/div>"
+  "\x3c/details>"
 ].join("\n");
 
 export default {

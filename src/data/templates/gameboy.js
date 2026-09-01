@@ -1,11 +1,11 @@
 /* ProfileExE — Template: GAMEBOY
-   Vibe: Retro RPG Inventory Screen. 2-column layout & Trophies. */
+   Vibe: Retro RPG Inventory Screen. 2-column layout & EXP Status. */
 
 "use strict";
 
 var md = [
   "\x3cdiv align=\"center\">",
-  "  \x3cimg src=\"https://capsule-render.vercel.app/api?type=waving&color=0:1f2716,100:2a351d&text=PLAYER%201:%20[YOUR%20NAME]&height=185&fontSize=40&fontColor=9bbc0f&stroke=9bbc0f&strokeWidth=2&desc=LVL%2099%20FULL-STACK%20MAGE&descAlignY=66&descColor=c4d64f\" width=\"100%\" alt=\"Gameboy Banner\"/>",
+  "  \x3cimg src=\"https://capsule-render.vercel.app/api?type=waving&color=0:161c10,100:1f2716&text=PLAYER%201:%20[YOUR%20NAME]&height=185&fontSize=40&fontColor=9bbc0f&stroke=9bbc0f&strokeWidth=2&desc=LVL%2099%20FULL-STACK%20MAGE&descAlignY=66&descColor=c4d64f\" width=\"100%\" alt=\"Gameboy Banner\"/>",
   "  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Press+Start+2P&size=12&pause=1000&color=9BBC0F&center=true&vCenter=true&width=640&lines=PRESS+START+TO+CONTINUE;CURRENT+QUEST:+BUILDING+WEB+APPS;EQUIPPED:+KEYBOARD+OF+TYPING;LOCATION:+[YOUR+LOCATION]\" alt=\"Gameboy Typing\"/>",
   "  \x3cbr/>",
   "  \x3cimg src=\"https://img.shields.io/badge/HP-9999%2F9999-9bbc0f?style=flat-square&logoColor=161c10\"/>",
@@ -32,9 +32,9 @@ var md = [
   "\x3c/td>",
   "\x3ctd width=\"50%\" valign=\"top\">",
   "",
-  "### 🏆 TROPHIES (ACHIEVEMENTS)",
-  "\x3ca href=\"https://github.com/ryo-ma/github-profile-trophy\">",
-  "  \x3cimg src=\"https://github-profile-trophy.vercel.app/?username=[YOUR-USERNAME]&theme=flat&no-frame=true&no-bg=true&margin-w=15&column=3\" />",
+  "### 📜 EXP DISTRIBUTION",
+  "\x3ca href=\"https://github.com/[YOUR-USERNAME]\">",
+  "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api/top-langs/?username=[YOUR-USERNAME]&layout=compact&hide_border=true&bg_color=1f2716&title_color=9bbc0f&text_color=dce8b8&border_radius=0\" alt=\"Top Skills (EXP)\" />",
   "\x3c/a>",
   "",
   "\x3c/td>",
@@ -48,20 +48,20 @@ var md = [
   "```",
   "",
   "\x3cdiv align=\"center\">",
-  "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=161c10&title_color=9bbc0f&text_color=c4d64f&icon_color=9bbc0f&border_radius=0\" alt=\"Stats\" height=\"150\"/>",
-  "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=161c10&ring=9bbc0f&fire=c4d64f&currStreakLabel=c4d64f&currStreakNum=9bbc0f&sideNums=c4d64f&sideLabels=8a9768&border_radius=0\" alt=\"Streak\" height=\"150\"/>",
+  "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1f2716&title_color=9bbc0f&text_color=dce8b8&icon_color=9bbc0f&border_radius=0\" alt=\"Stats\" height=\"150\"/>",
+  "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=1f2716&ring=9bbc0f&fire=c4d64f&currStreakLabel=c4d64f&currStreakNum=9bbc0f&sideNums=dce8b8&sideLabels=8a9768&border_radius=0\" alt=\"Streak\" height=\"150\"/>",
   "\x3c/div>",
   "",
   "\x3cdiv align=\"center\">",
   "  \x3cbr/>",
   "  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/MESSAGE-9bbc0f?style=flat-square&logo=gmail&logoColor=161c10\"/>\x3c/a>",
-  "  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/PARTY-161c10?style=flat-square&logo=github&logoColor=9bbc0f\"/>\x3c/a>",
+  "  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/PARTY-1f2716?style=flat-square&logo=github&logoColor=9bbc0f\"/>\x3c/a>",
   "  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GUILD-c4d64f?style=flat-square&logo=linkedin&logoColor=161c10\"/>\x3c/a>",
   "\x3c/div>"
 ].join("\n");
 
 export default {
   id: "gameboy",
-  vibe: "Retro RPG Inventory Screen. 2-column layout & Trophies.",
+  vibe: "Retro RPG Inventory Screen. 2-column layout & EXP Status.",
   md: md,
 };

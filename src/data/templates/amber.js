@@ -1,12 +1,5 @@
 /* ProfileExE — Template: AMBER
-   Vibe: 1984 UNIX Station log. Warm monochrome amber phosphor glow.
-
-   Editing guide:
-   - Each string in the md array is one line of markdown
-   - Use \x3c for < (avoids CDN tag-stripping issues)
-   - Use \" for double-quotes inside strings
-   - Badge URLs: keep & as & (not &amp;) — they go into img src attrs
-   - After editing: save → Vite HMR reloads instantly in dev        */
+   Vibe: 1984 UNIX Station log. Warm monochrome amber phosphor glow. */
 
 "use strict";
 
@@ -51,6 +44,8 @@ var md = [
   "\x3cdiv align=\"center\">",
   "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1d1206&title_color=ffb000&text_color=ffe9c4&icon_color=ff6b1a&border_radius=4\" alt=\"Stats\" height=\"150\"/>",
   "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=1d1206&ring=ffb000&fire=ff6b1a&currStreakLabel=ffd27f&currStreakNum=ffb000&sideNums=ffe9c4&sideLabels=9c7b4a&border_radius=4\" alt=\"Streak\" height=\"150\"/>",
+  "  \x3cbr/>",
+  "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api/top-langs/?username=[YOUR-USERNAME]&layout=compact&hide_border=true&bg_color=1d1206&title_color=ffb000&text_color=ffe9c4&border_radius=4\" alt=\"Top Languages\" height=\"130\"/>",
   "\x3c/div>",
   "",
   "\x3c/details>",

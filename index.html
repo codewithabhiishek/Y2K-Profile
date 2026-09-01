@@ -716,16 +716,6 @@ function svgFrame(w,h,t,inner){var c=t.c;return '«svg xmlns="http://www.w3.org/
  '«circle cx="14" cy="13" r="3.5" fill="'+c.acc+'"/>«circle cx="26" cy="13" r="3.5" fill="'+c.sec+'"/>«circle cx="38" cy="13" r="3.5" fill="'+c.pri+'"/>'+
  inner+"«/svg>";}
 
-function avatarSvg(name,t,salt){
-  var seed=fnv1a(name.toLowerCase()+"|"+t.id+"|"+salt),r=rng(seed),c=t.c,N=8,P=16,pal=[c.pri,c.sec,c.acc],cells="";
-  for(var y=0;y«N;y++)for(var x=0;x«4;x++){if(r()«0.52){var col=pal[Math.floor(r()*pal.length)];
-    cells+='«rect x="'+(x*P)+'" y="'+(y*P)+'" width="'+P+'" height="'+P+'" fill="'+col+'"/>';
-    cells+='«rect x="'+((N-1-x)*P)+'" y="'+(y*P)+'" width="'+P+'" height="'+P+'" fill="'+col+'"/>';}}
-  return '«svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 132 132">'+
-   '«rect width="132" height="132" fill="'+c.deep+'"/>«rect x="2" y="2" width="128" height="128" fill="'+c.panel+'" stroke="'+c.line+'" stroke-width="2"/>'+
-   '«g transform="translate(2,2)">'+cells+"«/g>"+
-   '«rect x="2" y="2" width="128" height="128" fill="none" stroke="'+c.line+'" stroke-width="2"/>'+
-   '«rect x="2" y="2" width="128" height="4" fill="'+c.pri+'" opacity="0.7"/>«/svg>';}
 
 function statsCardSvg(p,t){
   var c=t.c,inner="";
@@ -1376,26 +1366,23 @@ function interpolateTemplate(rawMd){
   var locEnc=encodeURIComponent(loc);
   var skillsList = (S.skills && S.skills.length > 0) ? S.skills.join(",") : "js,ts,react,nextjs,nodejs,tailwind,python,fastapi,postgres,docker,git,linux";
 
+  var mainProj = (p.repos && p.repos[0] && p.repos[0].name) || "Y2K-Profile";
+  var locPlus = loc.replace(/\s+/g, "+");
+  var nPlus = nUpper.replace(/\s+/g, "+");
+
   var res = rawMd
     .replace(/https:\/\/skillicons\.dev\/icons\?i=[a-zA-Z0-9_,+-]+/g, "https://skillicons.dev/icons?i=" + skillsList)
-    .replace(/text=%E2%96%A0%20\[YOUR%20NAME\]%20%E2%96%A0/g, "text=%E2%96%A0%20"+nEnc+"%20%E2%96%A0")
-    .replace(/text=%E2%96%A0%20\[YOUR NAME\]%20%E2%96%A0/g, "text=%E2%96%A0%20"+nEnc+"%20%E2%96%A0")
-    .replace(/text=%E2%97%88%20\[YOUR NAME\]%20%E2%97%88/g, "text=%E2%97%88%20"+nEnc+"%20%E2%97%88")
-    .replace(/text=%E2%9C%A7%20\[YOUR NAME\]%20%E2%9C%A7/g, "text=%E2%9C%A7%20"+nEnc+"%20%E2%9C%A7")
-    .replace(/text=%E2%96%B6%20\[YOUR NAME\]/g, "text=%E2%96%B6%20"+nEnc)
-    .replace(/text=%E2%98%85%20\[YOUR NAME\]/g, "text=%E2%98%85%20"+nEnc)
-    .replace(/text=%E2%9C%A6%20\[YOUR NAME\]/g, "text=%E2%9C%A6%20"+nEnc)
-    .replace(/text=%E2%96%B8%20\[YOUR NAME\]/g, "text=%E2%96%B8%20"+nEnc)
-    .replace(/text=%F0%9F%94%A5%20\[YOUR NAME\]/g, "text=%F0%9F%94%A5%20"+nEnc)
-    .replace(/text=%3E_%20\[YOUR NAME\]/g, "text=%3E_%20"+nEnc)
-    .replace(/\[YOUR%20LOCATION\]/g, locEnc)
-    .replace(/\[YOUR%20NAME\]/g, nEnc)
-    .replace(/\[YOUR-USERNAME\]/g, u)
-    .replace(/\[YOUR_USERNAME\]/g, u)
-    .replace(/\[YOUR LOCATION\]/g, loc)
-    .replace(/\[Your Location\]/g, loc)
+    .replace(/\[YOUR%20NAME\]/gi, nEnc)
+    .replace(/\[YOUR\+NAME\]/gi, nPlus)
+    .replace(/\[YOUR NAME\]/gi, nUpper)
     .replace(/\[Your Name\]/g, n)
-    .replace(/\[YOUR NAME\]/g, nUpper)
+    .replace(/\[YOUR%20LOCATION\]/gi, locEnc)
+    .replace(/\[YOUR\+LOCATION\]/gi, locPlus)
+    .replace(/\[YOUR LOCATION\]/gi, loc)
+    .replace(/\[Your Location\]/g, loc)
+    .replace(/\[YOUR-USERNAME\]/gi, u)
+    .replace(/\[YOUR_USERNAME\]/gi, u)
+    .replace(/\[YOUR_SPOTIFY_ID\]/gi, u)
     .replace(/\[Your Handle\]/g, "@"+u)
     .replace(/\[YOUR HANDLE\]/g, "@"+u)
     .replace(/\[Your Email\]/g, u.toLowerCase()+"@developer.mail")
@@ -1403,7 +1390,8 @@ function interpolateTemplate(rawMd){
     .replace(/\[Your Website\]/g, "https://github.com/"+u)
     .replace(/\[YOUR WEBSITE\]/g, "https://github.com/"+u)
     .replace(/\[Your Twitter Handle\]/g, u)
-    .replace(/\[YOUR TWITTER\]/g, u);
+    .replace(/\[YOUR TWITTER\]/g, u)
+    .replace(/\[Main Project\]/g, mainProj);
   return res;
 }
 

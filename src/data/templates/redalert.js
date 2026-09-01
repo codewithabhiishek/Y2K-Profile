@@ -1,12 +1,5 @@
 /* ProfileExE — Template: REDALERT
-   Vibe: Tactical Tokyo alert system. Aggressive crimson combat HUD.
-
-   Editing guide:
-   - Each string in the md array is one line of markdown
-   - Use \x3c for < (avoids CDN tag-stripping issues)
-   - Use \" for double-quotes inside strings
-   - Badge URLs: keep & as & (not &amp;) — they go into img src attrs
-   - After editing: save → Vite HMR reloads instantly in dev        */
+   Vibe: Tactical Tokyo alert system. Aggressive crimson combat HUD. */
 
 "use strict";
 
