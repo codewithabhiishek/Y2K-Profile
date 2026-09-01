@@ -432,7 +432,7 @@ var TONES=[
 function mdInline(s){
   s=esc(s);var codes=[];
   s=s.replace(/`([^`]+)`/g,function(m,c){codes.push(c);return"\x01"+(codes.length-1)+"\x01";});
-  s=s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,'«img alt="$1" src="$2" loading="lazy" referrerpolicy="no-referrer" crossorigin="anonymous" onerror="this.classList.add(\'img-broken\')">');
+  s=s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,'«img alt="$1" src="$2" loading="eager" decoding="async" referrerpolicy="no-referrer" crossorigin="anonymous" onerror="this.classList.add(\'img-broken\')">');
   s=s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'«a href="$2" target="_blank" rel="noopener">$1«/a>');
   s=s.replace(/\*\*([^*]+)\*\*/g,"«strong>$1«/strong>");
   s=s.replace(/\*([^*]+)\*/g,"«em>$1«/em>");
@@ -1395,6 +1395,25 @@ function interpolateTemplate(rawMd){
   return res;
 }
 
+function preloadAllTemplates(){
+  try {
+    var seen = {};
+    for(var i=0; TEMPLATES.length>i; i++){
+      var activeMd = interpolateTemplate(TEMPLATES[i].md);
+      var urls = activeMd.match(/https:\/\/[^\s"'«»<>\)]+/g) || [];
+      for(var j=0; urls.length>j; j++){
+        var u = urls[j];
+        if(!seen[u] && (u.indexOf("capsule-render") !== -1 || u.indexOf("readme-typing") !== -1 || u.indexOf("shields.io") !== -1 || u.indexOf("streak-stats") !== -1 || u.indexOf("github-readme-stats") !== -1 || u.indexOf("skillicons") !== -1 || u.indexOf("komarev") !== -1)){
+          seen[u] = true;
+          var img = new Image();
+          img.decoding = "async";
+          img.src = u;
+        }
+      }
+    }
+  } catch(e){}
+}
+
 function skillBuilderHtml(th){
   var presets = [
     ["fullstack","⚡ FULLSTACK"],
@@ -1802,30 +1821,6 @@ document.addEventListener("click",function(e){
     toast("Avatar Archetype: "+S.avatarArchetype.toUpperCase(),"info");
     renderVisualsOnly();
   }
-  else if(act==="tpl"){S.tpl=el.getAttribute("data-id");S.themeId=S.tpl;applyTheme(cur());S.raw=false;render();}
-  else if(act==="tplview"){S.tplView=el.getAttribute("data-view");render();}
-  else if(act==="toggleskill"){
-    var sk=el.getAttribute("data-skill");
-    var idx=S.skills.indexOf(sk);
-    if(idx===-1){
-      S.skills.push(sk);
-    }else{
-      S.skills.splice(idx,1);
-    }
-    store.set("px_skills",JSON.stringify(S.skills));
-    render();
-  }
-  else if(act==="skillpreset"){
-    var p=el.getAttribute("data-preset");
-    if(p==="clear"){
-      S.skills=[];
-    }else if(SKILL_PRESETS[p]){
-      S.skills=JSON.parse(JSON.stringify(SKILL_PRESETS[p]));
-    }
-    store.set("px_skills",JSON.stringify(S.skills));
-    toast("Preset applied: "+p.toUpperCase(),"info");
-    render();
-  }
   else if(act==="rawtoggle"){S.raw=!S.raw;render();}
   else if(act==="applyskin"){var tp=template(S.tpl);S.themeId=tp.id;S.tpl=tp.id;applyTheme(cur());render();toast("Skin loaded: "+cur().name,"info");}
   else if(act==="copytpl"){
@@ -1894,7 +1889,7 @@ document.addEventListener("submit",function(e){
     e.preventDefault();
     var inp=document.getElementById("userInp");var u=inp?inp.value:S.g.user;S.g.user=u;
     toast("Contacting GitHub…","info");
-    fetchProfile(u).then(function(p){S.profile=p;toast("@"+p.username+" loaded — "+p.publicRepos+" repos");render();})
+    fetchProfile(u).then(function(p){S.profile=p;toast("@"+p.username+" loaded — "+p.publicRepos+" repos");render();setTimeout(preloadAllTemplates, 80);})
     .catch(function(err){toast(err.message,"err");S.g.err=err.message;if(S.tab==="generate"){render();}});
   }
   else if(formType==="addskill"){
@@ -1934,6 +1929,7 @@ document.addEventListener("focusout",function(e){
 /* boot */
 var savedTheme=theme(S.themeId);applyTheme(savedTheme);
 render();
+setTimeout(preloadAllTemplates, 80);
 window.__PX_APP__=1;
 if(window.__PX_WATCH__)clearTimeout(window.__PX_WATCH__);
 setTimeout(function(){toast("SYSTEM ONLINE · "+THEMES.length+" skins loaded");},400);
