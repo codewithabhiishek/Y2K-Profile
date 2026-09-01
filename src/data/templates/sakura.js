@@ -1,0 +1,95 @@
+/* ProfileExE — Template: SAKURA
+   Vibe: Japanese zen garden meets terminal. Cherry blossom pink, bamboo dark, and meditative precision.
+
+   Editing guide:
+   - Each string in the md array is one line of markdown
+   - Use \x3c for < (avoids CDN tag-stripping issues)
+   - Use \" for double-quotes inside strings
+   - Badge URLs: keep & as & (not &amp;) — they go into img src attrs
+   - After editing: save → Vite HMR reloads instantly in dev        */
+
+"use strict";
+
+var md = [
+  "\x3cdiv align=\"center\">",
+  "  \x3cimg src=\"https://capsule-render.vercel.app/api?type=soft&color=0:1a0a0d,50:3d0b1e,100:6d1f3a&text=%F0%9F%8C%B8%20[YOUR%20NAME]%20%F0%9F%8C%B8&height=185&fontSize=40&fontColor=ffb7c5&stroke=c9184a&strokeWidth=2&desc=ZEN+ENGINEER+%C2%B7+CODE+IS+HAIKU&descAlignY=66&descColor=ff8fa3\" width=\"100%\" alt=\"Sakura Banner\"/>",
+  "  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Noto+Serif&size=14&pause=1200&color=FFB7C5&center=true&vCenter=true&width=640&lines=The+code+ships+at+dawn+%F0%9F%8C%B8;Clean+architecture+%C2%B7+zero+waste;Building+with+intention+and+grace;%E6%8A%80%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%20%C2%B7+@[YOUR-USERNAME]\" alt=\"Sakura Typing\"/>",
+  "  \x3cbr/>",
+  "  \x3cimg src=\"https://img.shields.io/badge/%E4%BD%9C%E8%80%85-[YOUR%20NAME]-c9184a?style=for-the-badge&logo=github&logoColor=ffb7c5\"/>",
+  "  \x3cimg src=\"https://img.shields.io/badge/%E5%93%B2%E5%AD%A6-ZEN_FIRST-ff8fa3?style=for-the-badge\"/>",
+  "  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=c9184a&style=for-the-badge&label=PETALS+FALLEN\"/>",
+  "\x3c/div>",
+  "",
+  "```",
+  " ════════════════════════════════════════════════════════════",
+  " 　　　🌸  ZEN GARDEN TERMINAL  ·  @[YOUR-USERNAME]  🌸",
+  " ────────────────────────────────────────────────────────────",
+  "  古池や　蛙飛びこむ　水の音",
+  "  (Old pond — a frog jumps in — sound of water)",
+  "  ─────────────────────────────────────",
+  "  Craft code like a master writes haiku.",
+  "  Every line has purpose. Every build, intention.",
+  " ════════════════════════════════════════════════════════════",
+  "```",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>🌸 01 // 禅 PHILOSOPHY (ABOUT ME)\x3c/b>\x3c/summary>",
+  "",
+  "I write code the way a calligrapher wields a brush — deliberate, elegant, and purposeful.",
+  "",
+  "- 🌸 **The Way**: Full-stack artisan · React · TypeScript · Node.js",
+  "- 🎋 **Current Work**: [Main Project] — crafted with patience and precision",
+  "- 🍵 **Learning**: The art of silence in code — what to leave out",
+  "- 🗻 **Core Principle**: *Wabi-sabi* — beauty in simplicity and imperfection",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>🎋 02 // THE CRAFT (TECH STACK)\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=ts,react,nextjs,tailwind,nodejs,python,postgres,docker,git,figma&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>🍃 03 // FLOW STATE (METRICS)\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1a0a0d&title_color=c9184a&text_color=ffb7c5&icon_color=ff8fa3&border_radius=12\" alt=\"Stats\" height=\"150\"/>",
+  "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=1a0a0d&ring=c9184a&fire=ff8fa3&currStreakLabel=ffb7c5&currStreakNum=c9184a&sideNums=ffb7c5&sideLabels=8b3a52&border_radius=12\" alt=\"Streak\" height=\"150\"/>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>🌺 04 // BONSAI PROJECTS\x3c/b>\x3c/summary>",
+  "",
+  "| 🌸 | Project | Philosophy | Link |",
+  "| :--- | :--- | :--- | :--- |",
+  "| 枝 | **[Y2K-Profile](https://github.com/[YOUR-USERNAME]/Y2K-Profile)** | *Form follows function, with beauty* | [Open Garden →](https://github.com/[YOUR-USERNAME]/Y2K-Profile) |",
+  "| 葉 | **[Hello-Museum](https://github.com/[YOUR-USERNAME]/Hello-Museum)** | *120+ voices, one shared humanity* | [Enter Temple →](https://github.com/[YOUR-USERNAME]/Hello-Museum) |",
+  "| 水 | **[Zen-Sudoku](https://github.com/[YOUR-USERNAME]/Zen-Sudoku)** | *Empty mind, elegant solution* | [Find Stillness →](https://github.com/[YOUR-USERNAME]/Zen-Sudoku) |",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails>",
+  "\x3csummary>\x3cb>🕊️ 05 // SEND A PAPER CRANE\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/文-c9184a?style=for-the-badge&logo=gmail&logoColor=ffb7c5&label=EMAIL\"/>\x3c/a>",
+  "  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/道-1a0a0d?style=for-the-badge&logo=github&logoColor=c9184a&label=GITHUB\"/>\x3c/a>",
+  "  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/縁-ff8fa3?style=for-the-badge&logo=linkedin&logoColor=1a0a0d&label=LINKEDIN\"/>\x3c/a>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdiv align=\"center\">\x3csub>🌸 @[YOUR-USERNAME] · 静寂 (seijaku) · crafted with intention 🌸\x3c/sub>\x3c/div>"
+].join("\n");
+
+export default {
+  id: "sakura",
+  vibe: "Japanese zen garden meets terminal. Cherry blossom pink, bamboo dark, and meditative precision.",
+  md: md,
+};

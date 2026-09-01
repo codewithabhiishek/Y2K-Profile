@@ -1,0 +1,78 @@
+/* ProfileExE — Template: REDLINE
+   Vibe: Critical Tokyo alert system. Aggressive crimson combat HUD.
+
+   Editing guide:
+   - Each string in the md array is one line of markdown
+   - Use \x3c for < (avoids CDN tag-stripping issues)
+   - Use \" for double-quotes inside strings
+   - Badge URLs: keep & as & (not &amp;) — they go into img src attrs
+   - After editing: save → Vite HMR reloads instantly in dev        */
+
+"use strict";
+
+var md = [
+  "\x3cdiv align=\"center\">",
+  "  \x3cimg src=\"https://capsule-render.vercel.app/api?type=rect&color=1e0808&text=%E2%9C%A6%20[YOUR%20NAME]%20%E2%9C%A6&height=150&fontSize=34&fontColor=ff3b2f&stroke=ff3b2f&strokeWidth=1.5&desc=DEFCON%201%20ALERT%20%C2%B7%20COMBAT%20ENGINE%20ACTIVE&descAlignY=65&descColor=ff8a70\" width=\"100%\" alt=\"Redline Banner\"/>",
+  "  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Chakra+Petch&size=13&pause=1000&color=FF3B2F&center=true&vCenter=true&width=580&height=28&lines=DEFCON+1+ALERT+%C2%B7+CRITICAL+MISSION+ENGAGED;HIGH-PERFORMANCE+ENGINEERING+SPECIALIST;ZERO+LATENCY+EXECUTION;LOCATION%3A+[YOUR+LOCATION]\" alt=\"Redline Typing\"/>",
+  "  \x3cbr/>",
+  "  \x3cimg src=\"https://img.shields.io/badge/DEFCON-1_ALERT-ff3b2f?style=for-the-badge&logo=target&logoColor=white\"/>",
+  "  \x3cimg src=\"https://img.shields.io/badge/THREAT-MAXIMUM-ffd23f?style=for-the-badge\"/>",
+  "  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=ff3b2f&style=for-the-badge&label=WARP_BURSTS\"/>",
+  "\x3c/div>",
+  "",
+  "```",
+  "[!] REDLINE TACTICAL BRIEFING · LEVEL 4 CLEARANCE ONLY",
+  "[!] ALL SYSTEMS PRIMED FOR HIGH-OCTANE SHIP VELOCITY",
+  "```",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>🚨 01 // TACTICAL DIRECTIVE\x3c/b>\x3c/summary>",
+  "",
+  "Specializing in rapid product development, distributed computing, and mission-critical cloud deployments. Eliminating bottlenecks with extreme prejudice.",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>⚔ 02 // COMBAT LOADOUT (TECH STACK)\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=ts,react,nextjs,tailwind,nodejs,postgres,redis,docker,git,linux&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>📈 03 // BATTLEFIELD TELEMETRY\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1e0808&title_color=ff3b2f&text_color=ffe3dd&icon_color=ffd23f&border_radius=4\" alt=\"Stats\" height=\"150\"/>",
+  "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=1e0808&ring=ff3b2f&fire=ffd23f&currStreakLabel=ff8a70&currStreakNum=ff3b2f&sideNums=ffe3dd&sideLabels=a06a5f&border_radius=4\" alt=\"Streak\" height=\"150\"/>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>🎯 04 // ACTIVE TARGETS (PROJECTS)\x3c/b>\x3c/summary>",
+  "",
+  "- 🎯 **[Y2K-Profile](https://github.com/[YOUR-USERNAME]/Y2K-Profile)** — Weaponized profile generator and visual studio · [Engage →](https://github.com/[YOUR-USERNAME]/Y2K-Profile)",
+  "- ⚡ **[Hello-Museum](https://github.com/[YOUR-USERNAME]/Hello-Museum)** — Acoustic heritage engine · [Engage →](https://github.com/[YOUR-USERNAME]/Hello-Museum)",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails>",
+  "\x3csummary>\x3cb>📡 05 // ENCRYPTED COMMS\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/DISPATCH-ff3b2f?style=for-the-badge&logo=gmail&logoColor=white\"/>\x3c/a>",
+  "  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-1e0808?style=for-the-badge&logo=github&logoColor=ff3b2f\"/>\x3c/a>",
+  "  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/SIGNAL-ffd23f?style=for-the-badge&logo=linkedin&logoColor=1e0808\"/>\x3c/a>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>"
+].join("\n");
+
+export default {
+  id: "redline",
+  vibe: "Critical Tokyo alert system. Aggressive crimson combat HUD.",
+  md: md,
+};

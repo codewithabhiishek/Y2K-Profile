@@ -1,0 +1,84 @@
+/* ProfileExE — Template: AMBER
+   Vibe: 1984 UNIX Station log. Warm monochrome amber phosphor glow.
+
+   Editing guide:
+   - Each string in the md array is one line of markdown
+   - Use \x3c for < (avoids CDN tag-stripping issues)
+   - Use \" for double-quotes inside strings
+   - Badge URLs: keep & as & (not &amp;) — they go into img src attrs
+   - After editing: save → Vite HMR reloads instantly in dev        */
+
+"use strict";
+
+var md = [
+  "\x3cdiv align=\"center\">",
+  "  \x3cimg src=\"https://capsule-render.vercel.app/api?type=rect&color=1d1206&text=%3E_%20[YOUR%20NAME]%20%C2%B7%20UNIX-88&height=150&fontSize=34&fontColor=ffb000&stroke=ffb000&strokeWidth=1.5&desc=MAINFRAME%20STATION%20%C2%B7%20300%20BAUD%20TRANSMISSION&descAlignY=65&descColor=ffd27f\" width=\"100%\" alt=\"Amber Banner\"/>",
+  "  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Courier+Prime&size=13&pause=1000&color=FFB000&center=true&vCenter=true&width=580&height=28&lines=300+BAUD+TELEGRAPH+LOCKED;CRAFTING+RESILIENT+SOFTWARE+ARCHITECTURES;MAINTAINING+SYSTEM+INTEGRITY+SINCE+1999;BROADCASTING+FROM+[YOUR+LOCATION]\" alt=\"Amber Typing\"/>",
+  "  \x3cbr/>",
+  "  \x3cimg src=\"https://img.shields.io/badge/BAUD_RATE-300_BPS-ffb000?style=flat-square&logo=gnu-bash&logoColor=0a0501\"/>",
+  "  \x3cimg src=\"https://img.shields.io/badge/SYS_STATUS-NOMINAL-ffd27f?style=flat-square\"/>",
+  "  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=ffb000&style=flat-square&label=STATION_VIEWS\"/>",
+  "\x3c/div>",
+  "",
+  "```",
+  "┌─[ UNIX MAINFRAME ]───────────────────────────────────────────┐",
+  "│ STATION  : @[YOUR-USERNAME].local                            │",
+  "│ PROTOCOL : UNIX System V / Architecture                      │",
+  "│ KERNEL   : Linux x86_64 LTS · 99.99% Uptime                  │",
+  "│ DISK     : /dev/sda1 mounted at /home/developer              │",
+  "└──────────────────────────────────────────────────────────────┘",
+  "```",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>◈ 01 // STATION BRIEFING (ABOUT)\x3c/b>\x3c/summary>",
+  "",
+  "I engineer resilient backend architectures and handcrafted frontend surfaces. Specializing in high-performance web systems and developer tooling, I turn complex specifications into robust, maintainable code.",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>◈ 02 // INSTRUMENT PANEL (TECH STACK)\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=ts,js,react,nodejs,express,postgres,redis,docker,git,linux,bash&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>◈ 03 // STATION TELEMETRY (METRICS)\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=1d1206&title_color=ffb000&text_color=ffe9c4&icon_color=ff6b1a&border_radius=4\" alt=\"Stats\" height=\"150\"/>",
+  "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=1d1206&ring=ffb000&fire=ff6b1a&currStreakLabel=ffd27f&currStreakNum=ffb000&sideNums=ffe9c4&sideLabels=9c7b4a&border_radius=4\" alt=\"Streak\" height=\"150\"/>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>◈ 04 // ACTIVE TRANSMISSIONS (PROJECTS)\x3c/b>\x3c/summary>",
+  "",
+  "| Frequency | Payload | Signal |",
+  "| :--- | :--- | :--- |",
+  "| **[Y2K-Profile](https://github.com/[YOUR-USERNAME]/Y2K-Profile)** | Full-stack profile compilation suite with retro CRT skinning | [Signal Locked →](https://github.com/[YOUR-USERNAME]/Y2K-Profile) |",
+  "| **[Hello-Museum](https://github.com/[YOUR-USERNAME]/Hello-Museum)** | Interactive linguistics & global acoustic museum | [Signal Locked →](https://github.com/[YOUR-USERNAME]/Hello-Museum) |",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails>",
+  "\x3csummary>\x3cb>◈ 05 // CONTACT FREQUENCY\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/TELEGRAPH-ffb000?style=flat-square&logo=gmail&logoColor=0a0501\"/>\x3c/a>",
+  "  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-1d1206?style=flat-square&logo=github&logoColor=ffb000\"/>\x3c/a>",
+  "  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/NETWORK-ffb000?style=flat-square&logo=linkedin&logoColor=0a0501\"/>\x3c/a>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>"
+].join("\n");
+
+export default {
+  id: "amber",
+  vibe: "1984 UNIX Station log. Warm monochrome amber phosphor glow.",
+  md: md,
+};

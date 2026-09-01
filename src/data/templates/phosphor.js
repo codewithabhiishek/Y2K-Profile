@@ -1,0 +1,94 @@
+/* ProfileExE — Template: PHOSPHOR
+   Vibe: CRT Matrix hacker station. Phosphor glow, telemetry, terminal loadout.
+
+   Editing guide:
+   - Each string in the md array is one line of markdown
+   - Use \x3c for < (avoids CDN tag-stripping issues)
+   - Use \" for double-quotes inside strings
+   - Badge URLs: keep & as & (not &amp;) — they go into img src attrs
+   - After editing: save → Vite HMR reloads instantly in dev        */
+
+"use strict";
+
+var md = [
+  "\x3cdiv align=\"center\">",
+  "  \x3cimg src=\"https://capsule-render.vercel.app/api?type=waving&color=07130a&text=%E2%96%A0%20[YOUR%20NAME]%20%E2%96%A0&height=150&fontSize=34&fontColor=00ff66&stroke=00ff66&strokeWidth=1.5&desc=CYBERDECK%20OPERATOR%20%C2%B7%20FULL-STACK%20STATION&descAlignY=65&descColor=7dffa8\" width=\"100%\" alt=\"Phosphor Banner\"/>",
+  "  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Fira+Code&size=13&pause=1000&color=00FF66&center=true&vCenter=true&width=580&height=28&lines=SYSTEM+DIAGNOSTIC%3A+100%25+OPTIMAL;FULL-STACK+DEVELOPER+%C2%B7+REACT+%2F+NODE+%2F+TYPESCRIPT;BUILDING+ZERO-COMPROMISE+DIGITAL+TOOLS;OPERATING+FROM+[YOUR+LOCATION]\" alt=\"Typing SVG\"/>",
+  "  \x3cbr/>",
+  "  \x3cimg src=\"https://img.shields.io/badge/STATUS-COMPILING-00ff66?style=flat-square&logo=gnu-bash&logoColor=010502\"/>",
+  "  \x3cimg src=\"https://img.shields.io/badge/CORE-TYPESCRIPT-07130a?style=flat-square&logo=typescript&logoColor=00ff66\"/>",
+  "  \x3cimg src=\"https://img.shields.io/badge/LOCATION-[YOUR%20LOCATION]-07130a?style=flat-square&logo=google-maps&logoColor=00ff66\"/>",
+  "  \x3cimg src=\"https://komarev.com/ghpvc/?username=[YOUR-USERNAME]&color=00ff66&style=flat-square&label=PROFILE+VIEWS\"/>",
+  "\x3c/div>",
+  "",
+  "```",
+  "┌─[ OPERATOR TERMINAL ]────────────────────────────────────────┐",
+  "│ USER     : @[YOUR-USERNAME]                                  │",
+  "│ ROLE     : Senior Full-Stack Architect                       │",
+  "│ STATUS   : ONLINE · 0x0100 READY                             │",
+  "│ FOCUS    : High-throughput Web Platforms & Creative Coding   │",
+  "└──────────────────────────────────────────────────────────────┘",
+  "```",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>⚡ 01 // SYSTEM DIAGNOSTIC (ABOUT ME)\x3c/b>\x3c/summary>",
+  "",
+  "- ⚡ **Primary Directive**: Full-stack architect specializing in building high-craft web apps, zero-dependency tools, and reactive experiences.",
+  "- 🔭 **Currently Building**: **[Main Project]** — high-performance distributed platform with sub-second latency.",
+  "- 🌱 **Exploring Next**: Advanced WebGL shaders, distributed event architectures, and AI neural acceleration.",
+  "- 💬 **Ask Me About**: TypeScript, React & Next.js ecosystem, state engines, and UI craft.",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>🛠️ 02 // WEAPONS LOADOUT (TECH STACK)\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3ca href=\"https://skillicons.dev\">\x3cimg src=\"https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,tailwind,python,fastapi,postgres,docker,git,linux&theme=dark\" alt=\"Skills\"/>\x3c/a>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>📊 03 // TELEMETRY & INTEL (LIVE STATS)\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api?username=[YOUR-USERNAME]&show_icons=true&hide_border=true&bg_color=07130a&title_color=00ff66&text_color=d8ffe4&icon_color=d4ff3f&border_radius=4\" alt=\"GitHub Stats\" height=\"150\"/>",
+  "  \x3cimg src=\"https://streak-stats.demolab.com/?user=[YOUR-USERNAME]&hide_border=true&background=07130a&ring=00ff66&fire=d4ff3f&currStreakLabel=7dffa8&currStreakNum=00ff66&sideNums=d8ffe4&sideLabels=5f8f6f&border_radius=4\" alt=\"Streak Stats\" height=\"150\"/>",
+  "  \x3cbr/>",
+  "  \x3cimg src=\"https://github-readme-stats-fast.vercel.app/api/top-langs/?username=[YOUR-USERNAME]&layout=compact&hide_border=true&bg_color=07130a&title_color=00ff66&text_color=d8ffe4&border_radius=4\" alt=\"Top Languages\" height=\"130\"/>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails open>",
+  "\x3csummary>\x3cb>🚀 04 // NOTABLE COMMITS (FEATURED WORKS)\x3c/b>\x3c/summary>",
+  "",
+  "| Repository | Description | Tech Stack | Live Signal |",
+  "| :--- | :--- | :--- | :--- |",
+  "| **[Y2K-Profile](https://github.com/[YOUR-USERNAME]/Y2K-Profile)** | Y2K GitHub Profile Generator & Studio with AI | `React` `TypeScript` `Vite` | [⚡ Launch App →](https://github.com/[YOUR-USERNAME]/Y2K-Profile) |",
+  "| **[Hello-Museum](https://github.com/[YOUR-USERNAME]/Hello-Museum)** | Museum of First Words — 120+ greetings gallery | `React` `Tailwind` `Audio` | [🏛️ Visit Exhibit →](https://github.com/[YOUR-USERNAME]/Hello-Museum) |",
+  "| **[Study-OS](https://github.com/[YOUR-USERNAME]/Study-OS)** | Cyberpunk productivity & focus dashboard | `TypeScript` `WebSockets` | [★ View Repo →](https://github.com/[YOUR-USERNAME]/Study-OS) |",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdetails>",
+  "\x3csummary>\x3cb>📡 05 // OPEN SECURE CHANNEL (CONNECT)\x3c/b>\x3c/summary>",
+  "",
+  "\x3cdiv align=\"center\">",
+  "  \x3ca href=\"mailto:[Your Email]\">\x3cimg src=\"https://img.shields.io/badge/EMAIL-00ff66?style=for-the-badge&logo=gmail&logoColor=010502\"/>\x3c/a>",
+  "  \x3ca href=\"https://github.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/GITHUB-07130a?style=for-the-badge&logo=github&logoColor=00ff66\"/>\x3c/a>",
+  "  \x3ca href=\"https://linkedin.com/in/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/LINKEDIN-00ff66?style=for-the-badge&logo=linkedin&logoColor=010502\"/>\x3c/a>",
+  "  \x3ca href=\"https://twitter.com/[YOUR-USERNAME]\">\x3cimg src=\"https://img.shields.io/badge/TWITTER-07130a?style=for-the-badge&logo=x&logoColor=00ff66\"/>\x3c/a>",
+  "\x3c/div>",
+  "",
+  "\x3c/details>",
+  "",
+  "\x3cdiv align=\"center\">\x3cem style=\"color:#5f8f6f\">— @[YOUR-USERNAME] // terminal log est. 1999 —\x3c/em>\x3c/div>"
+].join("\n");
+
+export default {
+  id: "phosphor",
+  vibe: "CRT Matrix hacker station. Phosphor glow, telemetry, terminal loadout.",
+  md: md,
+};
