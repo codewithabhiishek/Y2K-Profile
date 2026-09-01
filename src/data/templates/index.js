@@ -9,7 +9,7 @@ import tpl_amber from "./amber.js";
 import tpl_cybergrid from "./cybergrid.js";
 import tpl_sakura from "./sakura.js";
 import tpl_vaporwave from "./vaporwave.js";
-import tpl_acid from "./acid.js";
+import tpl_ice from "./ice.js";
 import tpl_redalert from "./redalert.js";
 import tpl_cosmos from "./cosmos.js";
 import tpl_gameboy from "./gameboy.js";
@@ -21,7 +21,7 @@ export default [
   tpl_cybergrid,
   tpl_sakura,
   tpl_vaporwave,
-  tpl_acid,
+  tpl_ice,
   tpl_redalert,
   tpl_cosmos,
   tpl_gameboy,

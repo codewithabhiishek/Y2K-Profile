@@ -25,8 +25,8 @@ export var THEMES = [
   {id:"vaporwave",name:"VAPORWAVE-95",era:"1995 · SYNTH",sf:"sf-bevel",scan:.08,rad:"2px",fd:"var(--f-crt)",fb:"var(--f-ui)",
    c:{bg:"#11041b",deep:"#090110",panel:"#1e0b2b",panel2:"#2a103c",ink:"#ffe6fb",muted:"#9968a3",line:"#50226b",hi:"#8439b0",lo:"#0c0214",pri:"#ff71ce",sec:"#01cdfe",acc:"#05ffa1"},sw:["#ff71ce","#1e0b2b","#01cdfe"]},
   
-  {id:"acid",name:"ACID RAVE",era:"1998 · FLYER",sf:"sf-pixel",scan:.1,rad:"0",fd:"var(--f-crt)",fb:"var(--f-ui)",
-   c:{bg:"#0c0f0a",deep:"#060804",panel:"#141a10",panel2:"#1d2617",ink:"#eaffdc",muted:"#7f9a6b",line:"#3a4d2c",hi:"#6a8f4a",lo:"#0a0d07",pri:"#b4ff00",sec:"#e0ff7a",acc:"#00ffd0"},sw:["#b4ff00","#141a10","#00ffd0"]},
+  {id:"ice",name:"ICE.CHROME",era:"1999 · IM",sf:"sf-bevel",scan:.05,rad:"3px",fd:"var(--f-crt)",fb:"var(--f-ui)",
+   c:{bg:"#dfe9f2",deep:"#c3d3e0",panel:"#eef4f9",panel2:"#f7fbfe",ink:"#17324a",muted:"#5c7690",line:"#a9bfd2",hi:"#ffffff",lo:"#8ba3b8",pri:"#0a84d0",sec:"#12b0c9",acc:"#f5a300"},sw:["#0a84d0","#eef4f9","#f5a300"]},
   
   {id:"redalert",name:"RED ALERT",era:"1997 · OPS",sf:"sf-glow",scan:.1,rad:"2px",fd:"var(--f-crt)",fb:"var(--f-mono)",
    c:{bg:"#140404",deep:"#0b0202",panel:"#1e0808",panel2:"#2b0d0d",ink:"#ffe3dd",muted:"#a06a5f",line:"#5c231c",hi:"#8f3a2e",lo:"#0c0303",pri:"#ff3b2f",sec:"#ff8a70",acc:"#ffd23f"},sw:["#ff3b2f","#1e0808","#ffd23f"]},
