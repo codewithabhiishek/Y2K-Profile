@@ -10,10 +10,16 @@ import { THEMES, theme, applyTheme } from "./data/themes.js";
 import { ASCII, asciiText } from "./data/ascii.js";
 import TEMPLATES from "./data/templates/index.js";
 
+export function template(id){
+  for(var i=0;TEMPLATES.length>i;i++)if(TEMPLATES[i].id===id)return TEMPLATES[i];
+  return TEMPLATES[0];
+}
+
 // Expose everything the app renderer block reads from window.__PX__
 window.__PX__ = {
   esc, fnv1a, rng, mix, fmt, store, copyText, download, toast,
   theme, applyTheme, ASCII, asciiText, THEMES,
+  template, TEMPLATES
 };
 
 // Expose the template array the app renderer reads from window.__TEMPLATES__

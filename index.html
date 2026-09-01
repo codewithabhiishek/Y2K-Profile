@@ -383,7 +383,7 @@ window.addEventListener("error", function (e) {
     <div style="font-size:clamp(1.1rem,3vw,1.6rem);color:#ffb000;letter-spacing:.35em">Y2K GITHUB TOOLKIT</div>
     <div style="font-size:1.25rem;color:#7dffa8;letter-spacing:.15em">BOOTING<span style="animation:pxblink 1.1s steps(1) infinite">&#9608;</span></div>
     <div id="bootdiag" style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:#5f8f6f;letter-spacing:.18em;max-width:640px">LINKING CORE MODULES&hellip;</div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:#2f7a4c;letter-spacing:.22em;margin-top:1.2rem">BUILD 20260213-A &middot; 18 TEMPLATES &middot; SELF-CONTAINED</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:#2f7a4c;letter-spacing:.22em;margin-top:1.2rem">BUILD 20260213-A &middot; 10 TEMPLATES &middot; SELF-CONTAINED</div>
   </div>
   <style>@keyframes pxblink{0%,49%{opacity:1}50%,100%{opacity:0}}</style>
 </div>
@@ -405,7 +405,7 @@ var esc=window.__PX__.esc, fnv1a=window.__PX__.fnv1a, rng=window.__PX__.rng, mix
     store=window.__PX__.store, copyText=window.__PX__.copyText, download=window.__PX__.download,
     toast=window.__PX__.toast, ASCII=window.__PX__.ASCII, asciiText=window.__PX__.asciiText,
     THEMES=window.__PX__.THEMES||[], TEMPLATES=window.__PX__.TEMPLATES||window.__TEMPLATES__||[],
-    template=window.__PX__.template||function(){return TEMPLATES[0]||null;};
+    template=window.__PX__.template||function(id){for(var i=0;TEMPLATES.length>i;i++)if(TEMPLATES[i].id===id)return TEMPLATES[i];return TEMPLATES[0]||null;};
 
 /* demo profile — instant data, zero config */
 var DEMO={isDemo:true,username:"codewithabhiishek",name:"Abhishek",location:"India",bio:"Full-stack engineer building high-craft web apps, retro toolkits, and interactive tools.",

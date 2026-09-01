@@ -1,5 +1,5 @@
-/* ProfileExE — Template: REDLINE
-   Vibe: Critical Tokyo alert system. Aggressive crimson combat HUD.
+/* ProfileExE — Template: REDALERT
+   Vibe: Tactical Tokyo alert system. Aggressive crimson combat HUD.
 
    Editing guide:
    - Each string in the md array is one line of markdown
@@ -12,8 +12,8 @@
 
 var md = [
   "\x3cdiv align=\"center\">",
-  "  \x3cimg src=\"https://capsule-render.vercel.app/api?type=rect&color=1e0808&text=%E2%9C%A6%20[YOUR%20NAME]%20%E2%9C%A6&height=150&fontSize=34&fontColor=ff3b2f&stroke=ff3b2f&strokeWidth=1.5&desc=DEFCON%201%20ALERT%20%C2%B7%20COMBAT%20ENGINE%20ACTIVE&descAlignY=65&descColor=ff8a70\" width=\"100%\" alt=\"Redline Banner\"/>",
-  "  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Chakra+Petch&size=13&pause=1000&color=FF3B2F&center=true&vCenter=true&width=580&height=28&lines=DEFCON+1+ALERT+%C2%B7+CRITICAL+MISSION+ENGAGED;HIGH-PERFORMANCE+ENGINEERING+SPECIALIST;ZERO+LATENCY+EXECUTION;LOCATION%3A+[YOUR+LOCATION]\" alt=\"Redline Typing\"/>",
+  "  \x3cimg src=\"https://capsule-render.vercel.app/api?type=rect&color=1e0808&text=%E2%9C%A6%20[YOUR%20NAME]%20%E2%9C%A6&height=150&fontSize=34&fontColor=ff3b2f&stroke=ff3b2f&strokeWidth=1.5&desc=DEFCON%201%20ALERT%20%C2%B7%20COMBAT%20ENGINE%20ACTIVE&descAlignY=65&descColor=ff8a70\" width=\"100%\" alt=\"Red Alert Banner\"/>",
+  "  \x3cimg src=\"https://readme-typing-svg.demolab.com?font=Chakra+Petch&size=13&pause=1000&color=FF3B2F&center=true&vCenter=true&width=580&height=28&lines=DEFCON+1+ALERT+%C2%B7+CRITICAL+MISSION+ENGAGED;HIGH-PERFORMANCE+ENGINEERING+SPECIALIST;ZERO+LATENCY+EXECUTION;LOCATION%3A+[YOUR+LOCATION]\" alt=\"Red Alert Typing\"/>",
   "  \x3cbr/>",
   "  \x3cimg src=\"https://img.shields.io/badge/DEFCON-1_ALERT-ff3b2f?style=for-the-badge&logo=target&logoColor=white\"/>",
   "  \x3cimg src=\"https://img.shields.io/badge/THREAT-MAXIMUM-ffd23f?style=for-the-badge\"/>",
@@ -21,7 +21,7 @@ var md = [
   "\x3c/div>",
   "",
   "```",
-  "[!] REDLINE TACTICAL BRIEFING · LEVEL 4 CLEARANCE ONLY",
+  "[!] RED ALERT TACTICAL BRIEFING · LEVEL 4 CLEARANCE ONLY",
   "[!] ALL SYSTEMS PRIMED FOR HIGH-OCTANE SHIP VELOCITY",
   "```",
   "",
@@ -72,7 +72,7 @@ var md = [
 ].join("\n");
 
 export default {
-  id: "redline",
-  vibe: "Critical Tokyo alert system. Aggressive crimson combat HUD.",
+  id: "redalert",
+  vibe: "Tactical Tokyo alert system. Aggressive crimson combat HUD.",
   md: md,
 };
